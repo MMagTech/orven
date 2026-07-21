@@ -195,7 +195,17 @@ The pattern it demonstrates:
 - **Fixtures replace the network.** When the engine passes `fixture`
   in the input (tests and `orven validate` do), read that file as the
   canned API response instead of calling anything. Your plugin is
-  fully testable without the real service.
+  fully testable without the real service. **Never commit a real
+  credential to a fixture** — invent obviously fake values, and don't
+  give them header or query-parameter shapes (the validator warns on
+  those).
+- **Credentials must never appear in your output.** Not in summaries,
+  observations, or error text — even when an upstream API echoes your
+  key back in an error page. The engine redacts assigned secret values
+  and credential-shaped fragments from everything you return before it
+  is stored or shown, but that scrubber is a backstop against
+  accidents, not permission: `orven validate` treats credential-shaped
+  output as an error.
 - **Declare the access** in `permissions:` so the user sees it before
   enabling.
 

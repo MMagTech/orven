@@ -63,7 +63,21 @@ is wrong, not the file.
 
 13. Secrets are write-only after entry: never in briefs, logs, plugin
     output, error messages, exports, or unencrypted backups.
-14. Installing a plugin is a trust decision: show source, publisher,
+14. **The credential publication boundary is structural.** A plugin
+    receives only its own assigned credentials, via stdin, in a
+    stripped environment. Everything a plugin returns — stdout fields
+    and captured stderr alike — passes through the engine's sanitizer
+    before storage, briefing, logging, or display: assigned secret
+    values and credential-shaped content (authorization headers,
+    credential query parameters) are redacted; text with no credential
+    in it passes through unchanged. **The boundary's honest limit:**
+    this protects against accidental disclosure; it cannot stop a
+    malicious plugin from deliberately transforming (encoding,
+    splitting) or exfiltrating a secret it was given. That residual
+    risk is governed by the install-time trust decision, declared
+    permissions, and plugin review — which is why installing a plugin
+    is, and must remain presented as, a trust decision.
+15. Installing a plugin is a trust decision: show source, publisher,
     version, and requested permissions before enablement. Third-party
     repositories are labeled as such.
-15. Updates never silently expand permissions.
+16. Updates never silently expand permissions.

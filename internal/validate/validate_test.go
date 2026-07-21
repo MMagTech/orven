@@ -104,6 +104,41 @@ json.dump({
 	}
 }
 
+func TestCredentialShapedOutputIsAnError(t *testing.T) {
+	needPython(t)
+	dir := writePlugin(t, `import json, sys
+json.load(sys.stdin)
+json.dump({"contract_version": 1, "status": "ok",
+    "summary": "Checked the queue.",
+    "observations": [{"title": "Queue checked",
+        "body": "Called http://radarr:7878/api?apikey=abc123 with Authorization: Bearer xyz."}],
+}, sys.stdout)
+`)
+	if !hasError(Dir(dir), "credential-shaped content") {
+		t.Fatal("credential-shaped output must be an error")
+	}
+}
+
+func TestCredentialShapedFixtureIsAWarning(t *testing.T) {
+	needPython(t)
+	dir := writePlugin(t, `import json, sys
+json.load(sys.stdin)
+json.dump({"contract_version": 1, "status": "nothing", "summary": "Nothing new."}, sys.stdout)
+`)
+	os.WriteFile(filepath.Join(dir, "fixtures", "f.json"),
+		[]byte(`{"url": "http://h/api?api_key=real-key-oops"}`), 0o644)
+	found := false
+	for _, f := range Dir(dir) {
+		if f.Severity == "WARN" && strings.Contains(f.Where, "fixtures/") &&
+			strings.Contains(f.Message, "credential-shaped") {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatal("credential-shaped fixture content must be warned about")
+	}
+}
+
 func TestTimeoutAndIntervalErrors(t *testing.T) {
 	dir := t.TempDir()
 	os.WriteFile(filepath.Join(dir, "plugin.yaml"), []byte(`schema_version: 1

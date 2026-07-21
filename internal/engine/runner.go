@@ -64,6 +64,20 @@ func (e *Engine) Run(p *Plugin, manual bool) StoredBatch {
 		batch.Items = out.Observations
 	}
 
+	// Publication boundary: everything the plugin returned — including
+	// captured stderr inside error text — is scrubbed of assigned
+	// credentials and credential-shaped content here, before it can
+	// reach storage, briefings, run history, logs, or the UI. Output
+	// with no credential in it passes through unchanged (sanitize.go).
+	san := newSanitizer(in.Secrets)
+	rec.Summary = san.clean(rec.Summary)
+	rec.Error = san.clean(rec.Error)
+	batch.Summary = san.clean(batch.Summary)
+	for i := range batch.Items {
+		batch.Items[i].Title = san.clean(batch.Items[i].Title)
+		batch.Items[i].Body = san.clean(batch.Items[i].Body)
+	}
+
 	if err := e.Store.SaveBatch(batch); err != nil {
 		log.Printf("engine: save batch for %s: %v", p.Manifest.ID, err)
 	}

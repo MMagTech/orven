@@ -53,13 +53,23 @@ it. The validator helps contributors succeed; it never merely rejects.
    4 times") must never be flagged, so only clearly advisory or
    imperative forms are matched.
 
+10. Credential-shaped content in output regardless of value:
+    Authorization/API-key header fragments or credential-bearing query
+    parameters (`api_key=`, `token=`, `password=`, …). The runtime
+    sanitizer would redact these; a plugin should never emit them in
+    the first place. Shares its patterns with the engine's sanitizer
+    so the two can't drift apart.
+
 ## Warnings
 
-10. Missing `README.md`, `fixtures/`, or `tests/`.
-11. Missing `collection.freshness` declaration (the engine will guess
+11. Missing `README.md`, `fixtures/`, or `tests/`.
+12. Fixture files containing credential-shaped content — never commit
+    real credentials to fixtures; invent obviously fake values that
+    don't use header or query-parameter shapes.
+13. Missing `collection.freshness` declaration (the engine will guess
     2× the recommended interval).
-12. No permissions declared (every plugin touches *something*; say so).
-13. `summary` longer than one sentence, or absent on a non-`ok` status
+14. No permissions declared (every plugin touches *something*; say so).
+15. `summary` longer than one sentence, or absent on a non-`ok` status
     (failure results should explain themselves).
 
 ### Observation-title house style (warnings)
@@ -68,19 +78,19 @@ Titles are the headlines of short news briefs: sentence case, concise,
 factual, no trailing period, detail in the body. The validator checks
 what can be checked *safely*:
 
-14. **Trailing period or exclamation mark.** Show the corrected title
+16. **Trailing period or exclamation mark.** Show the corrected title
     with the punctuation removed (punctuation-only fix — safe to
     suggest verbatim).
-15. **Obvious title casing.** Heuristic: three or more words, and most
+17. **Obvious title casing.** Heuristic: three or more words, and most
     non-leading words of four or more letters begin with a capital
     ("2 New Requests Awaiting Approval"). Show a suggested sentence-case
     version produced by *capitalization changes only*: lowercase
     non-leading words, but leave fully-uppercase tokens (RAID, GB,
     S02E04) untouched. Mark the suggestion "verify proper nouns" —
     the validator cannot distinguish "The Bear" from "the queue".
-16. **All-caps titles.** Warn. Do not auto-suggest here: acronyms make
+18. **All-caps titles.** Warn. Do not auto-suggest here: acronyms make
     a mechanical lowercase unsafe.
-17. **Excessive length** (over ~60 characters): suggest moving the
+19. **Excessive length** (over ~60 characters): suggest moving the
     specifics into `body`. No rewrite offered.
 
 ### Hard boundaries for the title checks

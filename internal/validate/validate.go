@@ -78,6 +78,7 @@ func Dir(dir string) []Finding {
 	}
 	checkManifest(r, p)
 	checkLayout(r, dir)
+	checkFixtures(r, dir)
 
 	if p.Incompatible {
 		return r.findings // cannot run it here
@@ -266,6 +267,29 @@ func runAndCheckOutput(r *report, p *engine.Plugin, dir string) {
 	for _, sv := range secretValues {
 		if strings.Contains(string(blob), sv) {
 			r.errf("output", "secret leakage: a configured secret value appears in the plugin's output")
+		}
+	}
+	// Credential-shaped content regardless of value (the runtime would
+	// redact this; a plugin should never emit it in the first place).
+	if frag := engine.ContainsCredentialPattern(strings.Join(textParts, "\n")); frag != "" {
+		r.errf("output", "credential-shaped content (%q) — never put authorization headers or credential query parameters in output", clip(frag, 40))
+	}
+}
+
+// checkFixtures warns when fixture files contain credential-shaped
+// content — real credentials must never be committed to fixtures.
+func checkFixtures(r *report, dir string) {
+	entries, _ := os.ReadDir(filepath.Join(dir, "fixtures"))
+	for _, e := range entries {
+		if e.IsDir() {
+			continue
+		}
+		b, err := os.ReadFile(filepath.Join(dir, "fixtures", e.Name()))
+		if err != nil || len(b) > 1<<20 {
+			continue
+		}
+		if frag := engine.ContainsCredentialPattern(string(b)); frag != "" {
+			r.warnf("fixtures/"+e.Name(), "credential-shaped content (%q) — never commit real credentials to fixtures; invent obviously fake values without header/parameter shapes", clip(frag, 40))
 		}
 	}
 }
