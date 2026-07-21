@@ -16,6 +16,13 @@ my-plugin/
 
 Copy `plugins/demo-activity/` as a starting point.
 
+Your `id` is a lowercase-kebab slug (`radarr-queue`) and it is the
+plugin's storage key: an installation may contain only one plugin with
+a given ID, so make it descriptive enough not to collide with the
+obvious name for a different plugin. A plugin's full identity in the
+ecosystem is (catalog, plugin ID) — the identity rules live in
+`docs/CONSTRAINTS.md` (§18–21).
+
 For Python plugins, declare `entrypoint: ["python", "main.py"]` and
 stop there: if a system only ships `python3` (or only `python`), the
 engine resolves between those two standard names automatically. That
@@ -80,7 +87,15 @@ If you mark a state as an event, readers will see it duplicated once
 per collection run. If you mark an event as a state, it may vanish
 from the briefing before anyone reads it.
 
-#### The deciding question
+#### `kind` is advisory
+
+`kind` (`fact | count | change | notice`) is metadata a future
+presentation may use. It has **no engine behavior today** — nothing
+renders differently by kind, and your plugin must not depend on any
+kind-based treatment. Pick the closest value; the validator warns on
+anything outside the four so the vocabulary stays coherent.
+
+### The deciding question
 
 > **If the condition resolves before the next briefing, should the
 > reader still be told it happened?**

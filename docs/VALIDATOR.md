@@ -71,6 +71,10 @@ it. The validator helps contributors succeed; it never merely rejects.
 14. No permissions declared (every plugin touches *something*; say so).
 15. `summary` longer than one sentence, or absent on a non-`ok` status
     (failure results should explain themselves).
+16. Observation `kind` outside `fact | count | change | notice` —
+    kind is advisory metadata with no engine behavior, and the
+    vocabulary is bounded so it cannot drift before it ever gains
+    semantics.
 
 ### Observation-title house style (warnings)
 
@@ -78,19 +82,19 @@ Titles are the headlines of short news briefs: sentence case, concise,
 factual, no trailing period, detail in the body. The validator checks
 what can be checked *safely*:
 
-16. **Trailing period or exclamation mark.** Show the corrected title
+17. **Trailing period or exclamation mark.** Show the corrected title
     with the punctuation removed (punctuation-only fix — safe to
     suggest verbatim).
-17. **Obvious title casing.** Heuristic: three or more words, and most
+18. **Obvious title casing.** Heuristic: three or more words, and most
     non-leading words of four or more letters begin with a capital
     ("2 New Requests Awaiting Approval"). Show a suggested sentence-case
     version produced by *capitalization changes only*: lowercase
     non-leading words, but leave fully-uppercase tokens (RAID, GB,
     S02E04) untouched. Mark the suggestion "verify proper nouns" —
     the validator cannot distinguish "The Bear" from "the queue".
-18. **All-caps titles.** Warn. Do not auto-suggest here: acronyms make
+19. **All-caps titles.** Warn. Do not auto-suggest here: acronyms make
     a mechanical lowercase unsafe.
-19. **Excessive length** (over ~60 characters): suggest moving the
+20. **Excessive length** (over ~60 characters): suggest moving the
     specifics into `body`. No rewrite offered.
 
 ### Hard boundaries for the title checks

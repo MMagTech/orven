@@ -104,6 +104,24 @@ json.dump({
 	}
 }
 
+func TestUnknownKindIsAWarning(t *testing.T) {
+	needPython(t)
+	dir := writePlugin(t, `import json, sys
+json.load(sys.stdin)
+json.dump({"contract_version": 1, "status": "ok", "summary": "Checked.",
+    "observations": [{"title": "Queue checked", "kind": "urgent"}]}, sys.stdout)
+`)
+	found := false
+	for _, f := range Dir(dir) {
+		if f.Severity == "WARN" && strings.Contains(f.Message, `unknown kind "urgent"`) {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatal("unknown kind must draw a warning")
+	}
+}
+
 func TestCredentialShapedOutputIsAnError(t *testing.T) {
 	needPython(t)
 	dir := writePlugin(t, `import json, sys

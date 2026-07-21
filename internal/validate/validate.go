@@ -46,6 +46,12 @@ var knownFieldTypes = map[string]bool{
 	"duration": true, "select": true, "secret": true,
 }
 
+// knownKinds bounds the advisory `kind` vocabulary so it cannot drift
+// into fifty private interpretations before it ever gains semantics.
+var knownKinds = map[string]bool{
+	"fact": true, "count": true, "change": true, "notice": true,
+}
+
 // forbiddenVoice is the maintained list of recommendation/remediation
 // phrasing (VALIDATOR.md §9). It favors precision over recall: factual
 // past-tense wording like "restarted 4 times" must not be flagged, so
@@ -253,6 +259,9 @@ func runAndCheckOutput(r *report, p *engine.Plugin, dir string) {
 		}
 		if o.Scope != "" && o.Scope != contract.ScopeEvent && o.Scope != contract.ScopeState {
 			r.errf(where, "unknown scope %q (event, state, or omitted)", o.Scope)
+		}
+		if o.Kind != "" && !knownKinds[o.Kind] {
+			r.warnf(where, "unknown kind %q — kind is advisory metadata with no engine behavior; known values are fact, count, change, notice", o.Kind)
 		}
 		titleStyle(r, o.Title)
 		textParts = append(textParts, o.Title, o.Body)

@@ -91,6 +91,29 @@ is wrong, not the file.
     install time. A third-party plugin stays visibly third-party
     forever.
 
+## Plugin identity and catalogs
+
+18. **A plugin's identity is (catalog, plugin ID).** Version is
+    release metadata used for update tracking; it is not part of the
+    identity. Within an installation, the bare plugin ID is the
+    storage key for config, secrets, observations, and history —
+    flat, stable across the plugin's life, and never
+    catalog-qualified.
+19. **An installation may contain only one plugin with a given plugin
+    ID.** This is a product rule; the loader and duplicate detection
+    enforce it, and a future installer refuses an install whose ID is
+    already taken, naming the incumbent and its catalog.
+20. **Orven never resolves a plugin ID across catalogs.** There is no
+    search order and no catalog priority; every install is an explicit
+    user pick of a specific plugin from a specific catalog. A same-ID
+    plugin in another catalog is a different plugin — never a match,
+    never an update.
+21. **Provenance is install metadata, not identity.** The installer
+    records catalog, publisher, and version alongside the plugin.
+    That record powers the curated-vs-third-party labeling (§17) and
+    pins updates to the recording catalog: updates only ever come from
+    the catalog a plugin was installed from.
+
 ## Known enforcement gaps (recorded, planned)
 
 These are honest limits of today's containment. Contributors must not

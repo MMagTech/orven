@@ -1,8 +1,10 @@
 package engine
 
 import (
+	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -321,6 +323,41 @@ func TestStaleSectionIsMarked(t *testing.T) {
 	}
 	if b2.Sections[0].Stale {
 		t.Fatal("freshly collected data must not be marked stale")
+	}
+}
+
+// TestDuplicatePluginIDsAreRejected: an installation may contain only
+// one plugin with a given plugin ID. A second folder claiming a loaded
+// ID must be visibly broken, never silently sharing storage.
+func TestDuplicatePluginIDsAreRejected(t *testing.T) {
+	dir := t.TempDir()
+	for _, folder := range []string{"alpha-first", "alpha-second"} {
+		pdir := filepath.Join(dir, folder)
+		if err := os.MkdirAll(pdir, 0o755); err != nil {
+			t.Fatal(err)
+		}
+		manifest := `schema_version: 1
+id: alpha
+name: Alpha
+version: 0.0.1
+entrypoint: ["python", "main.py"]
+engine:
+  min_contract: 1
+`
+		if err := os.WriteFile(filepath.Join(pdir, "plugin.yaml"), []byte(manifest), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	ps := LoadPlugins(dir)
+	if len(ps) != 2 {
+		t.Fatalf("both folders should load (one broken), got %d", len(ps))
+	}
+	if ps[0].LoadError != "" {
+		t.Fatalf("first claimant of the id must be valid, got %q", ps[0].LoadError)
+	}
+	if !strings.Contains(ps[1].LoadError, "duplicate plugin id") ||
+		!strings.Contains(ps[1].LoadError, "alpha-first") {
+		t.Fatalf("second claimant must name the duplicate and the incumbent folder, got %q", ps[1].LoadError)
 	}
 }
 

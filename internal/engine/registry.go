@@ -39,17 +39,33 @@ func parseDur(s string, def time.Duration) time.Duration {
 }
 
 // LoadPlugins discovers plugins in dir. Each plugin is a folder with a
-// plugin.yaml.
+// plugin.yaml. Product rule (CONSTRAINTS.md, plugin identity): an
+// installation may contain only one plugin with a given plugin ID —
+// the ID keys config, secrets, observations, and history, so a second
+// folder claiming a loaded ID is marked broken rather than silently
+// sharing the first one's storage.
 func LoadPlugins(dir string) []*Plugin {
 	var out []*Plugin
+	seen := map[string]string{} // plugin id -> folder that claimed it
 	entries, _ := os.ReadDir(dir)
 	for _, e := range entries {
 		if !e.IsDir() {
 			continue
 		}
-		if p := LoadPlugin(filepath.Join(dir, e.Name())); p != nil {
-			out = append(out, p)
+		p := LoadPlugin(filepath.Join(dir, e.Name()))
+		if p == nil {
+			continue
 		}
+		if p.LoadError == "" {
+			if prev, dup := seen[p.Manifest.ID]; dup {
+				p.LoadError = fmt.Sprintf(
+					"duplicate plugin id %q (already provided by %s) — an installation may contain only one plugin with a given id",
+					p.Manifest.ID, prev)
+			} else {
+				seen[p.Manifest.ID] = e.Name()
+			}
+		}
+		out = append(out, p)
 	}
 	return out
 }

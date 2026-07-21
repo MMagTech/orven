@@ -69,7 +69,12 @@ const (
 type Observation struct {
 	Title string `json:"title"`
 	Body  string `json:"body,omitempty"`
-	Kind  string `json:"kind,omitempty"`  // fact | count | change | notice
+	// Kind is advisory metadata: fact | count | change | notice. It is
+	// a hint that future presentation MAY use; it has no engine
+	// behavior today, and plugins must not depend on any rendering
+	// difference between kinds. Values outside the four draw a
+	// validator warning so the vocabulary cannot drift.
+	Kind  string `json:"kind,omitempty"`
 	Scope string `json:"scope,omitempty"` // event (default) | state
 	// OccurredAt is when the fact happened, if the plugin knows.
 	// omitzero: an unset time is absent from JSON, never a year-one
