@@ -1,0 +1,17 @@
+{
+  "records": [
+    {
+      "title": "The Fall Guy (2024)",
+      "trackedDownloadState": "importFailed",
+      "errorMessage": "No files found are eligible for import"
+    },
+    {
+      "title": "Furiosa: A Mad Max Saga (2024)",
+      "trackedDownloadState": "downloading"
+    },
+    {
+      "title": "Poor Things (2023)",
+      "trackedDownloadState": "downloading"
+    }
+  ]
+}

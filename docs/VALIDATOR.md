@@ -5,11 +5,14 @@ so the checks are implemented from an agreed spec, and so contributors
 know exactly what will be checked before they submit. The validator is
 also the future CI gate for the community plugin repository.
 
-Usage (planned):
+Usage:
 
 ```bash
-orven validate ./plugins/my-plugin
+go run ./cmd/orven validate ./plugins/my-plugin
 ```
+
+(or `orven validate <dir>...` with a built binary; exit code 0 = no
+errors, 1 = errors, and warnings are listed either way)
 
 The validator runs the plugin against its own fixtures via the real
 engine runner and inspects the manifest and output.
@@ -43,9 +46,12 @@ it. The validator helps contributors succeed; it never merely rejects.
 8. Secret leakage: any configured secret value (from the test input)
    appearing verbatim in summary, observations, or error text.
 9. Forbidden voice in output: recommendation or remediation language
-   ("you should", "we recommend", "restart", "run ... to fix",
-   "consider", "please"). Facts only — this list is maintained in the
-   validator and shared with the repository CI.
+   ("you should", "we recommend", "try restarting", "to fix",
+   "consider", "please"). Facts only. The list is maintained in the
+   validator (`internal/validate/validate.go`) and favors precision
+   over recall: factual past-tense wording ("the container restarted
+   4 times") must never be flagged, so only clearly advisory or
+   imperative forms are matched.
 
 ## Warnings
 

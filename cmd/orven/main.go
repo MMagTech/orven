@@ -8,6 +8,7 @@ import (
 
 	"orven/internal/core"
 	"orven/internal/engine"
+	"orven/internal/validate"
 )
 
 func envOr(key, def string) string {
@@ -18,6 +19,12 @@ func envOr(key, def string) string {
 }
 
 func main() {
+	// Subcommand: `orven validate <plugin-dir>...` — the contributor
+	// tool specified in docs/VALIDATOR.md. Everything else serves the app.
+	if len(os.Args) > 1 && os.Args[1] == "validate" {
+		os.Exit(validate.CLI(os.Args[2:]))
+	}
+
 	dataDir := envOr("ORVEN_DATA", "data")
 	pluginsDir := envOr("ORVEN_PLUGINS", "plugins")
 	addr := envOr("ORVEN_ADDR", ":8420")

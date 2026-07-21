@@ -37,7 +37,7 @@ func (e *Engine) Run(p *Plugin, manual bool) StoredBatch {
 		Secrets:         e.Store.Secrets(p.Manifest.ID),
 	}
 
-	out, runErr := execPlugin(p, in)
+	out, runErr := ExecPlugin(p, in)
 
 	batch := StoredBatch{
 		PluginID:   p.Manifest.ID,
@@ -123,7 +123,10 @@ func resolveInterpreter(name string, lookPath func(string) (string, error)) stri
 	return name
 }
 
-func execPlugin(p *Plugin, in contract.Input) (contract.Output, error) {
+// ExecPlugin executes one plugin subprocess with the engine's full
+// isolation (timeout, minimal env, plugin dir as cwd) and returns its
+// parsed output. Used by the runner and by `orven validate`.
+func ExecPlugin(p *Plugin, in contract.Input) (contract.Output, error) {
 	var out contract.Output
 
 	ctx, cancel := context.WithTimeout(context.Background(), p.Timeout)

@@ -46,10 +46,19 @@ in *Settings*.
 ## Building a plugin (with or without AI)
 
 Point your AI assistant at this repository and say what you want
-observed — [docs/PLUGIN_SDK.md](docs/PLUGIN_SDK.md) and
-[docs/CONSTRAINTS.md](docs/CONSTRAINTS.md) contain everything it needs
-to produce a conforming plugin. `plugins/demo-activity/` is the
-reference implementation.
+observed — `CLAUDE.md` is its entry point, and
+[docs/PLUGIN_SDK.md](docs/PLUGIN_SDK.md) plus
+[docs/CONSTRAINTS.md](docs/CONSTRAINTS.md) contain everything needed
+to produce a conforming plugin. Two references to copy:
+`plugins/demo-activity/` (fixture-driven basics) and
+`examples/radarr-queue/` (observing an HTTP API).
+
+Check your work with the validator
+([spec](docs/VALIDATOR.md)):
+
+```bash
+go run ./cmd/orven validate ./path/to/plugin
+```
 
 ## Configuration
 

@@ -32,7 +32,7 @@ func (e *Engine) collectDue(now time.Time) {
 			continue
 		}
 		cfg := e.Store.PluginConfig(p.Manifest.ID)
-		if !cfg.Enabled || requiredConfigMissing(p, cfg) {
+		if !cfg.Enabled || e.requiredConfigMissing(p, cfg) {
 			continue
 		}
 		attempt, _ := e.Store.LastRun(p.Manifest.ID)

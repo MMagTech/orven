@@ -170,6 +170,53 @@ So write it as a calm statement about the check itself, and make it
 most informative for the empty and failure cases — that's when a
 reader will actually see it.
 
+## Observing an HTTP API (the common case)
+
+Most real plugins read a service's HTTP API — Sonarr, Radarr,
+Overseerr, Traefik. The complete reference implementation is
+**`examples/radarr-queue/`**; copy it and change what it observes.
+The pattern it demonstrates:
+
+- **Standard library HTTP only** (Python `urllib`, Go `net/http`, …).
+  No package installs — a plugin folder must run as dropped in.
+- **GET requests only.** A plugin never changes the system it observes.
+- **Secrets go in headers, never URLs.** The API key arrives in the
+  engine input's `secrets` and is sent as a header; query strings end
+  up in proxy and server logs.
+- **Map transport failures to statuses honestly:**
+
+  | what happened                        | status        |
+  |--------------------------------------|---------------|
+  | connection refused / DNS / timeout   | `unavailable` |
+  | HTTP 401 or 403                      | `auth_failed` |
+  | other HTTP error, unparsable body    | `error`       |
+  | reached it, queue/list is empty      | `nothing`     |
+
+- **Fixtures replace the network.** When the engine passes `fixture`
+  in the input (tests and `orven validate` do), read that file as the
+  canned API response instead of calling anything. Your plugin is
+  fully testable without the real service.
+- **Declare the access** in `permissions:` so the user sees it before
+  enabling.
+
+### Choosing a data source
+
+This is not a choice between "HTTP plugins" and something else — every
+plugin is a subprocess the engine runs on its schedule. The choice is
+what your subprocess reads:
+
+- **A service's HTTP API** — prefer this when the service has one
+  (most self-hosted apps do): clean authentication, no filesystem
+  coupling, works across hosts and containers.
+- **Local files or directories** (log files, exported reports) — needs
+  a declared path permission, and Docker users must mount it.
+- **Local sockets or read-only CLIs** (the Docker socket, `smartctl`)
+  — the most privileged option; declare it plainly and read only.
+
+Whatever the source: no daemons, no servers, no background threads
+that outlive the run. The engine starts you, you observe, you print
+one JSON object, you exit.
+
 ## Rules
 
 1. **Facts only.** Observations state what is, never what to do.

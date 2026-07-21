@@ -1,0 +1,31 @@
+schema_version: 1
+id: radarr-queue
+name: Radarr Queue
+version: 0.1.0
+publisher: orven
+description: >
+  Watches the Radarr download queue and reports how many items are
+  waiting and whether any are stuck. Read-only: it only ever issues
+  GET requests.
+entrypoint: ["python", "main.py"]
+engine:
+  min_contract: 1
+collection:
+  recommended_interval: 15m
+  min_interval: 5m
+  max_interval: 12h
+  freshness: 1h
+timeout: 20s
+permissions:
+  - "Read-only HTTP (GET) access to the Radarr server at the URL you configure."
+config:
+  - key: url
+    type: url
+    label: Radarr URL
+    help: The address of your Radarr server, e.g. http://radarr:7878
+    required: true
+  - key: api_key
+    type: secret
+    label: API key
+    help: Radarr → Settings → General → API Key. Stored write-only; never shown again.
+    required: true

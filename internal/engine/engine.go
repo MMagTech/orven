@@ -132,7 +132,7 @@ func (e *Engine) Health(p *Plugin) string {
 	}
 	attempt, _ := e.Store.LastRun(p.Manifest.ID)
 	if attempt == nil {
-		if requiredConfigMissing(p, cfg) {
+		if e.requiredConfigMissing(p, cfg) {
 			return HealthNeverConfigured
 		}
 		return HealthReady
@@ -153,9 +153,23 @@ func (e *Engine) Health(p *Plugin) string {
 	}
 }
 
-func requiredConfigMissing(p *Plugin, cfg PluginConfig) bool {
+// requiredConfigMissing reports whether any required field without a
+// default is still unset. Secret-type fields live in the secrets store,
+// not in config values — checking the wrong place would leave a plugin
+// "Never configured" forever after its API key was saved.
+func (e *Engine) requiredConfigMissing(p *Plugin, cfg PluginConfig) bool {
+	var secrets map[string]string
 	for _, f := range p.Manifest.Config {
 		if !f.Required || f.Default != nil {
+			continue
+		}
+		if f.Type == "secret" {
+			if secrets == nil {
+				secrets = e.Store.Secrets(p.Manifest.ID)
+			}
+			if secrets[f.Key] == "" {
+				return true
+			}
 			continue
 		}
 		if v, ok := cfg.Values[f.Key]; !ok || v == "" {
