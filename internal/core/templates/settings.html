@@ -1,0 +1,56 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline"><h1>Settings</h1></div>
+  {{if .Msg}}<p class="flash">{{.Msg}}</p>{{end}}
+  <p class="warn">This installation has no sign-in protection yet. Keep it on a trusted network; do not expose it directly to the internet.</p>
+
+  <section class="panel">
+    <h3>Briefing schedule</h3>
+    <form method="post" action="/settings/save" class="form">
+      <label>Prepare the briefing at
+        <input type="time" name="brief_time" value="{{.S.BriefTime}}">
+        <span class="help">One briefing is assembled at this time from everything collected since the previous one.</span>
+      </label>
+      <label>On these days
+        <span class="dayrow">
+        {{$sel := .S.BriefDays}}
+        {{range .Days}}<label class="daybox"><input type="checkbox" name="brief_days" value="{{.}}" {{if or (not $sel) (contains $sel .)}}checked{{end}}>{{.}}</label>{{end}}
+        </span>
+      </label>
+      <label>Keep briefings and observations for
+        <input type="number" name="retention" value="{{.S.RetentionDays}}" min="1" style="max-width:6rem"> days
+      </label>
+      <button type="submit">Save</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h3>Plugin repositories</h3>
+    <table class="list">
+      <tbody>
+      {{range .S.Repos}}
+      <tr><td>{{.}}</td>
+          <td style="text-align:right"><form method="post" action="/settings/repos"><input type="hidden" name="delete" value="{{.}}"><button class="subtle" type="submit">Remove</button></form></td></tr>
+      {{else}}
+      <tr><td class="quiet">No repositories configured.</td></tr>
+      {{end}}
+      </tbody>
+    </table>
+    <form method="post" action="/settings/repos" class="form-inline">
+      <input name="add" placeholder="https://github.com/user/plugins-repo">
+      <button type="submit">Add repository</button>
+    </form>
+    <p class="help">Plugins from repositories other than the default are third-party. Review what a plugin asks for before enabling it. (Installing directly from repositories arrives in a later version — for now, place plugin folders in the plugins directory.)</p>
+  </section>
+
+  <section class="panel">
+    <h3>Backups</h3>
+    <p class="help">Everything Orven knows lives in its data directory. Back that folder up with your normal backup tool. Briefings and observations contain no secrets; the <code>secrets</code> subfolder does — encrypt any backup that includes it.</p>
+  </section>
+
+  <section class="panel">
+    <h3>Diagnostics</h3>
+    <p><a href="/logs">Open the log viewer</a></p>
+  </section>
+</article>
+{{template "foot" .}}

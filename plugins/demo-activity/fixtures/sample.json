@@ -1,0 +1,11 @@
+{
+  "events": [
+    { "title": "3 movies finished downloading", "detail": "Dune: Part Two, The Holdovers, and Poor Things are ready to watch.", "kind": "count", "scope": "event", "minutes_ago": 25 },
+    { "title": "1 episode is stuck in the queue", "detail": "Severance S02E04 has been waiting for 6 hours.", "kind": "notice", "scope": "state" },
+    { "title": "Overnight backup completed", "detail": "412 GB backed up successfully at 3:12 AM.", "kind": "fact", "scope": "event", "minutes_ago": 340 },
+    { "title": "2 new requests are awaiting approval", "detail": "Requested yesterday evening by the family account.", "kind": "count", "scope": "state" },
+    { "title": "Certificate renewed", "detail": "The reverse-proxy certificate now expires in 89 days.", "kind": "fact", "scope": "event", "minutes_ago": 55 },
+    { "title": "Container update available", "detail": "One container has a new image published this week.", "kind": "notice", "scope": "state" },
+    { "title": "Library growth", "detail": "The media library grew by 41 GB this week.", "kind": "fact", "scope": "event", "minutes_ago": 130 }
+  ]
+}

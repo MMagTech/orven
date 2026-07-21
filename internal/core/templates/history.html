@@ -1,0 +1,20 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline"><h1>History</h1>
+  <p class="when">Briefings are kept for {{.Retention}} days.</p></div>
+  {{range .Groups}}
+  <details class="day" {{if eq (len .Briefs) 1}}open{{end}}>
+    <summary>{{.Day}} <span class="count">{{len .Briefs}} briefing{{if gt (len .Briefs) 1}}s{{end}}</span></summary>
+    <ul class="daylist">
+      {{range .Briefs}}
+      <li><a href="/brief/{{.ID}}">{{clock .Generated}}</a>
+        {{if .Quiet}}<span class="muted">all quiet</span>{{else}}<span class="muted">{{len .Sections}} section{{if gt (len .Sections) 1}}s{{end}}</span>{{end}}
+      </li>
+      {{end}}
+    </ul>
+  </details>
+  {{else}}
+  <p class="quiet">No briefings yet.</p>
+  {{end}}
+</article>
+{{template "foot" .}}

@@ -1,0 +1,7 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline"><h1>Log</h1><p class="when">Most recent engine activity. Secrets never appear here.</p></div>
+  <pre class="log">{{range .Lines}}{{.}}
+{{else}}Nothing logged yet.{{end}}</pre>
+</article>
+{{template "foot" .}}

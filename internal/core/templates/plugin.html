@@ -1,0 +1,79 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline">
+    <h1>{{.P.Manifest.Name}}</h1>
+    <p class="when">{{.P.Manifest.Description}}</p>
+    <p class="muted">v{{.P.Manifest.Version}} · by {{.P.Manifest.Publisher}} · contract v{{.P.Manifest.Engine.MinContract}} · <span class="pill">{{.Health}}</span></p>
+  </div>
+
+  {{if .Msg}}<p class="flash">{{.Msg}}</p>{{end}}
+  {{if .P.LoadError}}<p class="warn">This plugin cannot run: {{.P.LoadError}}</p>{{end}}
+  {{if .P.Incompatible}}<p class="warn">This plugin needs a newer engine (requires contract v{{.P.Manifest.Engine.MinContract}}).</p>{{end}}
+
+  {{if .P.Manifest.Permissions}}
+  <section class="panel">
+    <h3>This plugin asks for</h3>
+    <ul class="facts">{{range .P.Manifest.Permissions}}<li>{{.}}</li>{{end}}</ul>
+  </section>
+  {{end}}
+
+  <section class="panel">
+    <h3>Controls</h3>
+    <div class="controls">
+      <form method="post" action="/plugins/{{.P.Manifest.ID}}/toggle">
+        <button type="submit">{{if .Cfg.Enabled}}Disable{{else}}Enable{{end}}</button>
+      </form>
+      <form method="post" action="/plugins/{{.P.Manifest.ID}}/run">
+        <button type="submit" {{if not .Cfg.Enabled}}disabled{{end}}>Run now</button>
+      </form>
+    </div>
+    <p class="muted">Collects every {{.Interval}} (recommended {{.P.Recommended}}, allowed {{.P.MinInterval}}–{{.P.MaxInterval}}) ·
+      last ran {{if .LastRun}}{{ago .LastRun.Started}}{{else}}never{{end}} ·
+      last success {{if .LastOK}}{{ago .LastOK.Started}}{{else}}never{{end}}</p>
+  </section>
+
+  <section class="panel">
+    <h3>Settings</h3>
+    <form method="post" action="/plugins/{{.P.Manifest.ID}}/save" class="form">
+      <label>Collection interval
+        <input name="interval" value="{{.Cfg.Interval}}" placeholder="{{.P.Recommended}} (recommended)">
+        <span class="help">How often information is gathered. Briefings are prepared separately, in Settings.</span>
+      </label>
+      {{$cfg := .Cfg}}{{$secrets := .SecretSet}}
+      {{range .P.Manifest.Config}}
+      <label>{{.Label}}{{if .Required}} *{{end}}
+        {{if eq .Type "boolean"}}
+          <input type="checkbox" name="cfg_{{.Key}}" {{if index $cfg.Values .Key}}checked{{end}}>
+        {{else if eq .Type "secret"}}
+          <input type="password" name="cfg_{{.Key}}" placeholder="{{if index $secrets .Key}}configured — leave blank to keep{{else}}not configured{{end}}" autocomplete="off">
+        {{else if eq .Type "select"}}
+          <select name="cfg_{{.Key}}">{{$sel := index $cfg.Values .Key}}{{range .Options}}<option {{if eq $sel .}}selected{{end}}>{{.}}</option>{{end}}</select>
+        {{else if eq .Type "number"}}
+          <input type="number" name="cfg_{{.Key}}" value="{{index $cfg.Values .Key}}">
+        {{else}}
+          <input name="cfg_{{.Key}}" value="{{index $cfg.Values .Key}}" placeholder="{{.Default}}">
+        {{end}}
+        {{if .Help}}<span class="help">{{.Help}}</span>{{end}}
+      </label>
+      {{end}}
+      <button type="submit">Save settings</button>
+    </form>
+  </section>
+
+  {{if .Runs}}
+  <section class="panel">
+    <h3>Recent runs</h3>
+    <table class="list">
+      <thead><tr><th>When</th><th>Result</th><th>Note</th></tr></thead>
+      <tbody>
+      {{range .Runs}}
+      <tr><td>{{short .Started}}{{if .Manual}} <span class="muted">manual</span>{{end}}</td>
+          <td><span class="pill">{{.Status}}</span></td>
+          <td class="muted">{{if .Summary}}{{.Summary}}{{else}}{{.Error}}{{end}}</td></tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+  {{end}}
+</article>
+{{template "foot" .}}

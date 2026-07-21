@@ -1,0 +1,13 @@
+services:
+  orven:
+    build: .
+    ports:
+      - "8420:8420"
+    volumes:
+      - orven-data:/app/data
+      # Uncomment to manage plugins from the host:
+      # - ./plugins:/app/plugins
+    restart: unless-stopped
+
+volumes:
+  orven-data:

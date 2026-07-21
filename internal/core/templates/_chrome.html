@@ -1,0 +1,69 @@
+{{define "head"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orven</title>
+<link rel="stylesheet" href="/static/style.css">
+<script>
+// Apply the saved appearance before first paint. "system" is the
+// absence of an override; the stylesheet resolves it via color-scheme.
+(function () {
+  var m = localStorage.getItem("orven-appearance");
+  if (m === "light" || m === "dark") document.documentElement.setAttribute("data-appearance", m);
+})();
+</script>
+</head>
+<body>
+<header class="masthead no-print">
+  <a class="wordmark" href="/">Orven</a>
+  <nav>
+    <a href="/" {{if eq .Page "front"}}class="on"{{end}}>Today</a>
+    <a href="/history" {{if eq .Page "history"}}class="on"{{end}}>History</a>
+    <a href="/plugins" {{if eq .Page "plugins"}}class="on"{{end}}>Plugins</a>
+    <a href="/settings" {{if eq .Page "settings"}}class="on"{{end}}>Settings</a>
+    <button id="appearance" class="appearance" type="button" title="Appearance"></button>
+  </nav>
+</header>
+<main>
+{{end}}
+
+{{define "foot"}}
+</main>
+<footer class="no-print">
+  <span>Orven reads. It never changes anything.</span>
+</footer>
+<script>
+// The lighting control: one quiet button cycling system -> dark ->
+// light. Changing the lighting for the page, not selecting a theme.
+(function () {
+  var btn = document.getElementById("appearance");
+  if (!btn) return;
+  var order = ["system", "dark", "light"];
+  var icons = { system: "◐", dark: "☾", light: "☀" };
+  var names = { system: "System", dark: "Dark", light: "Light" };
+  function current() {
+    var v = localStorage.getItem("orven-appearance");
+    return v === "dark" || v === "light" ? v : "system";
+  }
+  function apply(m) {
+    if (m === "system") {
+      document.documentElement.removeAttribute("data-appearance");
+      localStorage.removeItem("orven-appearance");
+    } else {
+      document.documentElement.setAttribute("data-appearance", m);
+      localStorage.setItem("orven-appearance", m);
+    }
+    btn.textContent = icons[m];
+    btn.title = "Appearance: " + names[m];
+  }
+  btn.addEventListener("click", function () {
+    apply(order[(order.indexOf(current()) + 1) % order.length]);
+  });
+  apply(current());
+})();
+</script>
+</body>
+</html>
+{{end}}

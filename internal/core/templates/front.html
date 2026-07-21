@@ -1,0 +1,60 @@
+{{template "head" .}}
+{{if .Have}}
+<article class="paper">
+  <div class="dateline">
+    <h1>{{if .Archived}}Briefing{{else}}The Morning Brief{{end}}</h1>
+    <p class="when">{{day .Brief.Generated}} · prepared at {{clock .Brief.Generated}}</p>
+    {{if .Archived}}<p class="archived-note no-print">You are reading an archived briefing. <a href="/">Back to today</a></p>{{end}}
+  </div>
+
+  {{if not .Brief.CoverageComplete}}
+  <p class="confidence">Unable to verify all sources — {{.Unverified}}.</p>
+  {{else if .Brief.Quiet}}
+  <p class="quiet">All quiet. Every source was checked; nothing changed since your last briefing.</p>
+  {{end}}
+
+  {{range .Stories}}
+  <section class="story">
+    <h2>{{.PluginName}}</h2>
+    {{if eq .Status "partial"}}<p class="status-note">Only partial information was available.</p>{{end}}
+    <ul class="facts">
+      {{range .Items}}
+      <li><strong>{{.Title}}</strong>{{if .Body}} — {{.Body}}{{end}}</li>
+      {{end}}
+    </ul>
+    {{/* Freshness speaks only when noteworthy: fresh data earns no caption. */}}
+    {{if .Stale}}
+    <p class="freshness stale">This information is from {{staleWhen .Freshness $.Brief.Generated}} and may be out of date.</p>
+    {{end}}
+  </section>
+  {{end}}
+
+  {{if .Brief.Sections}}
+  <section class="coverage">
+    <h3>Coverage</h3>
+    {{if .Contributed}}<p>Today's briefing draws on: {{.Contributed}}.</p>{{end}}
+    {{if .Partial}}<p>Only partial information was available from: {{.Partial}}.</p>{{end}}
+    {{range .Failures}}<p>Could not be checked: {{.Name}} — {{.Why}}</p>{{end}}
+  </section>
+  {{else}}
+  <p class="quiet">No plugins contributed to this briefing yet. Enable one under <a href="/plugins">Plugins</a>.</p>
+  {{end}}
+
+  <div class="paper-actions no-print">
+    <button onclick="window.print()">Print / Save as PDF</button>
+    {{if not .Archived}}
+    <form method="post" action="/generate"><button type="submit">Prepare a fresh briefing now</button></form>
+    {{end}}
+  </div>
+</article>
+{{else}}
+<article class="paper">
+  <div class="dateline"><h1>Welcome to Orven</h1><p class="when">{{day .Now}}</p></div>
+  <p class="quiet">No briefing has been prepared yet.</p>
+  <div class="paper-actions no-print">
+    <form method="post" action="/generate"><button type="submit">Prepare the first briefing</button></form>
+    <a class="btnlink" href="/plugins">Set up plugins first</a>
+  </div>
+</article>
+{{end}}
+{{template "foot" .}}

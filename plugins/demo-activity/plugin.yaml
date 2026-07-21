@@ -1,0 +1,37 @@
+schema_version: 1
+id: demo-activity
+name: Demo Activity
+version: 0.1.0
+publisher: orven
+description: >
+  A sample plugin that reports pretend media-server activity from bundled
+  fixture data. It talks to nothing on your network — it exists so you can
+  see a real briefing working before installing real plugins.
+entrypoint: ["python", "main.py"]
+engine:
+  min_contract: 1
+collection:
+  recommended_interval: 30m
+  min_interval: 1m
+  max_interval: 24h
+  freshness: 2h
+timeout: 20s
+permissions:
+  - "No network access. Reads only its own bundled fixture files."
+config:
+  - key: source_name
+    type: text
+    label: Source name
+    help: The name shown for this source in your briefing.
+    default: "Demo media server"
+  - key: max_items
+    type: number
+    label: Most items to report
+    help: The briefing stays short; extra activity is summarized as a count.
+    default: 5
+  - key: scenario
+    type: select
+    label: Scenario to simulate
+    help: Switch this to preview how the briefing presents quiet days and problems.
+    default: activity
+    options: [activity, quiet, outage, auth-problem]

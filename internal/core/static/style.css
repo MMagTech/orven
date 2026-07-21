@@ -1,0 +1,151 @@
+/* Orven — calm newspaper. Cream paper, ink text, one quiet accent.
+   Dark mode is lighting, not a theme (CONSTRAINTS §11): every color is
+   a light-dark() pair resolved by the color-scheme, so the three
+   appearance modes (light / dark / system) can differ in palette only.
+   Typography, spacing, and hierarchy have no mode-specific rules. */
+:root {
+  color-scheme: light dark;
+  --paper: light-dark(#f7f3ea, #211f1b);
+  --sheet: light-dark(#fffdf7, #282521);
+  --ink: light-dark(#2b2a26, #d8d2c3);
+  --faint: light-dark(#8a8578, #96907f);
+  --rule: light-dark(#d8d2c2, #3d392f);
+  --accent: light-dark(#6b4f2a, #c2a172);
+  --field: light-dark(#ffffff, #1d1b17);
+  --flash-bg: light-dark(#eee8d5, #33302a);
+  --warn-ink: light-dark(#7a3b2e, #d9a08c);
+  --warn-bg: light-dark(#f9efe9, #33211a);
+  --warn-border: light-dark(#d9b8a8, #5c4a41);
+}
+:root[data-appearance="light"] { color-scheme: light; }
+:root[data-appearance="dark"] { color-scheme: dark; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.6 Georgia, "Times New Roman", serif;
+}
+a { color: var(--accent); }
+
+.masthead {
+  display: flex; align-items: baseline; justify-content: space-between;
+  max-width: 46rem; margin: 0 auto; padding: 1.2rem 1rem .6rem;
+}
+.wordmark {
+  font-size: 1.9rem; letter-spacing: .35em; text-transform: uppercase;
+  text-decoration: none; color: var(--ink); font-weight: bold;
+}
+.masthead nav a {
+  margin-left: 1.1rem; text-decoration: none; color: var(--faint);
+  font-size: .95rem;
+}
+.masthead nav a.on, .masthead nav a:hover { color: var(--ink); }
+
+main { max-width: 46rem; margin: 0 auto; padding: 0 1rem 3rem; }
+.paper {
+  background: var(--sheet); border: 1px solid var(--rule);
+  padding: 2.2rem 2.4rem; box-shadow: 0 1px 4px rgba(60,50,30,.07);
+}
+.dateline { border-bottom: 3px double var(--rule); margin-bottom: 1.6rem; padding-bottom: 1rem; }
+.dateline h1 { margin: 0; font-size: 2rem; font-weight: normal; }
+.when { margin: .3rem 0 0; color: var(--faint); font-style: italic; }
+.archived-note { color: var(--faint); font-size: .9rem; }
+
+.story { padding: 1.1rem 0; border-bottom: 1px solid var(--rule); }
+.story:last-of-type { border-bottom: none; }
+.story h2 { margin: 0 0 .35rem; font-size: 1.25rem; }
+.summary { margin: .2rem 0; }
+.status-note { margin: .2rem 0; color: var(--faint); font-style: italic; }
+.facts { margin: .5rem 0 .2rem; padding-left: 1.2rem; }
+.facts li { margin: .25rem 0; }
+.freshness { margin: .4rem 0 0; color: var(--faint); font-size: .82rem; }
+.freshness.stale { color: var(--ink); font-style: italic; }
+.quiet { color: var(--faint); font-style: italic; font-size: 1.05rem; text-align: center; padding: 1.4rem 0; }
+.confidence { font-style: italic; margin: 0 0 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+.coverage { margin-top: 2rem; border-top: 1px solid var(--rule); padding-top: .6rem; }
+.coverage h3 {
+  font-size: .85rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--faint); margin: 0 0 .5rem; font-weight: normal;
+}
+.coverage p { color: var(--faint); font-size: .88rem; margin: .25rem 0; }
+
+.paper-actions { display: flex; gap: .8rem; margin-top: 1.8rem; align-items: center; }
+button, .btnlink {
+  font: inherit; font-size: .92rem; padding: .45rem 1rem; cursor: pointer;
+  background: var(--sheet); color: var(--ink);
+  border: 1px solid var(--accent); text-decoration: none;
+}
+button:hover { background: var(--paper); }
+button:disabled { opacity: .45; cursor: default; }
+button.subtle { border-color: var(--rule); color: var(--faint); padding: .2rem .6rem; font-size: .8rem; }
+
+.pill {
+  display: inline-block; font-size: .78rem; padding: .1rem .55rem;
+  border: 1px solid var(--rule); border-radius: 1rem; color: var(--faint);
+  font-family: Georgia, serif;
+}
+.muted { color: var(--faint); font-size: .88rem; }
+.count { color: var(--faint); font-size: .85rem; margin-left: .5rem; }
+.flash { background: var(--flash-bg); border: 1px solid var(--rule); padding: .5rem .9rem; }
+.warn, .warn-inline { color: var(--warn-ink); font-size: .92rem; }
+.warn { border: 1px solid var(--warn-border); background: var(--warn-bg); padding: .55rem .9rem; }
+
+.panel { margin-top: 1.6rem; }
+.panel h3 {
+  font-size: .85rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--faint); border-bottom: 1px solid var(--rule);
+  padding-bottom: .3rem; margin-bottom: .8rem; font-weight: normal;
+}
+.controls { display: flex; gap: .8rem; margin-bottom: .5rem; }
+
+.form label { display: block; margin-bottom: 1rem; }
+.form input[type=text], .form input:not([type]), .form input[type=password],
+.form input[type=number], .form input[type=time], .form select {
+  display: block; width: 100%; max-width: 24rem; margin-top: .25rem;
+  font: inherit; font-size: .95rem; padding: .4rem .6rem;
+  border: 1px solid var(--rule); background: var(--field); color: var(--ink);
+}
+.help { display: block; color: var(--faint); font-size: .82rem; margin-top: .2rem; }
+.form-inline { display: flex; gap: .6rem; margin-top: .6rem; }
+.form-inline input { flex: 1; font: inherit; font-size: .95rem; padding: .4rem .6rem; border: 1px solid var(--rule); background: var(--field); color: var(--ink); }
+
+button.appearance {
+  border: none; background: none; padding: 0 0 0 1.1rem;
+  font: inherit; font-size: 1.05rem; color: var(--faint);
+  cursor: pointer; vertical-align: baseline;
+}
+button.appearance:hover { color: var(--ink); background: none; }
+.dayrow { display: flex; gap: .7rem; margin-top: .35rem; flex-wrap: wrap; }
+.daybox { font-size: .9rem; color: var(--faint); display: flex; gap: .25rem; align-items: center; }
+
+table.list { width: 100%; border-collapse: collapse; font-size: .95rem; }
+table.list th {
+  text-align: left; font-weight: normal; color: var(--faint);
+  font-size: .8rem; letter-spacing: .1em; text-transform: uppercase;
+  border-bottom: 1px solid var(--rule); padding: .35rem .5rem;
+}
+table.list td { padding: .5rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+
+details.day { border-bottom: 1px solid var(--rule); padding: .6rem 0; }
+details.day summary { cursor: pointer; font-size: 1.05rem; }
+.daylist { list-style: none; padding: .4rem 0 0 1.2rem; margin: 0; }
+.daylist li { margin: .3rem 0; }
+
+.log {
+  font: .8rem/1.5 Consolas, Menlo, monospace; background: #2b2a26; color: #ddd6c4;
+  padding: 1rem; overflow-x: auto; white-space: pre-wrap;
+}
+
+footer {
+  max-width: 46rem; margin: 0 auto; padding: 0 1rem 2rem;
+  color: var(--faint); font-size: .82rem; font-style: italic; text-align: center;
+}
+
+@media print {
+  :root { color-scheme: light; } /* paper prints in daylight */
+  .no-print { display: none !important; }
+  body { background: #fff; font-size: 12pt; }
+  .paper { border: none; box-shadow: none; padding: 0; }
+  main { max-width: none; }
+}

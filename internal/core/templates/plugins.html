@@ -1,0 +1,24 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline"><h1>Plugins</h1>
+  <p class="when">Plugins collect facts. The engine decides when they run.</p></div>
+  <table class="list">
+    <thead><tr><th>Plugin</th><th>Status</th><th>Every</th><th>Last ran</th><th>Last success</th></tr></thead>
+    <tbody>
+    {{range .Rows}}
+    <tr>
+      <td><a href="/plugins/{{.P.Manifest.ID}}">{{.P.Manifest.Name}}</a>
+          <span class="muted">v{{.P.Manifest.Version}}</span>
+          {{if .P.LoadError}}<div class="warn-inline">{{.P.LoadError}}</div>{{end}}</td>
+      <td><span class="pill">{{.Health}}</span></td>
+      <td>{{if .Enabled}}{{.Interval}}{{else}}—{{end}}</td>
+      <td>{{if .LastRun}}{{ago .LastRun.Started}}{{else}}never{{end}}</td>
+      <td>{{if .LastOK}}{{ago .LastOK.Started}}{{else}}never{{end}}</td>
+    </tr>
+    {{else}}
+    <tr><td colspan="5" class="quiet">No plugins installed. Drop a plugin folder into the plugins directory and restart, or install from a repository.</td></tr>
+    {{end}}
+    </tbody>
+  </table>
+</article>
+{{template "foot" .}}
