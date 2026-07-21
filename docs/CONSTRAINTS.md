@@ -81,3 +81,32 @@ is wrong, not the file.
     version, and requested permissions before enablement. Third-party
     repositories are labeled as such.
 16. Updates never silently expand permissions.
+17. **Valid is never trusted.** Passing validation, matching the
+    schema, or installing successfully must never be presented as an
+    endorsement. The distinction between curated plugins (from the
+    default repository, reviewed before acceptance) and third-party
+    plugins (the user is the reviewer) must be extremely clear at
+    every surface where a plugin is seen or acted on — install flow,
+    plugin list, plugin page, and permission prompts — not only at
+    install time. A third-party plugin stays visibly third-party
+    forever.
+
+## Known enforcement gaps (recorded, planned)
+
+These are honest limits of today's containment. Contributors must not
+write documentation or UI copy that implies otherwise, and fixes are
+planned as incremental milestones (OS-level plugin isolation):
+
+- **Network egress is not enforced.** A plugin's declared network
+  access is informed consent shown to the user, not a technical
+  restriction; a running plugin can reach any host.
+- **Plugins share the application's OS user.** A malicious plugin
+  could read the application's data directory, including other
+  plugins' stored secrets, directly from disk. The per-plugin
+  credential boundary is structural at the input channel and against
+  accidental disclosure, not against determined malice on the same
+  filesystem.
+
+Until these close, the compensating controls are the curated default
+repository, small auditable plugins, declared permissions, and the
+user's trust decision (§15, §17).
