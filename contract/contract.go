@@ -23,13 +23,16 @@ const (
 
 // Input is what the engine writes to a plugin's stdin as JSON.
 type Input struct {
-	ContractVersion int               `json:"contract_version"`
-	PluginID        string            `json:"plugin_id"`
-	Now             time.Time         `json:"now"`
-	WindowStart     time.Time         `json:"window_start"` // last successful run, or zero
-	Config          map[string]any    `json:"config"`
-	Secrets         map[string]string `json:"secrets,omitempty"`
-	Fixture         string            `json:"fixture,omitempty"` // set during tests: path to fixture data
+	ContractVersion int       `json:"contract_version"`
+	PluginID        string    `json:"plugin_id"`
+	Now             time.Time `json:"now"`
+	// WindowStart is the plugin's last successful run. Absent from the
+	// JSON on the first run (omitzero) — plugins treat a missing or
+	// zero-valued window as "report everything".
+	WindowStart time.Time         `json:"window_start,omitzero"`
+	Config      map[string]any    `json:"config"`
+	Secrets     map[string]string `json:"secrets,omitempty"`
+	Fixture     string            `json:"fixture,omitempty"` // set during tests: path to fixture data
 }
 
 // Output is what a plugin writes to stdout as JSON.
@@ -64,11 +67,14 @@ const (
 // Observation is a single structured fact a plugin found. Plugins state
 // facts only — never suggestions, fixes, or remediation steps.
 type Observation struct {
-	Title      string    `json:"title"`
-	Body       string    `json:"body,omitempty"`
-	Kind       string    `json:"kind,omitempty"`  // fact | count | change | notice
-	Scope      string    `json:"scope,omitempty"` // event (default) | state
-	OccurredAt time.Time `json:"occurred_at,omitempty"`
+	Title string `json:"title"`
+	Body  string `json:"body,omitempty"`
+	Kind  string `json:"kind,omitempty"`  // fact | count | change | notice
+	Scope string `json:"scope,omitempty"` // event (default) | state
+	// OccurredAt is when the fact happened, if the plugin knows.
+	// omitzero: an unset time is absent from JSON, never a year-one
+	// placeholder.
+	OccurredAt time.Time `json:"occurred_at,omitzero"`
 }
 
 // Manifest is the parsed plugin.yaml.

@@ -38,8 +38,11 @@ command is executed exactly as declared.
 }
 ```
 
-`window_start` is your last successful run (zero value on the first
-run). Report what changed since then.
+`window_start` is your last successful run; it is **absent on the
+first run** — treat a missing window as "report everything". Report
+what changed since then. `occurred_at` on observations is likewise
+optional: set it when you know when the fact happened, omit it
+otherwise.
 
 **Output (stdout):**
 
