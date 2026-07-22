@@ -1,0 +1,46 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline">
+    <h1>Uninstall {{.P.Manifest.Name}}?</h1>
+    <p class="when">Uninstalling changes what happens going forward. It never rewrites the past.</p>
+  </div>
+
+  {{if .Msg}}<p class="flash">{{.Msg}}</p>{{end}}
+
+  <section class="panel">
+    <h3>What will happen</h3>
+    <ul class="facts">
+      <li>Its configuration and credentials will be removed.</li>
+      <li>Its collected raw observations will be removed.</li>
+      {{if .Managed}}
+      <li>Its files will be deleted ({{if .Rec}}{{if eq .Rec.Status "bundled"}}bundled sample content{{else}}installed by Orven from {{.Rec.Catalog}}{{end}}{{end}}).</li>
+      {{else}}
+      <li class="warn-inline">Its files were <strong>not installed by Orven</strong> — they were added
+        manually. Deleting them removes that folder from your storage.</li>
+      {{end}}
+      <li><strong>Historical briefings are not affected.</strong> Every briefing it
+        contributed to remains exactly as published.</li>
+      <li>Its run history is <strong>preserved</strong> unless you choose below to delete it.</li>
+    </ul>
+  </section>
+
+  <form method="post" action="/plugins/{{.P.Manifest.ID}}/uninstall" class="form">
+    {{if not .Managed}}
+    <label class="daybox ack">
+      <input type="checkbox" name="ack_delete">
+      Delete the folder <code>{{.Dir}}</code> from disk. I understand these files were added manually and Orven will remove them permanently.
+    </label>
+    {{end}}
+    {{if .HasRuns}}
+    <label class="daybox">
+      <input type="checkbox" name="delete_runs">
+      Also delete its run history (otherwise it is kept)
+    </label>
+    {{end}}
+    <div class="paper-actions no-print">
+      <button type="submit">Uninstall {{.P.Manifest.Name}}</button>
+      <a class="btnlink" href="/plugins/{{.P.Manifest.ID}}">Cancel</a>
+    </div>
+  </form>
+</article>
+{{template "foot" .}}

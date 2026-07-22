@@ -28,9 +28,10 @@
     <h3>Plugin repositories</h3>
     <table class="list">
       <tbody>
-      {{range .S.Repos}}
-      <tr><td>{{.}}</td>
-          <td style="text-align:right"><form method="post" action="/settings/repos"><input type="hidden" name="delete" value="{{.}}"><button class="subtle" type="submit">Remove</button></form></td></tr>
+      {{range .Repos}}
+      <tr><td>{{.URL}}
+            {{if .Default}}<span class="pill">default catalog</span>{{else}}<span class="pill pill-third">third-party</span>{{end}}</td>
+          <td style="text-align:right"><form method="post" action="/settings/repos"><input type="hidden" name="delete" value="{{.URL}}"><button class="subtle" type="submit">Remove</button></form></td></tr>
       {{else}}
       <tr><td class="quiet">No repositories configured.</td></tr>
       {{end}}
@@ -40,8 +41,21 @@
       <input name="add" placeholder="https://github.com/user/plugins-repo">
       <button type="submit">Add repository</button>
     </form>
-    <p class="help">Plugins from repositories other than the default are third-party. Review what a plugin asks for before enabling it. (Installing directly from repositories arrives in a later version — for now, place plugin folders in the plugins directory.)</p>
+    <p class="help">These are the repositories Orven is allowed to browse and install
+    from, under <a href="/plugins/discover">Discover</a>. Plugins from
+    repositories other than the default catalog are third-party: you are the
+    reviewer. Removing a repository never touches plugins already installed
+    from it.</p>
   </section>
+
+  {{if .DemoRestorable}}
+  <section class="panel">
+    <h3>Sample content</h3>
+    <p class="help">The Demo Activity plugin is not installed. It shows a working
+    briefing from pretend data — useful for trying things out.</p>
+    <form method="post" action="/settings/restore-demo"><button type="submit">Restore the demo plugin</button></form>
+  </section>
+  {{end}}
 
   <section class="panel">
     <h3>Backups</h3>

@@ -1,0 +1,55 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline"><h1>Discover</h1>
+  <p class="when">Plugins available from your configured repositories. Installing one is a trust decision — review what it asks for.</p></div>
+
+  <div class="tabs no-print">
+    <a href="/plugins">Installed</a>
+    <a href="/plugins/discover" class="on">Discover</a>
+  </div>
+
+  {{if .Msg}}<p class="flash">{{.Msg}}</p>{{end}}
+
+  {{range .Repos}}{{$repo := .}}
+  <section class="panel">
+    <h3>{{.Name}}
+      {{if .Default}}<span class="pill">default catalog</span>{{else}}<span class="pill pill-third">third-party repository</span>{{end}}
+    </h3>
+    {{if .Err}}
+      <p class="warn">{{.Err}}</p>
+    {{else}}
+      {{range .Plugins}}
+      <div class="catalog-entry">
+        <p class="entry-head"><strong>{{.Name}}</strong>
+          <span class="muted">v{{.Version}} · by {{.Publisher}}</span>
+          {{if eq .Status "curated"}}<span class="pill pill-curated">curated</span>{{else}}<span class="pill">community</span>{{end}}
+        </p>
+        <p class="entry-desc">{{.Description}}</p>
+        {{if .Permissions}}
+        <p class="muted">Asks for:</p>
+        <ul class="facts">{{range .Permissions}}<li>{{.}}</li>{{end}}</ul>
+        {{end}}
+        <p class="entry-note muted">
+          {{if eq .Status "curated"}}Curated: recommended by the Orven project after review. Still code you are choosing to run.{{else}}Community: published but not curated — you are the reviewer.{{end}}
+        </p>
+        {{if .Installed}}
+        <p class="muted">✓ Installed — <a href="/plugins/{{.ID}}">manage it</a></p>
+        {{else}}
+        <a class="btnlink" href="/plugins/install?repo={{urlquery $repo.URL}}&id={{urlquery .ID}}">Install…</a>
+        {{end}}
+      </div>
+      {{else}}
+      <p class="quiet">This repository publishes no plugins yet.</p>
+      {{end}}
+      {{if not .Fetched.IsZero}}<p class="freshness">catalog fetched {{ago .Fetched}}</p>{{end}}
+    {{end}}
+  </section>
+  {{else}}
+  <p class="quiet">No repositories are configured. Add one under <a href="/settings">Settings</a>.</p>
+  {{end}}
+
+  <div class="paper-actions no-print">
+    <form method="post" action="/plugins/discover/refresh"><button type="submit">Refresh repositories</button></form>
+  </div>
+</article>
+{{template "foot" .}}

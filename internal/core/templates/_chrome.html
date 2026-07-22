@@ -21,7 +21,7 @@
   <nav>
     <a href="/" {{if eq .Page "front"}}class="on"{{end}}>Today</a>
     <a href="/history" {{if eq .Page "history"}}class="on"{{end}}>History</a>
-    <a href="/plugins" {{if eq .Page "plugins"}}class="on"{{end}}>Plugins</a>
+    <a href="/plugins" {{if or (eq .Page "plugins") (eq .Page "discover") (eq .Page "install") (eq .Page "uninstall") (eq .Page "plugin")}}class="on"{{end}}>Plugins</a>
     <a href="/settings" {{if eq .Page "settings"}}class="on"{{end}}>Settings</a>
     <button id="appearance" class="appearance" type="button" title="Appearance"></button>
   </nav>

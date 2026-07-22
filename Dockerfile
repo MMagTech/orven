@@ -17,10 +17,14 @@ LABEL org.opencontainers.image.title="Orven" \
 RUN adduser -D -h /app orven
 WORKDIR /app
 COPY --from=build /orven /usr/local/bin/orven
-COPY plugins/ /app/plugins/
-RUN mkdir -p /app/data && chown -R orven:orven /app
+# Bundled sample content lives outside the live plugins directory; on a
+# fresh installation it is seeded in exactly once (and stays uninstalled
+# if the user removes it — see seed-once in the engine).
+COPY plugins/ /usr/share/orven/seed-plugins/
+RUN mkdir -p /app/data /app/plugins && chown -R orven:orven /app
 USER orven
-ENV ORVEN_DATA=/app/data ORVEN_PLUGINS=/app/plugins ORVEN_ADDR=:8420
+ENV ORVEN_DATA=/app/data ORVEN_PLUGINS=/app/plugins ORVEN_ADDR=:8420 \
+    ORVEN_SEED=/usr/share/orven/seed-plugins
 VOLUME /app/data
 EXPOSE 8420
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s \

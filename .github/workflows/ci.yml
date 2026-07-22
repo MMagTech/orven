@@ -43,7 +43,12 @@ jobs:
           for i in $(seq 1 15); do
             if curl -fsS http://localhost:8420/healthz >/dev/null 2>&1; then
               echo "healthy after ${i}s"
-              curl -fsS http://localhost:8420/ | grep -qi "orven" && exit 0
+              curl -fsS http://localhost:8420/ | grep -qi "orven" || exit 1
+              # seed-once: a fresh container is seeded with the demo plugin
+              curl -fsS http://localhost:8420/plugins | grep -qi "Demo Activity" || {
+                echo "fresh container was not seeded with the demo plugin"; exit 1
+              }
+              exit 0
             fi
             sleep 1
           done

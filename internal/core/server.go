@@ -47,6 +47,13 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /brief/{id}", s.brief)
 	mux.HandleFunc("GET /history", s.history)
 	mux.HandleFunc("GET /plugins", s.plugins)
+	mux.HandleFunc("GET /plugins/discover", s.discover)
+	mux.HandleFunc("POST /plugins/discover/refresh", s.discoverRefresh)
+	mux.HandleFunc("GET /plugins/install", s.installConfirm)
+	mux.HandleFunc("POST /plugins/install", s.installDo)
+	mux.HandleFunc("GET /plugins/{id}/uninstall", s.uninstallConfirm)
+	mux.HandleFunc("POST /plugins/{id}/uninstall", s.uninstallDo)
+	mux.HandleFunc("POST /settings/restore-demo", s.restoreDemo)
 	mux.HandleFunc("GET /plugins/{id}", s.pluginPage)
 	mux.HandleFunc("POST /plugins/{id}/save", s.pluginSave)
 	mux.HandleFunc("POST /plugins/{id}/toggle", s.pluginToggle)
@@ -179,6 +186,7 @@ type pluginRow struct {
 	Interval time.Duration
 	LastRun  *engine.RunRecord
 	LastOK   *engine.RunRecord
+	Source   string // curated | community | bundled | manual
 }
 
 func (s *Server) pluginRows() []pluginRow {
@@ -189,13 +197,14 @@ func (s *Server) pluginRows() []pluginRow {
 		rows = append(rows, pluginRow{
 			P: p, Health: s.Engine.Health(p), Enabled: cfg.Enabled,
 			Interval: p.Interval(cfg), LastRun: attempt, LastOK: ok,
+			Source: sourceLabel(s.Engine.Store.InstallRecord(p.Manifest.ID)),
 		})
 	}
 	return rows
 }
 
 func (s *Server) plugins(w http.ResponseWriter, r *http.Request) {
-	s.render(w, "plugins", map[string]any{"Rows": s.pluginRows()})
+	s.render(w, "plugins", map[string]any{"Rows": s.pluginRows(), "Msg": r.URL.Query().Get("msg")})
 }
 
 func (s *Server) pluginPage(w http.ResponseWriter, r *http.Request) {
@@ -218,10 +227,12 @@ func (s *Server) pluginPage(w http.ResponseWriter, r *http.Request) {
 	for i, j := 0, len(runs)-1; i < j; i, j = i+1, j-1 {
 		runs[i], runs[j] = runs[j], runs[i]
 	}
+	rec := s.Engine.Store.InstallRecord(p.Manifest.ID)
 	s.render(w, "plugin", map[string]any{
 		"P": p, "Cfg": cfg, "SecretSet": secretSet,
 		"Health": s.Engine.Health(p), "Interval": p.Interval(cfg),
 		"LastRun": attempt, "LastOK": ok, "Runs": runs,
+		"Rec": rec, "Source": sourceLabel(rec),
 		"Msg": r.URL.Query().Get("msg"),
 	})
 }
@@ -297,10 +308,21 @@ func (s *Server) pluginRun(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) settings(w http.ResponseWriter, r *http.Request) {
+	cfg := s.Engine.Store.Settings()
+	type repoRow struct {
+		URL     string
+		Default bool
+	}
+	var repos []repoRow
+	for _, u := range cfg.Repos {
+		repos = append(repos, repoRow{URL: u, Default: u == engine.DefaultCatalog})
+	}
 	s.render(w, "settings", map[string]any{
-		"S":   s.Engine.Store.Settings(),
-		"Msg": r.URL.Query().Get("msg"),
-		"Days": []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		"S":              cfg,
+		"Repos":          repos,
+		"DemoRestorable": s.Engine.SeedAvailable("demo-activity"),
+		"Msg":            r.URL.Query().Get("msg"),
+		"Days":           []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
 	})
 }
 

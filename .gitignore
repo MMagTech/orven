@@ -2,3 +2,7 @@
 /orven
 /orven.exe
 __pycache__/
+# The dev plugins directory doubles as a live install target; only the
+# bundled demo is part of the repository.
+/plugins/*
+!/plugins/demo-activity/

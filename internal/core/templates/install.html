@@ -1,0 +1,54 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline">
+    <h1>Install {{.Entry.Name}}?</h1>
+    <p class="when">Installing a plugin is a trust decision. Review what you are agreeing to.</p>
+  </div>
+
+  {{if .Error}}
+  <p class="warn">{{.Error}}</p>
+  {{if .Errs}}<ul class="facts">{{range .Errs}}<li>{{.}}</li>{{end}}</ul>{{end}}
+  {{end}}
+
+  <section class="panel">
+    <h3>What you are installing</h3>
+    <ul class="facts">
+      <li><strong>Plugin</strong> — {{.Entry.Name}} ({{.Entry.ID}}), version {{.Entry.Version}}</li>
+      <li><strong>Publisher</strong> — {{.Entry.Publisher}}</li>
+      <li><strong>From</strong> — {{.RepoName}}
+        {{if .Default}}<span class="pill">default catalog</span>{{else}}<span class="pill pill-third">third-party repository</span>{{end}}</li>
+      <li><strong>Standing</strong> —
+        {{if eq .Entry.Status "curated"}}<span class="pill pill-curated">curated</span> recommended by the Orven project after review{{else}}<span class="pill">community</span> published but not curated — you are the reviewer{{end}}</li>
+    </ul>
+    <p>{{.Entry.Description}}</p>
+  </section>
+
+  <section class="panel">
+    <h3>This plugin asks for</h3>
+    {{if .Entry.Permissions}}
+    <ul class="facts">{{range .Entry.Permissions}}<li>{{.}}</li>{{end}}</ul>
+    {{else}}
+    <p class="warn">This plugin declares no permissions. Every plugin touches something — treat that silence as a reason for more caution, not less.</p>
+    {{end}}
+  </section>
+
+  <p class="help">Being installable is not an endorsement: passing validation means the
+  plugin speaks Orven's contract, not that it deserves your trust. Plugins are
+  deliberately small — you can read this one's folder after installing, before
+  enabling it. It will be installed disabled, with no access to anything, until
+  you configure and enable it.</p>
+
+  <div class="paper-actions no-print">
+    {{if .Installed}}
+    <p class="muted">Already installed — <a href="/plugins/{{.Entry.ID}}">manage it</a></p>
+    {{else}}
+    <form method="post" action="/plugins/install">
+      <input type="hidden" name="repo" value="{{.RepoURL}}">
+      <input type="hidden" name="id" value="{{.Entry.ID}}">
+      <button type="submit">Install {{.Entry.Name}}</button>
+    </form>
+    <a class="btnlink" href="/plugins/discover">Cancel</a>
+    {{end}}
+  </div>
+</article>
+{{template "foot" .}}

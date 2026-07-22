@@ -23,6 +23,7 @@ const maxConcurrentRuns = 4
 type Engine struct {
 	Store      *Store
 	PluginsDir string
+	SeedDir    string // bundled sample content (ORVEN_SEED); "" outside the container
 
 	mu      sync.Mutex
 	running map[string]bool // prevents overlapping runs
