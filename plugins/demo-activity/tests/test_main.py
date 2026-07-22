@@ -43,17 +43,17 @@ class TestDemoActivity(unittest.TestCase):
         self.assertEqual(res["status"], "auth_failed")
 
     def test_events_filtered_by_window_states_always_reported(self):
-        # A window starting 60 minutes ago: only events that occurred
-        # within the hour are new; states are reported regardless.
-        from datetime import datetime, timedelta, timezone
-        window = (datetime.now(timezone.utc) - timedelta(minutes=60)).isoformat()
+        # Fixture events are anchored to clock times (06:45, 03:12,
+        # 05:20, 07:05). With "now" at 08:00 and a window from 05:00,
+        # only events after 05:00 are new; states report regardless.
         res = run_plugin({"scenario": "activity", "max_items": 10},
-                         window_start=window)
+                         now="2026-07-22T08:00:00+00:00",
+                         window_start="2026-07-22T05:00:00+00:00")
         titles = [o["title"] for o in res["observations"]]
-        self.assertIn("3 movies finished downloading", titles)   # 25 min ago
-        self.assertIn("Certificate renewed", titles)             # 55 min ago
-        self.assertNotIn("Overnight backup completed", titles)   # 340 min ago
-        self.assertNotIn("Library growth", titles)               # 130 min ago
+        self.assertIn("3 movies finished downloading", titles)   # 06:45
+        self.assertIn("Certificate renewed", titles)             # 05:20
+        self.assertIn("Library growth", titles)                  # 07:05
+        self.assertNotIn("Overnight backup completed", titles)   # 03:12
         for state_title in ("1 episode is stuck in the queue",
                             "2 new requests are awaiting approval",
                             "Container update available"):
@@ -64,12 +64,28 @@ class TestDemoActivity(unittest.TestCase):
     def test_all_events_old_but_states_remain(self):
         # Nothing happened since the last run, but conditions persist:
         # the plugin must still report the states, not "nothing".
-        from datetime import datetime, timezone
         res = run_plugin({"scenario": "activity", "max_items": 10},
-                         window_start=datetime.now(timezone.utc).isoformat())
+                         now="2026-07-22T08:00:00+00:00",
+                         window_start="2026-07-22T08:00:00+00:00")
         self.assertEqual(res["status"], "ok")
         scopes = {o["scope"] for o in res["observations"]}
         self.assertEqual(scopes, {"state"})
+
+    def test_events_not_rereported_on_the_next_run(self):
+        # The duplication bug: a second collection 30 minutes after the
+        # first must not re-report the same events as new again.
+        first = run_plugin({"scenario": "activity", "max_items": 10},
+                           now="2026-07-22T07:30:00+00:00")
+        self.assertIn("3 movies finished downloading",
+                      [o["title"] for o in first["observations"]])
+        second = run_plugin({"scenario": "activity", "max_items": 10},
+                            now="2026-07-22T08:00:00+00:00",
+                            window_start="2026-07-22T07:30:00+00:00")
+        second_titles = [o["title"] for o in second["observations"]]
+        for event_title in ("3 movies finished downloading",
+                            "Overnight backup completed",
+                            "Certificate renewed", "Library growth"):
+            self.assertNotIn(event_title, second_titles)
 
     def test_no_recommendation_language(self):
         res = run_plugin({"scenario": "activity"})

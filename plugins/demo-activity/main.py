@@ -75,8 +75,15 @@ def build_output(inp):
     for e in entries:
         scope = e.get("scope", "event")
         occurred = None
-        if "minutes_ago" in e:
-            occurred = now - timedelta(minutes=e["minutes_ago"])
+        if "at" in e:
+            # Fixture events are anchored to a clock time (today, or
+            # yesterday if that time hasn't arrived yet) so that window
+            # filtering behaves like a real source: each event is new
+            # exactly once, then never re-reported.
+            hh, mm = (int(x) for x in e["at"].split(":"))
+            occurred = now.replace(hour=hh, minute=mm, second=0, microsecond=0)
+            if occurred > now:
+                occurred -= timedelta(days=1)
         # Events are new-since-last-run; skip ones the previous run
         # already reported. States are re-reported while still true.
         if scope == "event" and window_start and occurred and occurred <= window_start:
