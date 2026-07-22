@@ -64,6 +64,12 @@ plugin" if you ever want it again.
 | `ORVEN_ADDR`    | `:8420`        | listen address                |
 | `ORVEN_DATA`    | `/app/data`    | data directory (persist this) |
 | `ORVEN_PLUGINS` | `/app/plugins` | installed plugins             |
+| `TZ`            | unset (UTC)    | container time zone           |
+
+The briefing time and backup schedule follow the container's clock,
+and the image keeps UTC unless `TZ` is set — set it to your zone
+(for example `TZ=America/New_York`) so the morning briefing arrives
+on your morning.
 
 ## Health and updates
 

@@ -7,6 +7,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	// The container image ships no zoneinfo database; without this,
+	// TZ=Area/City silently falls back to UTC and the briefing fires
+	// at the wrong hour.
+	_ "time/tzdata"
 
 	"orven/internal/core"
 	"orven/internal/engine"
