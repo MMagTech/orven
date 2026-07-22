@@ -71,7 +71,29 @@ The image ships a `HEALTHCHECK` against `GET /healthz`, so `docker ps`
 and Unraid show real container health. Releases are tagged
 `vX.Y.Z`; the image tags `latest`, `X.Y`, and `X.Y.Z` track them.
 
+## Backups
+
+Settings → Backups manages everything: download a backup on demand,
+schedule automatic daily backups with a retention count, browse and
+delete existing ones, and restore (a safety backup of the current
+state is written before any restore). Credentials are only included
+when you opt in, and then always encrypted under a passphrase —
+backups never contain plain secrets. Point the backup folder at a
+mapped host path so your existing backup tooling picks the archives
+up.
+
+**After a restore** you have: every briefing, observation, and run
+record from the backup; all settings (schedule, retention,
+repositories, backup settings); and every plugin's configuration,
+enabled state, and — when included — credentials. Plugin *files* are
+not in backups: the app lists which catalog plugins to reinstall
+(each resumes with its restored settings), manually added plugin
+folders must be copied back by hand, and the backup passphrase must
+be re-entered if automatic backups include credentials — it never
+travels inside a backup. Restore means *put me back exactly where I
+was*: anything created since the backup is removed, preserved only in
+the automatic pre-restore safety backup.
+
 **Security note:** Orven has no sign-in yet. Keep it on a trusted
 network or behind an authenticating reverse proxy; do not expose it
-directly to the internet. The `data/secrets/` subfolder holds plugin
-credentials — encrypt any backup that includes it.
+directly to the internet.

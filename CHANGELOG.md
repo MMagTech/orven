@@ -10,6 +10,28 @@ plugins work on every future engine, period.
 
 ### Added
 
+- Daily Care. **Backups**: download on demand, automatic daily backups
+  with retention, a backup browser, and restore. Credentials are only
+  ever included encrypted (AES-256-GCM, passphrase-derived key) —
+  never plain, in any archive. **Restore means "put me back exactly
+  where I was"**: the backed-up domains are reproduced strictly
+  (anything created since the backup is preserved only in the
+  automatic pre-restore safety backup); credentials are reproduced
+  only when the archive carries them. The restore flow answers the
+  questions that matter — a plain-English confirmation, a completion
+  page stating what was restored and what still needs attention, an
+  "Awaiting reinstall" list for plugins recorded in the backup, and a
+  visible warning when automatic backups are set to include
+  credentials but the (never-backed-up) passphrase is missing.
+  **Collection schedule** overview in Settings: every plugin's
+  interval, last run, and next expected run in one place. **Print
+  preview** (`/print`): the briefing exactly as it prints, with a
+  running header and footer and paper typography; PDF remains the
+  browser's reliable print-to-PDF. **Exports**: any briefing downloads
+  as Markdown or JSON. The Brief page's actions became a quiet
+  service line — Prepare Brief · Print · Download — because the page
+  is a publication first.
+
 - Plugin management, the complete three-tier experience. Settings
   manages trusted repositories (default catalog vs third-party,
   labeled). **Plugins → Discover** browses what those repositories
