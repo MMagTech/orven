@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/MMagTech/orven/security/advisories/new
+    about: Please report anything exploitable privately, never as a public issue.
+  - name: Contribute a plugin
+    url: https://github.com/MMagTech/orven-plugins
+    about: New observers for real systems go to the curated plugin catalog.

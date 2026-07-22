@@ -1,0 +1,42 @@
+name: Bug report
+description: Something in Orven is broken or behaving dishonestly
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. One request before you paste anything:
+        **redact credentials and hostnames** from logs and screenshots.
+        (If you believe you've found a way a credential can *leak*, do
+        not open an issue — use *Security → Report a vulnerability*.)
+  - type: input
+    id: version
+    attributes:
+      label: Orven version
+      placeholder: "v0.1.0 (image tag or commit)"
+    validations:
+      required: true
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: How are you running it?
+      options:
+        - Docker / compose
+        - Unraid
+        - From source
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, what did you see instead?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output or briefing text
+      description: The in-app log viewer (Settings → Diagnostics) or container logs. Redact secrets and private hostnames.
+      render: text
