@@ -8,6 +8,27 @@ plugins work on every future engine, period.
 
 ## [Unreleased]
 
+### Added
+
+- Plugin management, the complete three-tier experience. Settings
+  manages trusted repositories (default catalog vs third-party,
+  labeled). **Plugins → Discover** browses what those repositories
+  publish — name, publisher, version, curated/community standing, and
+  requested permissions — and installs after an explicit trust-decision
+  page; every install passes the validator regardless of source, and
+  provenance (catalog, publisher, version) is recorded. **Plugins →
+  Installed** gains uninstall: configuration, credentials, and raw
+  observations are removed; run history is preserved unless
+  deliberately deleted; historical briefings are never altered.
+  Folders added manually are never deleted without an explicit
+  acknowledgment.
+- Seed-once demo lifecycle: a fresh installation is seeded with the
+  demo plugin exactly once. Uninstalling it is permanent across
+  restarts and container updates, and Settings offers a deliberate
+  "Restore the demo plugin".
+- `orven index` subcommand: generates a catalog repository's
+  index.json (the file Discover reads).
+
 ### Changed
 
 - The in-tree HTTP reference plugin is now `examples/jobs-example`, a

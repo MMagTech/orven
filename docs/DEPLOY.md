@@ -47,10 +47,15 @@ appdata folder was created by root, give it to that UID once:
 chown -R 1000:1000 /mnt/user/appdata/orven
 ```
 
-To install plugins beyond the bundled demo, also map
-`/app/plugins` → `/mnt/user/appdata/orven-plugins` and drop plugin
-folders there (one folder per plugin; restart the container after
-adding one).
+Map `/app/plugins` → `/mnt/user/appdata/orven/plugins` so installed
+plugins survive container updates. Plugins are installed from the
+app itself (Plugins → Discover), or by dropping a plugin folder there
+and restarting.
+
+The Demo Activity plugin is seeded into a fresh installation exactly
+once. Uninstalling it is permanent — it will not come back after a
+restart or image update — and Settings offers "Restore the demo
+plugin" if you ever want it again.
 
 ## Configuration
 
