@@ -1,0 +1,100 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline"><h1>Backups</h1>
+  <p class="when">Everything Orven knows fits in one archive. Credentials are only ever included encrypted, under a passphrase.</p></div>
+
+  {{if .Msg}}<p class="flash">{{.Msg}}</p>{{end}}
+
+  {{if and .B.IncludeSecrets (not .HasPassphrase)}}
+  <p class="warn">Automatic backups are set to include credentials, but no
+  passphrase is stored — this happens after a restore, because the passphrase
+  is never inside a backup. Until you enter one below, scheduled backups will
+  <strong>not</strong> include credentials.</p>
+  {{end}}
+
+  {{if .Delete}}
+  <section class="panel">
+    <h3>Delete {{.Delete}}?</h3>
+    <p class="help">This removes the backup file itself, permanently. Your live data is not affected.</p>
+    <form method="post" action="/backups/delete" class="controls">
+      <input type="hidden" name="name" value="{{.Delete}}">
+      <button type="submit">Delete this backup</button>
+      <a class="btnlink" href="/backups">Cancel</a>
+    </form>
+  </section>
+  {{end}}
+
+  <section class="panel">
+    <h3>Download a backup now</h3>
+    <form method="post" action="/backups/download" class="form">
+      <label class="daybox"><input type="checkbox" name="include_secrets"> Include plugin credentials (encrypted)</label>
+      <label>Passphrase for the credentials
+        <input type="password" name="passphrase" autocomplete="off" placeholder="required only when including credentials">
+        <span class="help">You will need this passphrase to restore the credentials. It is not stored.</span>
+      </label>
+      <button type="submit">Download backup</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h3>Automatic backups</h3>
+    <form method="post" action="/backups/settings" class="form" id="backup-settings">
+      <label class="daybox"><input type="checkbox" name="enabled" {{if .B.Enabled}}checked{{end}}> Write a backup automatically every day</label>
+      <label>At <input type="time" class="inline-input" name="time" value="{{.B.Time}}"></label>
+      <label>Backup folder
+        <input name="dir" value="{{.B.Dir}}" placeholder="{{.Dir}}">
+        <span class="help">Leave empty for the data directory's own <code>backups/</code> folder. On Docker, point this at a mapped path your existing backup tooling already covers.</span>
+      </label>
+      <label>Keep the most recent
+        <input type="number" class="inline-input" name="retention" value="{{.B.Retention}}" min="1"> backups
+      </label>
+      <label class="daybox"><input type="checkbox" name="include_secrets" {{if .B.IncludeSecrets}}checked{{end}}> Include plugin credentials (encrypted with the stored passphrase)</label>
+      <label>Stored passphrase
+        <input type="password" name="passphrase" autocomplete="off" placeholder="{{if .HasPassphrase}}configured — leave blank to keep{{else}}not configured{{end}}">
+        <span class="help">Stored on this machine so scheduled backups can encrypt
+        credentials without you present. It protects the <strong>backup
+        copies</strong> wherever they travel — it does not add protection for
+        the live data directory itself, and it is never included in any
+        backup.</span>
+      </label>
+    </form>
+    <div class="controls" style="margin-top:.4rem">
+      <button type="submit" form="backup-settings">Save</button>
+      <form method="post" action="/backups/now" class="inline-form"><button type="submit">Back up now</button></form>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>Existing backups</h3>
+    <p class="help">Folder: <code>{{.Dir}}</code></p>
+    <table class="list">
+      <thead><tr><th>Backup</th><th>Created</th><th>Size</th><th>Credentials</th><th></th></tr></thead>
+      <tbody>
+      {{range .List}}
+      <tr>
+        <td><a href="/backups/file/{{.Name}}">{{.Name}}</a></td>
+        <td>{{short .Created}}</td>
+        <td>{{sizeKB .Size}}</td>
+        <td>{{if .SecretsIncluded}}<span class="pill">encrypted</span>{{else}}<span class="muted">not included</span>{{end}}</td>
+        <td style="text-align:right">
+          <a class="btnlink" href="/backups/restore?src={{urlquery .Name}}">Restore…</a>
+          <a class="btnlink" href="/backups?delete={{urlquery .Name}}">Delete…</a>
+        </td>
+      </tr>
+      {{else}}
+      <tr><td colspan="5" class="quiet">No backups yet.</td></tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
+    <h3>Restore from a file</h3>
+    <form method="post" action="/backups/upload" enctype="multipart/form-data" class="form-inline">
+      <input type="file" name="archive" accept=".zip" required>
+      <button type="submit">Upload and review…</button>
+    </form>
+    <p class="help">Nothing is changed until you confirm on the next page.</p>
+  </section>
+</article>
+{{template "foot" .}}

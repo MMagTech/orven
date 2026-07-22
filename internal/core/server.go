@@ -30,6 +30,16 @@ func NewServer(e *engine.Engine) (*Server, error) {
 		"short":    func(t time.Time) string { return t.Format("Jan 2, 3:04 PM") },
 		"ago":       humanAgo,
 		"staleWhen": staleWhen,
+		"dur":       humanDur,
+		"durc":      compactDur,
+		"sizeKB": func(n int64) string {
+			switch {
+			case n >= 1<<20:
+				return fmt.Sprintf("%.1f MB", float64(n)/(1<<20))
+			default:
+				return fmt.Sprintf("%d KB", (n+1023)/1024)
+			}
+		},
 		"title":    sectionTitleStatus,
 		"contains": func(xs []string, x string) bool { for _, v := range xs { if v == x { return true } }; return false },
 	}
@@ -45,6 +55,10 @@ func (s *Server) Handler() http.Handler {
 	mux.Handle("GET /static/", http.FileServerFS(assets))
 	mux.HandleFunc("GET /{$}", s.front)
 	mux.HandleFunc("GET /brief/{id}", s.brief)
+	mux.HandleFunc("GET /print", s.printPreview)
+	mux.HandleFunc("GET /brief/{id}/print", s.printPreview)
+	mux.HandleFunc("GET /brief/{id}/export.md", s.exportMarkdown)
+	mux.HandleFunc("GET /brief/{id}/export.json", s.exportJSON)
 	mux.HandleFunc("GET /history", s.history)
 	mux.HandleFunc("GET /plugins", s.plugins)
 	mux.HandleFunc("GET /plugins/discover", s.discover)
@@ -54,6 +68,16 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /plugins/{id}/uninstall", s.uninstallConfirm)
 	mux.HandleFunc("POST /plugins/{id}/uninstall", s.uninstallDo)
 	mux.HandleFunc("POST /settings/restore-demo", s.restoreDemo)
+	mux.HandleFunc("GET /backups", s.backupsPage)
+	mux.HandleFunc("POST /backups/settings", s.backupsSettingsSave)
+	mux.HandleFunc("POST /backups/now", s.backupNow)
+	mux.HandleFunc("POST /backups/download", s.backupDownload)
+	mux.HandleFunc("GET /backups/file/{name}", s.backupFetch)
+	mux.HandleFunc("POST /backups/delete", s.backupDelete)
+	mux.HandleFunc("POST /backups/upload", s.backupUpload)
+	mux.HandleFunc("GET /backups/restore", s.restoreConfirm)
+	mux.HandleFunc("POST /backups/restore", s.restoreDo)
+	mux.HandleFunc("GET /backups/restored", s.restoredPage)
 	mux.HandleFunc("GET /plugins/{id}", s.pluginPage)
 	mux.HandleFunc("POST /plugins/{id}/save", s.pluginSave)
 	mux.HandleFunc("POST /plugins/{id}/toggle", s.pluginToggle)
@@ -186,7 +210,8 @@ type pluginRow struct {
 	Interval time.Duration
 	LastRun  *engine.RunRecord
 	LastOK   *engine.RunRecord
-	Source   string // curated | community | bundled | manual
+	Source   string    // curated | community | bundled | manual
+	Next     time.Time // next expected collection; zero = not scheduled
 }
 
 func (s *Server) pluginRows() []pluginRow {
@@ -194,17 +219,25 @@ func (s *Server) pluginRows() []pluginRow {
 	for _, p := range s.Engine.Plugins() {
 		cfg := s.Engine.Store.PluginConfig(p.Manifest.ID)
 		attempt, ok := s.Engine.Store.LastRun(p.Manifest.ID)
-		rows = append(rows, pluginRow{
+		row := pluginRow{
 			P: p, Health: s.Engine.Health(p), Enabled: cfg.Enabled,
 			Interval: p.Interval(cfg), LastRun: attempt, LastOK: ok,
 			Source: sourceLabel(s.Engine.Store.InstallRecord(p.Manifest.ID)),
-		})
+		}
+		if cfg.Enabled && p.LoadError == "" && !p.Incompatible && attempt != nil {
+			row.Next = attempt.Started.Add(row.Interval)
+		}
+		rows = append(rows, row)
 	}
 	return rows
 }
 
 func (s *Server) plugins(w http.ResponseWriter, r *http.Request) {
-	s.render(w, "plugins", map[string]any{"Rows": s.pluginRows(), "Msg": r.URL.Query().Get("msg")})
+	s.render(w, "plugins", map[string]any{
+		"Rows":    s.pluginRows(),
+		"Missing": s.Engine.MissingInstalls(),
+		"Msg":     r.URL.Query().Get("msg"),
+	})
 }
 
 func (s *Server) pluginPage(w http.ResponseWriter, r *http.Request) {
@@ -320,6 +353,7 @@ func (s *Server) settings(w http.ResponseWriter, r *http.Request) {
 	s.render(w, "settings", map[string]any{
 		"S":              cfg,
 		"Repos":          repos,
+		"Schedule":       s.pluginRows(),
 		"DemoRestorable": s.Engine.SeedAvailable("demo-activity"),
 		"Msg":            r.URL.Query().Get("msg"),
 		"Days":           []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
@@ -384,6 +418,39 @@ func parsePositive(s string) (int, error) {
 		return 0, fmt.Errorf("not a positive number")
 	}
 	return v, nil
+}
+
+// humanDur renders a duration in reader language: "30 min", "2 hr",
+// "1 hr 30 min" — never Go's "30m0s" notation.
+func humanDur(d time.Duration) string {
+	d = d.Round(time.Second)
+	if d < time.Minute {
+		return fmt.Sprintf("%d sec", int(d.Seconds()))
+	}
+	if d < time.Hour {
+		m, s := int(d.Minutes()), int(d.Seconds())%60
+		if s == 0 {
+			return fmt.Sprintf("%d min", m)
+		}
+		return fmt.Sprintf("%d min %d sec", m, s)
+	}
+	h, m := int(d.Hours()), int(d.Minutes())%60
+	if m == 0 {
+		return fmt.Sprintf("%d hr", h)
+	}
+	return fmt.Sprintf("%d hr %d min", h, m)
+}
+
+// compactDur renders a duration in the compact form users type into
+// interval fields: "30m", "2h", "1h30m".
+func compactDur(d time.Duration) string {
+	s := d.Round(time.Second).String()
+	s = strings.TrimSuffix(s, "0s")
+	s = strings.TrimSuffix(s, "0m")
+	if s == "" {
+		return "0s"
+	}
+	return s
 }
 
 func humanAgo(t time.Time) string {

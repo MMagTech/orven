@@ -40,11 +40,24 @@
   <p class="quiet">No plugins contributed to this briefing yet. Enable one under <a href="/plugins">Plugins</a>.</p>
   {{end}}
 
-  <div class="paper-actions no-print">
-    <button onclick="window.print()">Print / Save as PDF</button>
+  {{/* The service line: the reader's occasional actions, in the
+       margin's voice — never competing with the news. */}}
+  <div class="service-line no-print">
     {{if not .Archived}}
-    <form method="post" action="/generate"><button type="submit">Prepare a fresh briefing now</button></form>
+    <form method="post" action="/generate" class="inline-form"><button type="submit" class="quiet-action">Prepare Brief</button></form>
+    <span class="sep">·</span>
     {{end}}
+    <a class="quiet-action" href="/brief/{{.Brief.ID}}/print">Print</a>
+    <span class="sep">·</span>
+    <details class="download">
+      <summary class="quiet-action">Download&nbsp;▾</summary>
+      <span class="download-menu">
+        <span class="sep">·</span>
+        <a class="quiet-action" href="/brief/{{.Brief.ID}}/export.md">Markdown</a>
+        <span class="sep">·</span>
+        <a class="quiet-action" href="/brief/{{.Brief.ID}}/export.json">JSON</a>
+      </span>
+    </details>
   </div>
 </article>
 {{else}}

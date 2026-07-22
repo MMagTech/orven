@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orven — briefing for print</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+/* The sheet, exactly as it prints. */
+body { background: #fff; }
+.sheet { max-width: 46rem; margin: 0 auto; padding: 1rem 1.5rem 3rem; }
+.print-toolbar {
+  max-width: 46rem; margin: 0 auto; padding: .8rem 1.5rem;
+  display: flex; gap: .8rem; align-items: center;
+  border-bottom: 1px solid var(--rule);
+}
+.running-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 3px double var(--ink); padding-bottom: .4rem; margin-bottom: 1.2rem;
+  font-size: .85rem; letter-spacing: .3em; text-transform: uppercase;
+}
+.running-foot {
+  margin-top: 2rem; border-top: 1px solid var(--rule); padding-top: .4rem;
+  font-size: .78rem; color: var(--faint); display: flex; justify-content: space-between;
+}
+.sheet h1 { font-size: 1.8rem; font-weight: normal; margin: 0 0 .2rem; }
+.sheet .story { break-inside: avoid; }
+.sheet p, .sheet li { orphans: 3; widows: 3; }
+.sheet h2 { break-after: avoid; }
+@media print {
+  :root { color-scheme: light; }
+  .print-toolbar { display: none; }
+  .sheet { max-width: none; padding: 0; }
+  .running-foot {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #fff; border-top: 1px solid #ccc; margin: 0; padding: .3rem 0;
+  }
+  body { padding-bottom: 2.2rem; }
+}
+</style>
+</head>
+<body>
+<div class="print-toolbar">
+  <button onclick="window.print()">Print / Save as PDF</button>
+  <a class="btnlink" href="/brief/{{.Brief.ID}}">Back to the briefing</a>
+</div>
+<div class="sheet">
+  <div class="running-head"><span>Orven</span><span>{{day .Brief.Generated}}</span></div>
+  <h1>The Morning Brief</h1>
+  <p class="when">{{day .Brief.Generated}} · prepared at {{clock .Brief.Generated}}</p>
+
+  {{if not .Brief.CoverageComplete}}
+  <p class="confidence">Unable to verify all sources — {{.Unverified}}.</p>
+  {{else if .Brief.Quiet}}
+  <p class="quiet">All quiet. Every source was checked; nothing changed since your last briefing.</p>
+  {{end}}
+
+  {{range .Stories}}
+  <section class="story">
+    <h2>{{.PluginName}}</h2>
+    {{if eq .Status "partial"}}<p class="status-note">Only partial information was available.</p>{{end}}
+    <ul class="facts">
+      {{range .Items}}<li><strong>{{.Title}}</strong>{{if .Body}} — {{.Body}}{{end}}</li>{{end}}
+    </ul>
+    {{if .Stale}}<p class="freshness stale">This information is from {{staleWhen .Freshness $.Brief.Generated}} and may be out of date.</p>{{end}}
+  </section>
+  {{end}}
+
+  {{if .Brief.Sections}}
+  <section class="coverage">
+    <h3>Coverage</h3>
+    {{if .Contributed}}<p>This briefing draws on: {{.Contributed}}.</p>{{end}}
+    {{if .Partial}}<p>Only partial information was available from: {{.Partial}}.</p>{{end}}
+    {{range .Failures}}<p>Could not be checked: {{.Name}} — {{.Why}}</p>{{end}}
+  </section>
+  {{end}}
+
+  <div class="running-foot"><span>Orven — the morning brief</span><span>{{day .Brief.Generated}}</span></div>
+</div>
+</body>
+</html>

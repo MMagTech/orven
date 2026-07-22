@@ -9,6 +9,7 @@
   --sheet: light-dark(#fffdf7, #282521);
   --ink: light-dark(#2b2a26, #d8d2c3);
   --faint: light-dark(#8a8578, #96907f);
+  --mid: light-dark(#6f6a5e, #aaa393);
   --rule: light-dark(#d8d2c2, #3d392f);
   --accent: light-dark(#6b4f2a, #c2a172);
   --field: light-dark(#ffffff, #1d1b17);
@@ -71,6 +72,26 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1rem 3rem; }
 .coverage p { color: var(--faint); font-size: .88rem; margin: .25rem 0; }
 
 .paper-actions { display: flex; gap: .8rem; margin-top: 1.8rem; align-items: center; }
+
+/* The service line: quiet, borderless actions in the margin's voice. */
+.service-line {
+  display: flex; gap: .55rem; align-items: baseline; justify-content: center;
+  margin-top: 2rem; border-top: 1px solid var(--rule); padding-top: .7rem;
+  font-size: .85rem;
+}
+.inline-form { display: inline; }
+.quiet-action {
+  border: none; background: none; padding: 0; margin: 0;
+  font: inherit; font-size: .85rem; font-weight: normal; color: var(--mid);
+  cursor: pointer; text-decoration: none; box-shadow: none;
+}
+.quiet-action:hover { color: var(--ink); background: none; }
+.sep { color: var(--rule); }
+details.download { display: inline; }
+details.download summary { display: inline; list-style: none; }
+details.download summary::-webkit-details-marker { display: none; }
+.download-menu { display: inline; }
+.download-menu .sep:first-child { margin-left: .55rem; }
 button, .btnlink {
   font: inherit; font-size: .92rem; padding: .45rem 1rem; cursor: pointer;
   background: var(--sheet); color: var(--ink);
@@ -124,6 +145,11 @@ label.ack { color: var(--warn-ink); }
   display: block; width: 100%; max-width: 24rem; margin-top: .25rem;
   font: inherit; font-size: .95rem; padding: .4rem .6rem;
   border: 1px solid var(--rule); background: var(--field); color: var(--ink);
+}
+/* Inline inputs keep their unit ("[ 90 ] days") on one line. */
+.form input.inline-input {
+  display: inline-block; width: 5.5rem; margin: 0 .3rem;
+  vertical-align: baseline;
 }
 .help { display: block; color: var(--faint); font-size: .82rem; margin-top: .2rem; }
 .form-inline { display: flex; gap: .6rem; margin-top: .6rem; }

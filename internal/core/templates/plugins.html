@@ -20,7 +20,7 @@
           {{if .P.LoadError}}<div class="warn-inline">{{.P.LoadError}}</div>{{end}}</td>
       <td><span class="pill{{if eq .Source "curated"}} pill-curated{{end}}{{if eq .Source "manual"}} pill-third{{end}}">{{.Source}}</span></td>
       <td><span class="pill">{{.Health}}</span></td>
-      <td>{{if .Enabled}}{{.Interval}}{{else}}—{{end}}</td>
+      <td>{{if .Enabled}}{{dur .Interval}}{{else}}—{{end}}</td>
       <td>{{if .LastRun}}{{ago .LastRun.Started}}{{else}}never{{end}}</td>
       <td>{{if .LastOK}}{{ago .LastOK.Started}}{{else}}never{{end}}</td>
     </tr>
@@ -29,5 +29,28 @@
     {{end}}
     </tbody>
   </table>
+
+  {{if .Missing}}
+  <section class="panel">
+    <h3>Awaiting reinstall</h3>
+    <p class="help">These plugins are recorded as installed — typically from a
+    restored backup — but their files are not present. Their settings,
+    credentials, and history are already in place; each resumes the moment it
+    is reinstalled.</p>
+    <table class="list">
+      <tbody>
+      {{range .Missing}}
+      <tr>
+        <td>{{.PluginID}} <span class="muted">v{{.Version}}{{if .Publisher}} · by {{.Publisher}}{{end}}</span></td>
+        <td><span class="pill{{if eq .Status "curated"}} pill-curated{{end}}">{{.Status}}</span></td>
+        <td style="text-align:right">
+          {{if eq .Status "bundled"}}<a class="btnlink" href="/settings">Restore in Settings</a>{{else}}<a class="btnlink" href="/plugins/discover">Reinstall from Discover</a>{{end}}
+        </td>
+      </tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+  {{end}}
 </article>
 {{template "foot" .}}

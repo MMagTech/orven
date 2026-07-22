@@ -1,0 +1,62 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline">
+    <h1>Restore complete</h1>
+    {{if not .Created.IsZero}}<p class="when">You are back to the state captured {{day .Created}} at {{clock .Created}}.</p>{{end}}
+  </div>
+
+  <section class="panel">
+    <h3>What was restored</h3>
+    <ul class="facts">
+      <li>{{.Briefs}} briefing{{if ne .Briefs 1}}s{{end}} and their history, observations, and run records.</li>
+      <li>Configuration for {{.Plugins}} plugin{{if ne .Plugins 1}}s{{end}} — settings, collection intervals, and enabled states{{if .Secrets}} — and plugin credentials{{end}}.</li>
+      <li>All application settings: briefing schedule, retention, repositories, and backup settings.</li>
+      <li>Anything created since the backup was removed, and is preserved in the pre-restore safety backup under <a href="/backups">Backups</a>.</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h3>What still needs your attention</h3>
+    {{if .Missing}}
+    <p class="help">These plugins were installed on the backed-up machine. Their
+    settings{{if .Secrets}}, credentials,{{end}} and history are already in
+    place — each resumes the moment it is reinstalled.</p>
+    <table class="list">
+      <tbody>
+      {{range .Missing}}
+      <tr>
+        <td>{{.PluginID}} <span class="muted">v{{.Version}}{{if .Publisher}} · by {{.Publisher}}{{end}}</span></td>
+        <td><span class="pill{{if eq .Status "curated"}} pill-curated{{end}}">{{.Status}}</span></td>
+        <td style="text-align:right">
+          {{if eq .Status "bundled"}}<a class="btnlink" href="/settings">Restore in Settings</a>{{else}}<a class="btnlink" href="/plugins/discover">Reinstall from Discover</a>{{end}}
+        </td>
+      </tr>
+      {{end}}
+      </tbody>
+    </table>
+    {{end}}
+    <ul class="facts">
+      <li>Any <strong>manually added</strong> plugin folders must be copied back by hand, then the container restarted — Orven keeps no record of those.</li>
+      {{if .PassWarn}}
+      <li class="warn-inline">Automatic backups are set to include credentials, but the passphrase does not travel in backups — <a href="/backups">enter it again</a> or scheduled backups will not include credentials.</li>
+      {{end}}
+      {{if and (not .Missing) (not .PassWarn)}}
+      <li>Nothing else — no plugins await reinstallation.</li>
+      {{end}}
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h3>When are you fully back?</h3>
+    <p class="help">Once the plugins above are reinstalled{{if .PassWarn}} and the
+    backup passphrase is re-entered{{end}}, Orven is running exactly as the
+    backed-up machine was: same briefings, same schedules, same plugin
+    behavior. Collection resumes on its own — there is nothing to restart.</p>
+  </section>
+
+  <div class="paper-actions no-print">
+    <a class="btnlink" href="/plugins">Installed plugins</a>
+    <a class="btnlink" href="/">Go to the briefing</a>
+  </div>
+</article>
+{{template "foot" .}}

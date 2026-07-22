@@ -18,7 +18,7 @@
         </span>
       </label>
       <label>Keep briefings and observations for
-        <input type="number" name="retention" value="{{.S.RetentionDays}}" min="1" style="max-width:6rem"> days
+        <input type="number" class="inline-input" name="retention" value="{{.S.RetentionDays}}" min="1"> days
       </label>
       <button type="submit">Save</button>
     </form>
@@ -58,8 +58,31 @@
   {{end}}
 
   <section class="panel">
+    <h3>Collection schedule</h3>
+    <p class="help">When each plugin gathers information. Intervals are changed on the plugin's own page; the briefing itself is prepared at the time above.</p>
+    <table class="list">
+      <thead><tr><th>Plugin</th><th>Every</th><th>Last ran</th><th>Next expected</th></tr></thead>
+      <tbody>
+      {{range .Schedule}}
+      <tr>
+        <td><a href="/plugins/{{.P.Manifest.ID}}">{{.P.Manifest.Name}}</a></td>
+        <td>{{if .Enabled}}{{dur .Interval}}{{else}}<span class="muted">disabled</span>{{end}}</td>
+        <td>{{if .LastRun}}{{ago .LastRun.Started}}{{else}}never{{end}}</td>
+        <td>{{if not .Next.IsZero}}{{short .Next}}{{else if .Enabled}}on the next check{{else}}—{{end}}</td>
+      </tr>
+      {{else}}
+      <tr><td colspan="4" class="quiet">No plugins installed.</td></tr>
+      {{end}}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="panel">
     <h3>Backups</h3>
-    <p class="help">Everything Orven knows lives in its data directory. Back that folder up with your normal backup tool. Briefings and observations contain no secrets; the <code>secrets</code> subfolder does — encrypt any backup that includes it.</p>
+    <p class="help">Download a backup, schedule automatic ones, browse and restore
+    — everything Orven knows fits in one archive, and credentials are only ever
+    included encrypted.</p>
+    <p><a href="/backups">Manage backups</a></p>
   </section>
 
   <section class="panel">

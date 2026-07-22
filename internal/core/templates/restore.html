@@ -1,0 +1,48 @@
+{{template "head" .}}
+<article class="paper">
+  <div class="dateline">
+    <h1>Restore this backup?</h1>
+    <p class="when">Restoring overwrites the present with the past. A safety backup of the current state is written first.</p>
+  </div>
+
+  {{if .Msg}}<p class="flash">{{.Msg}}</p>{{end}}
+
+  <section class="panel">
+    <h3>What you are restoring</h3>
+    <ul class="facts">
+      <li><strong>Source</strong> — {{.Label}}</li>
+      <li><strong>Created</strong> — {{day .M.Created}} at {{clock .M.Created}}</li>
+      <li><strong>Contains</strong> — {{.M.Briefs}} briefing{{if ne .M.Briefs 1}}s{{end}}, configuration for {{.M.Plugins}} plugin{{if ne .M.Plugins 1}}s{{end}}</li>
+      <li><strong>Credentials</strong> — {{if .M.SecretsIncluded}}included, encrypted (passphrase required below){{else}}not included; current credentials stay as they are{{end}}</li>
+    </ul>
+  </section>
+
+  <section class="panel">
+    <h3>Immediately after restoring</h3>
+    <ul class="facts">
+      <li>Orven is put back <strong>exactly</strong> where the backup captured it: your briefings, history, and observations are those from the backup. Anything created since is removed — and preserved in the safety backup.</li>
+      <li>All settings return: the briefing schedule, retention, plugin repositories, and backup settings.</li>
+      <li>Every plugin's settings return — its configuration, collection interval, and whether it was enabled{{if .M.SecretsIncluded}} — and its credentials{{end}}.</li>
+      <li>Plugin <em>files</em> are not part of backups. The next page lists exactly which plugins to reinstall; each resumes with its restored settings the moment it's back. Manually added plugin folders must be copied back by hand (Orven keeps no record of those).</li>
+      <li>A safety backup of the current state is written first, so this step is undoable.</li>
+    </ul>
+  </section>
+
+  <form method="post" action="/backups/restore" class="form">
+    <input type="hidden" name="src" value="{{.Src}}">
+    {{if .M.SecretsIncluded}}
+    <label>Backup passphrase
+      <input type="password" name="passphrase" autocomplete="off" required>
+    </label>
+    {{end}}
+    <label class="daybox ack">
+      <input type="checkbox" name="ack">
+      I understand this overwrites the current briefings, observations, configuration, and settings with the backup's contents.
+    </label>
+    <div class="paper-actions no-print">
+      <button type="submit">Restore</button>
+      <a class="btnlink" href="/backups">Cancel</a>
+    </div>
+  </form>
+</article>
+{{template "foot" .}}

@@ -35,7 +35,7 @@
         <button type="submit" {{if not .Cfg.Enabled}}disabled{{end}}>Run now</button>
       </form>
     </div>
-    <p class="muted">Collects every {{.Interval}} (recommended {{.P.Recommended}}, allowed {{.P.MinInterval}}–{{.P.MaxInterval}}) ·
+    <p class="muted">Collects every {{dur .Interval}} (recommended {{dur .P.Recommended}}, allowed {{dur .P.MinInterval}} to {{dur .P.MaxInterval}}) ·
       last ran {{if .LastRun}}{{ago .LastRun.Started}}{{else}}never{{end}} ·
       last success {{if .LastOK}}{{ago .LastOK.Started}}{{else}}never{{end}}</p>
   </section>
@@ -44,7 +44,7 @@
     <h3>Settings</h3>
     <form method="post" action="/plugins/{{.P.Manifest.ID}}/save" class="form">
       <label>Collection interval
-        <input name="interval" value="{{.Cfg.Interval}}" placeholder="{{.P.Recommended}} (recommended)">
+        <input name="interval" value="{{.Cfg.Interval}}" placeholder="{{durc .P.Recommended}} (recommended)">
         <span class="help">How often information is gathered. Briefings are prepared separately, in Settings.</span>
       </label>
       {{$cfg := .Cfg}}{{$secrets := .SecretSet}}
