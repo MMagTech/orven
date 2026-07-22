@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Go and plugin tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Vet
+        run: go vet ./...
+      - name: Go tests
+        run: go test ./... -count=1
+      - name: Demo plugin tests
+        working-directory: plugins/demo-activity
+        run: python3 -m unittest discover -s tests -v
+      - name: HTTP example plugin tests
+        working-directory: examples/radarr-queue
+        run: python3 -m unittest discover -s tests -v
+      - name: Validate reference plugins (zero errors, zero warnings)
+        run: |
+          out=$(go run ./cmd/orven validate plugins/demo-activity examples/radarr-queue)
+          echo "$out"
+          test "$(echo "$out" | grep -c '0 error(s), 0 warning(s) — OK')" -eq 2
+
+  docker:
+    name: Docker build and smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t orven:ci .
+      - name: Smoke test
+        run: |
+          docker run -d --name orven -p 8420:8420 orven:ci
+          for i in $(seq 1 15); do
+            if curl -fsS http://localhost:8420/healthz >/dev/null 2>&1; then
+              echo "healthy after ${i}s"
+              curl -fsS http://localhost:8420/ | grep -qi "orven" && exit 0
+            fi
+            sleep 1
+          done
+          echo "container did not become healthy"; docker logs orven; exit 1

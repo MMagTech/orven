@@ -11,12 +11,14 @@ what to do.**
 ## Quick start (Docker)
 
 ```bash
-docker compose up --build
+docker run -d -p 8420:8420 -v ./orven-data:/app/data ghcr.io/mmagtech/orven:latest
 ```
 
 Open <http://localhost:8420>. Enable the bundled **Demo Activity**
 plugin under *Plugins*, press **Run now**, then **Prepare the first
-briefing** on the front page.
+briefing** on the front page. Deployment details (compose, Unraid,
+persistent storage): [docs/DEPLOY.md](docs/DEPLOY.md). To build from
+this repository instead: `docker compose up --build`.
 
 ## Quick start (from source)
 
@@ -78,6 +80,15 @@ credentials; encrypt backups that include it.
 go test ./...
 cd plugins/demo-activity && python -m unittest discover -s tests
 ```
+
+## Project direction and license
+
+Orven Community — this repository — is the product, licensed under
+[Apache 2.0](LICENSE). It is and will remain complete and first-class:
+never a trial edition, never intentionally diminished. If commercial
+offerings appear later, they will expand the platform (enterprise
+capabilities, managed services, professional tooling) around a
+Community Edition that stands on its own.
 
 ## Status
 

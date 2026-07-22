@@ -1,0 +1,7 @@
+.git
+.github
+.claude
+data
+docs
+examples
+*.md

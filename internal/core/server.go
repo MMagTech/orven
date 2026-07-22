@@ -56,6 +56,11 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("POST /settings/repos", s.reposEdit)
 	mux.HandleFunc("POST /generate", s.generate)
 	mux.HandleFunc("GET /logs", s.logs)
+	// liveness for container orchestrators; no data, no auth surface
+	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/plain")
+		w.Write([]byte("ok"))
+	})
 	return mux
 }
 
