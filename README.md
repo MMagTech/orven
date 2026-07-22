@@ -85,13 +85,28 @@ themselves, never persist their own data, and never render UI.
 go run ./cmd/orven validate ./path/to/plugin   # the same gate CI uses
 ```
 
-Curated plugins live in
-[orven-plugins](https://github.com/MMagTech/orven-plugins). To write
-your own, start from [docs/PLUGIN_SDK.md](docs/PLUGIN_SDK.md) and the
-two reference implementations (`plugins/demo-activity`,
-`examples/jobs-example`) — or point an AI coding assistant at this
-repository (it will find [CLAUDE.md](CLAUDE.md)) and describe what
-you want observed in plain language.
+### Where plugins live
+
+- **The catalog —
+  [orven-plugins](https://github.com/MMagTech/orven-plugins)** — is
+  where real, installable plugins are published (curated and
+  community). Browsing and installing from the catalog inside the app
+  is planned; today, installing means copying a plugin folder into
+  your plugins directory and restarting.
+- **Your plugins directory** (`/app/plugins` in Docker) holds what you
+  have installed. The bundled **Demo Activity** plugin is pre-installed
+  sample content: it observes nothing real, and exists so your first
+  run has a briefing to show.
+- **`examples/` in this repository** is teaching material, never
+  installed: `examples/jobs-example` is the generic HTTP-source
+  reference the SDK walks through. Real integrations belong in the
+  catalog, not here.
+
+To write your own plugin, start from
+[docs/PLUGIN_SDK.md](docs/PLUGIN_SDK.md) and copy a reference — or
+point an AI coding assistant at this repository (it will find
+[CLAUDE.md](CLAUDE.md)) and describe what you want observed in plain
+language.
 
 ## Trust and boundaries
 
