@@ -69,7 +69,7 @@ func DefaultSettings() Settings {
 		BriefTime:     "07:30",
 		BriefDays:     nil,
 		RetentionDays: 90,
-		Repos:         []string{"https://github.com/mmagnant/orven-plugins"},
+		Repos:         []string{"https://github.com/MMagTech/orven-plugins"},
 	}
 }
 
