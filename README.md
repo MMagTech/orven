@@ -43,15 +43,15 @@ in sentences, finishable before your coffee is.
 
 ## Maturity
 
-Early and honest about it: **v0.1.x**. What works today: the full
+Early and honest about it: **v0.2.x**. What works today: the full
 briefing pipeline (collect → observe → compile → read → history →
 print/PDF), the plugin contract (v1, frozen, with a backwards-
-compatibility promise), the validator, a demo plugin and an HTTP
-reference plugin, Docker deployment. What doesn't exist yet: sign-in
-(keep it on a trusted network or behind an authenticating reverse
-proxy — the app warns about this), in-app plugin installation
-(installing is a folder-drop today), and update checks. See
-[CHANGELOG.md](CHANGELOG.md).
+compatibility promise), the validator, in-app plugin install from
+catalogs with an explicit trust decision, backups and restore
+(credentials only ever encrypted), exports, Docker deployment. What
+doesn't exist yet: sign-in (keep it on a trusted network or behind
+an authenticating reverse proxy — the app warns about this) and
+update checks. See [CHANGELOG.md](CHANGELOG.md).
 
 ## Quick start
 
@@ -90,13 +90,14 @@ go run ./cmd/orven validate ./path/to/plugin   # the same gate CI uses
 - **The catalog —
   [orven-plugins](https://github.com/MMagTech/orven-plugins)** — is
   where real, installable plugins are published (curated and
-  community). Browsing and installing from the catalog inside the app
-  is planned; today, installing means copying a plugin folder into
-  your plugins directory and restarting.
+  community). *Plugins → Discover* browses what your trusted
+  repositories publish and installs after an explicit trust-decision
+  page; copying a plugin folder into your plugins directory and
+  restarting still works too.
 - **Your plugins directory** (`/app/plugins` in Docker) holds what you
-  have installed. The bundled **Demo Activity** plugin is pre-installed
-  sample content: it observes nothing real, and exists so your first
-  run has a briefing to show.
+  have installed. The bundled **Demo Activity** plugin is seeded into
+  a fresh installation exactly once: it observes nothing real, and
+  exists so your first run has a briefing to show.
 - **`examples/` in this repository** is teaching material, never
   installed: `examples/jobs-example` is the generic HTTP-source
   reference the SDK walks through. Real integrations belong in the

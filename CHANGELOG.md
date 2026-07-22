@@ -6,7 +6,11 @@ follow [Semantic Versioning](https://semver.org/). The plugin
 contract's compatibility promise is stronger than semver: contract v1
 plugins work on every future engine, period.
 
-## [Unreleased]
+## [0.2.0] — 2026-07-22
+
+Plugin management and Daily Care: plugins now install from catalogs
+after an explicit trust decision, and Orven backs up, restores, and
+exports what it holds.
 
 ### Added
 
