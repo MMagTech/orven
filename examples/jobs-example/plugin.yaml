@@ -1,0 +1,31 @@
+schema_version: 1
+id: jobs-example
+name: Jobs Example
+version: 0.1.0
+publisher: orven
+description: >
+  The reference HTTP-source plugin. It observes a made-up jobs API so
+  the pattern stays generic — any service with an HTTP endpoint and an
+  API token is observed the same way. Read-only: GET requests only.
+entrypoint: ["python", "main.py"]
+engine:
+  min_contract: 1
+collection:
+  recommended_interval: 15m
+  min_interval: 5m
+  max_interval: 12h
+  freshness: 1h
+timeout: 20s
+permissions:
+  - "Read-only HTTP (GET) access to the service at the URL you configure."
+config:
+  - key: url
+    type: url
+    label: Service URL
+    help: The address of the service to observe, e.g. http://myapp:8080
+    required: true
+  - key: api_token
+    type: secret
+    label: API token
+    help: Sent as a bearer token. Stored write-only; never shown again.
+    required: true

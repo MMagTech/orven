@@ -44,7 +44,7 @@ rules most often at stake:
 ## Building a plugin
 
 1. Copy a reference: `plugins/demo-activity/` (fixture-driven basics)
-   or `examples/radarr-queue/` (observing an HTTP API — the common
+   or `examples/jobs-example/` (observing an HTTP API — the common
    case).
 2. Read `docs/PLUGIN_SDK.md`. The two decisions that matter most:
    - **`event` vs `state` scope** — "If the condition resolves before

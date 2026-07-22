@@ -22,11 +22,11 @@ jobs:
         working-directory: plugins/demo-activity
         run: python3 -m unittest discover -s tests -v
       - name: HTTP example plugin tests
-        working-directory: examples/radarr-queue
+        working-directory: examples/jobs-example
         run: python3 -m unittest discover -s tests -v
       - name: Validate reference plugins (zero errors, zero warnings)
         run: |
-          out=$(go run ./cmd/orven validate plugins/demo-activity examples/radarr-queue)
+          out=$(go run ./cmd/orven validate plugins/demo-activity examples/jobs-example)
           echo "$out"
           test "$(echo "$out" | grep -c '0 error(s), 0 warning(s) — OK')" -eq 2
 

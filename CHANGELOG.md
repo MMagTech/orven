@@ -8,6 +8,14 @@ plugins work on every future engine, period.
 
 ## [Unreleased]
 
+### Changed
+
+- The in-tree HTTP reference plugin is now `examples/jobs-example`, a
+  deliberately generic observer of a made-up jobs API (it also
+  demonstrates window-filtered events). The Radarr plugin it replaces
+  lives where real plugins belong: the
+  [plugin catalog](https://github.com/MMagTech/orven-plugins).
+
 ## [0.1.0] — 2026-07-21
 
 The first release: a complete, small, working briefing platform.

@@ -89,7 +89,7 @@ Curated plugins live in
 [orven-plugins](https://github.com/MMagTech/orven-plugins). To write
 your own, start from [docs/PLUGIN_SDK.md](docs/PLUGIN_SDK.md) and the
 two reference implementations (`plugins/demo-activity`,
-`examples/radarr-queue`) — or point an AI coding assistant at this
+`examples/jobs-example`) — or point an AI coding assistant at this
 repository (it will find [CLAUDE.md](CLAUDE.md)) and describe what
 you want observed in plain language.
 

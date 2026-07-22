@@ -16,7 +16,7 @@ my-plugin/
 
 Copy `plugins/demo-activity/` as a starting point.
 
-Your `id` is a lowercase-kebab slug (`radarr-queue`) and it is the
+Your `id` is a lowercase-kebab slug (`jobs-example`) and it is the
 plugin's storage key: an installation may contain only one plugin with
 a given ID, so make it descriptive enough not to collide with the
 obvious name for a different plugin. A plugin's full identity in the
@@ -190,10 +190,13 @@ reader will actually see it.
 
 ## Observing an HTTP API (the common case)
 
-Most real plugins read a service's HTTP API — Sonarr, Radarr,
-Overseerr, Traefik. The complete reference implementation is
-**`examples/radarr-queue/`**; copy it and change what it observes.
-The pattern it demonstrates:
+Most real plugins read a service's HTTP API. The complete reference
+implementation is **`examples/jobs-example/`** — it observes a made-up
+jobs API, deliberately generic, because any service with an HTTP
+endpoint is observed the same way. Copy it and change what it
+observes; for real-world plugins built on the same pattern, see the
+[plugin catalog](https://github.com/MMagTech/orven-plugins). The
+pattern it demonstrates:
 
 - **Standard library HTTP only** (Python `urllib`, Go `net/http`, …).
   No package installs — a plugin folder must run as dropped in.

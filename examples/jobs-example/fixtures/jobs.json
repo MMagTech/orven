@@ -1,0 +1,9 @@
+{
+  "jobs": [
+    { "name": "nightly-backup", "state": "completed", "completed_at": "2026-07-21T03:12:00+00:00" },
+    { "name": "weekly-report", "state": "completed", "completed_at": "2026-07-20T22:40:00+00:00" },
+    { "name": "media-import", "state": "failed", "error": "destination disk is full" },
+    { "name": "thumbnail-rebuild", "state": "running" },
+    { "name": "log-rotation", "state": "running" }
+  ]
+}

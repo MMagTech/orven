@@ -70,7 +70,7 @@ func TestDemoPluginValidatesClean(t *testing.T) {
 
 func TestHTTPExampleValidatesClean(t *testing.T) {
 	needPython(t)
-	findings := Dir(repoPath(t, "examples", "radarr-queue"))
+	findings := Dir(repoPath(t, "examples", "jobs-example"))
 	if len(findings) != 0 {
 		t.Fatalf("the HTTP example plugin must validate clean, got %+v", findings)
 	}

@@ -26,7 +26,7 @@ documents first:
 ```bash
 go run ./cmd/orven          # run the app on :8420
 go test ./...               # engine, contract, and validator suites
-go run ./cmd/orven validate plugins/demo-activity examples/radarr-queue
+go run ./cmd/orven validate plugins/demo-activity examples/jobs-example
 ```
 
 Ground rules:
