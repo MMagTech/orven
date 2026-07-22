@@ -19,6 +19,10 @@ rules most often at stake:
    is stated as missing — absence of data is never an all-clear.
 3. **Importance is the reader's judgment.** Orven reports what
    changed; it never ranks or classifies what "needs attention."
+4. **Scope is deliberate.** Good ideas discovered mid-change go to
+   `ROADMAP.md` (Backlog or Ideas) as one line — they never expand
+   the change you are making. The active milestone grows only when
+   the product owner explicitly expands it.
 
 ## Architecture — do not blur these lines
 
