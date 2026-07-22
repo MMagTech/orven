@@ -20,6 +20,7 @@ func (e *Engine) StartScheduler(ctx context.Context) {
 			case now := <-tick.C:
 				e.collectDue(now)
 				e.briefIfDue(lastBriefCheck, now)
+				e.backupIfDue(lastBriefCheck, now)
 				lastBriefCheck = now
 			}
 		}
@@ -43,16 +44,22 @@ func (e *Engine) collectDue(now time.Time) {
 	}
 }
 
+// clockDue reports whether the daily local time hhmm falls between the
+// previous check and now.
+func clockDue(prev, now time.Time, hhmm string) bool {
+	t, err := time.ParseInLocation("15:04", hhmm, now.Location())
+	if err != nil {
+		return false
+	}
+	due := time.Date(now.Year(), now.Month(), now.Day(), t.Hour(), t.Minute(), 0, 0, now.Location())
+	return due.After(prev) && !due.After(now)
+}
+
 // briefIfDue fires when the configured local briefing time falls between
 // the previous check and now, on an allowed day.
 func (e *Engine) briefIfDue(prev, now time.Time) {
 	s := e.Store.Settings()
-	t, err := time.ParseInLocation("15:04", s.BriefTime, now.Location())
-	if err != nil {
-		return
-	}
-	due := time.Date(now.Year(), now.Month(), now.Day(), t.Hour(), t.Minute(), 0, 0, now.Location())
-	if !due.After(prev) || due.After(now) {
+	if !clockDue(prev, now, s.BriefTime) {
 		return
 	}
 	if len(s.BriefDays) > 0 && !contains(s.BriefDays, now.Format("Mon")) {
@@ -61,6 +68,20 @@ func (e *Engine) briefIfDue(prev, now time.Time) {
 	if _, err := e.GenerateBrief(); err != nil {
 		e.Logf("scheduled briefing failed: %v", err)
 	}
+}
+
+// backupIfDue writes the automatic backup at its configured time and
+// applies the backup retention count.
+func (e *Engine) backupIfDue(prev, now time.Time) {
+	b := e.Store.Settings().Backup
+	if !b.Enabled || !clockDue(prev, now, b.Time) {
+		return
+	}
+	if _, err := e.CreateBackupFile(); err != nil {
+		e.Logf("scheduled backup failed: %v", err)
+		return
+	}
+	e.PruneBackups(b.Retention)
 }
 
 func contains(xs []string, x string) bool {

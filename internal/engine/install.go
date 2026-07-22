@@ -236,6 +236,28 @@ func (e *Engine) Uninstall(id string, deleteFiles, deleteRuns bool) error {
 	return nil
 }
 
+// MissingInstalls returns install records whose plugin folder is not
+// present — exactly the state a restore onto a fresh machine produces.
+// The UI lists these so the post-restore to-do is visible in the app
+// instead of remembered by the user.
+func (e *Engine) MissingInstalls() []InstallRecord {
+	var out []InstallRecord
+	entries, _ := os.ReadDir(filepath.Join(e.Store.Root, "installed"))
+	for _, ent := range entries {
+		if !strings.HasSuffix(ent.Name(), ".json") {
+			continue
+		}
+		id := strings.TrimSuffix(ent.Name(), ".json")
+		if e.Plugin(id) != nil {
+			continue
+		}
+		if rec := e.Store.InstallRecord(id); rec != nil {
+			out = append(out, *rec)
+		}
+	}
+	return out
+}
+
 func copyDir(src, dest string) error {
 	return filepath.Walk(src, func(p string, info os.FileInfo, err error) error {
 		if err != nil {

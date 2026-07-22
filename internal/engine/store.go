@@ -58,10 +58,11 @@ func (s *Store) writeJSON(path string, v any) error {
 // ---- app settings ----
 
 type Settings struct {
-	BriefTime     string   `json:"brief_time"`     // "07:30"
-	BriefDays     []string `json:"brief_days"`     // ["Mon",...]; empty = every day
-	RetentionDays int      `json:"retention_days"` // briefs + observations
-	Repos         []string `json:"repos"`          // plugin repositories
+	BriefTime     string         `json:"brief_time"`     // "07:30"
+	BriefDays     []string       `json:"brief_days"`     // ["Mon",...]; empty = every day
+	RetentionDays int            `json:"retention_days"` // briefs + observations
+	Repos         []string       `json:"repos"`          // plugin repositories
+	Backup        BackupSettings `json:"backup"`
 }
 
 func DefaultSettings() Settings {
@@ -69,7 +70,8 @@ func DefaultSettings() Settings {
 		BriefTime:     "07:30",
 		BriefDays:     nil,
 		RetentionDays: 90,
-		Repos:         []string{"https://github.com/MMagTech/orven-plugins"},
+		Repos:         []string{DefaultCatalog},
+		Backup:        BackupSettings{Time: "03:30", Retention: 14},
 	}
 }
 
@@ -80,6 +82,12 @@ func (s *Store) Settings() Settings {
 	}
 	if v.RetentionDays <= 0 {
 		v.RetentionDays = 90
+	}
+	if v.Backup.Time == "" {
+		v.Backup.Time = "03:30"
+	}
+	if v.Backup.Retention <= 0 {
+		v.Backup.Retention = 14
 	}
 	return v
 }

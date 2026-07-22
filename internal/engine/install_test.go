@@ -256,6 +256,28 @@ func TestUninstallCanDeleteRunsDeliberately(t *testing.T) {
 
 // TestSeedLifecycle: seeded exactly once per installation; uninstall
 // sticks across restarts; restore is deliberate.
+// TestMissingInstalls: install records without plugin folders — the
+// post-restore state — are listed so the UI can show what to
+// reinstall; installing the plugin clears the listing.
+func TestMissingInstalls(t *testing.T) {
+	e := installEngine(t)
+	srv := testCatalogServer(t, nil)
+
+	e.Store.SaveInstallRecord(InstallRecord{
+		PluginID: "catalog-plugin", Catalog: srv.URL, Status: "community",
+		Publisher: "someone", Version: "1.2.0", Managed: true,
+	})
+	missing := e.MissingInstalls()
+	if len(missing) != 1 || missing[0].PluginID != "catalog-plugin" {
+		t.Fatalf("record without folder must be listed, got %+v", missing)
+	}
+
+	installFrom(t, e, srv)
+	if got := e.MissingInstalls(); len(got) != 0 {
+		t.Fatalf("installed plugin must clear the listing, got %+v", got)
+	}
+}
+
 func TestSeedLifecycle(t *testing.T) {
 	dataDir := t.TempDir()
 	pluginsDir := t.TempDir()
