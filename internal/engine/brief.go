@@ -18,8 +18,12 @@ import (
 func (e *Engine) GenerateBrief() (Brief, error) {
 	now := time.Now()
 	window := now.Add(-14 * 24 * time.Hour) // hard floor
-	if prev, ok := e.Store.LatestBrief(); ok && prev.Generated.After(window) {
-		window = prev.Generated
+	edition := "first"
+	if prev, ok := e.Store.LatestBrief(); ok {
+		edition = "subsequent"
+		if prev.Generated.After(window) {
+			window = prev.Generated
+		}
 	}
 
 	batches := e.Store.BatchesSince(window)
@@ -45,6 +49,7 @@ func (e *Engine) GenerateBrief() (Brief, error) {
 		ID:        now.UTC().Format("20060102T150405"),
 		Generated: now,
 		Window:    window,
+		Edition:   edition,
 	}
 
 	for _, p := range e.Plugins() {

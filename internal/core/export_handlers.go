@@ -31,6 +31,15 @@ func (s *Server) briefFor(w http.ResponseWriter, r *http.Request) (engine.Brief,
 }
 
 func (s *Server) printPreview(w http.ResponseWriter, r *http.Request) {
+	// Before any briefing exists, /print has nothing to preview — the
+	// Today page explains that state in the paper's own voice, so send
+	// the reader there instead of a bare 404.
+	if id := r.PathValue("id"); id == "" || id == "latest" {
+		if _, ok := s.Engine.Store.LatestBrief(); !ok {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
+	}
 	b, ok := s.briefFor(w, r)
 	if !ok {
 		return

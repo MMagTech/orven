@@ -13,6 +13,7 @@ func exportBrief() engine.Brief {
 	return engine.Brief{
 		ID:        "20260722T073000",
 		Generated: time.Date(2026, 7, 22, 7, 30, 0, 0, time.Local),
+		Edition:   "subsequent",
 		Sections: []engine.BriefSection{
 			{
 				PluginID: "sonarr", PluginName: "Sonarr", Status: contract.StatusOK,
@@ -34,6 +35,7 @@ func TestBriefMarkdown(t *testing.T) {
 	md := BriefMarkdown(exportBrief())
 	for _, want := range []string{
 		"# The Morning Brief — Wednesday, July 22, 2026",
+		"*Prepared at 7:30 AM · covers activity since the previous Brief*",
 		"> **Unable to verify all sources** — CrashPlan could not be checked.",
 		"## Sonarr",
 		"- **2 episodes downloaded overnight** — Both ready to watch.",

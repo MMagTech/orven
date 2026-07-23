@@ -3,7 +3,7 @@
 <article class="paper">
   <div class="dateline">
     <h1>{{if .Archived}}Briefing{{else}}The Morning Brief{{end}}</h1>
-    <p class="when">{{day .Brief.Generated}} · prepared at {{clock .Brief.Generated}}</p>
+    <p class="when">{{day .Brief.Generated}} · prepared at {{clock .Brief.Generated}}{{if eq .Brief.Edition "subsequent"}} · covers activity since the previous Brief{{else if eq .Brief.Edition "first"}} · the first Brief{{end}}</p>
     {{if .Archived}}<p class="archived-note no-print">You are reading an archived briefing. <a href="/">Back to today</a></p>{{end}}
   </div>
 

@@ -47,7 +47,7 @@ body { background: #fff; }
 <div class="sheet">
   <div class="running-head"><span>Orven</span><span>{{day .Brief.Generated}}</span></div>
   <h1>The Morning Brief</h1>
-  <p class="when">{{day .Brief.Generated}} · prepared at {{clock .Brief.Generated}}</p>
+  <p class="when">{{day .Brief.Generated}} · prepared at {{clock .Brief.Generated}}{{if eq .Brief.Edition "subsequent"}} · covers activity since the previous Brief{{else if eq .Brief.Edition "first"}} · the first Brief{{end}}</p>
 
   {{if not .Brief.CoverageComplete}}
   <p class="confidence">Unable to verify all sources — {{.Unverified}}.</p>

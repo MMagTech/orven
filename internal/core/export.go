@@ -15,7 +15,14 @@ func BriefMarkdown(b engine.Brief) string {
 	var sb strings.Builder
 
 	fmt.Fprintf(&sb, "# The Morning Brief — %s\n\n", b.Generated.Format("Monday, January 2, 2006"))
-	fmt.Fprintf(&sb, "*Prepared at %s*\n\n", b.Generated.Format("3:04 PM"))
+	switch b.Edition {
+	case "subsequent":
+		fmt.Fprintf(&sb, "*Prepared at %s · covers activity since the previous Brief*\n\n", b.Generated.Format("3:04 PM"))
+	case "first":
+		fmt.Fprintf(&sb, "*Prepared at %s · the first Brief*\n\n", b.Generated.Format("3:04 PM"))
+	default:
+		fmt.Fprintf(&sb, "*Prepared at %s*\n\n", b.Generated.Format("3:04 PM"))
+	}
 
 	if !b.CoverageComplete {
 		fmt.Fprintf(&sb, "> **Unable to verify all sources** — %s.\n\n", view["Unverified"])

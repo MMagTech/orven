@@ -89,6 +89,34 @@ func TestRunPluginAndGenerateBrief(t *testing.T) {
 	}
 }
 
+// The dateline claims a window only it can prove: the first brief is
+// marked "first", every later one "subsequent" (its window opens at
+// the previous brief). Briefs stored before the field existed carry
+// neither, and the dateline stays silent.
+func TestBriefEditionProvenance(t *testing.T) {
+	e := testEngine(t)
+
+	first, err := e.GenerateBrief()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if first.Edition != "first" {
+		t.Fatalf("first brief edition = %q, want %q", first.Edition, "first")
+	}
+
+	time.Sleep(1100 * time.Millisecond) // brief IDs have second precision
+	second, err := e.GenerateBrief()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if second.Edition != "subsequent" {
+		t.Fatalf("second brief edition = %q, want %q", second.Edition, "subsequent")
+	}
+	if !second.Window.Equal(first.Generated) {
+		t.Fatalf("second brief window = %v, want the first brief's generation time %v", second.Window, first.Generated)
+	}
+}
+
 func TestEnabledPluginWithoutDataIsReportedAsMissing(t *testing.T) {
 	e := testEngine(t)
 	p := e.Plugin("demo-activity")

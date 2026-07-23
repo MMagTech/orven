@@ -232,9 +232,15 @@ func (s *Store) BatchesSince(t time.Time) []StoredBatch {
 //     collected, so neither claim above can be made; the briefing leads
 //     with that and then presents what was collected.
 type Brief struct {
-	ID               string         `json:"id"`
-	Generated        time.Time      `json:"generated"`
-	Window           time.Time      `json:"window_start"`
+	ID        string    `json:"id"`
+	Generated time.Time `json:"generated"`
+	Window    time.Time `json:"window_start"`
+	// Edition records what opened this brief's window: "first" (no
+	// previous brief existed) or "subsequent" (the window starts at
+	// the previous brief). Absent on briefs stored before the field
+	// existed — the dateline then stays silent rather than claim a
+	// window it cannot prove.
+	Edition          string         `json:"edition,omitempty"`
 	Sections         []BriefSection `json:"sections"`
 	Quiet            bool           `json:"quiet"`
 	CoverageComplete bool           `json:"coverage_complete"`
