@@ -99,6 +99,19 @@ automatically.
   re-running the fresh-context acid test (a fresh AI context builds
   a useful plugin from the public repositories alone), keeping
   constitution §23 and §26 measured rather than assumed.
+- **Three-repository separation** (approved direction, its own
+  milestone after Brief Experience) — split into independently
+  versioned `orven` (application, engine, web UI, Docker release,
+  operator docs), `orven-sdk` (SDK, templates, validator tooling,
+  test kit, examples, author docs), and `orven-plugins` (catalog and
+  contribution workflow): technical independence and three clear
+  landing pages — use the product, build for the product, extend the
+  product. The SDK improves and releases on its own cadence as long
+  as the versioned contract stays compatible. Open questions for
+  that milestone: where the validator lives (today it runs plugins
+  through the real engine runner inside the app binary), and where
+  the constitution's ecosystem and author-facing sections are
+  published.
 - **Editorial-review checklist for catalog submissions** — the
   independent-plugin exercise showed editorial review catches what
   structural validation intentionally cannot (domain logic, honesty
