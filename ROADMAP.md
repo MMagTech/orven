@@ -29,6 +29,28 @@ Chosen deliberately at milestone close, never automatically.
 Captured and roughly ordered. Scheduled deliberately, never
 automatically.
 
+- **First-run experience** — the Today empty state becomes the
+  onboarding surface (no wizard): a welcome card in the paper's own
+  voice with one action, "Prepare your first Brief." On a genuinely
+  fresh installation the demo is seed-enabled and collects once
+  immediately, so the first Prepare has material to compile. Only a
+  bundled, first-party, zero-permission, fixture-only plugin may
+  ever be seed-enabled — document that narrow exception in
+  `docs/CONSTRAINTS.md` when implementation begins; catalog plugins,
+  curated included, never auto-enable. The demo is never
+  automatically re-enabled after the user disables or uninstalls it.
+  Coverage discloses, inside the briefing, that Demo Activity
+  produces fictional demonstration events. While onboarding is
+  active, a quiet shell line after the first Brief: "This Brief is a
+  demonstration. Tomorrow's prepares itself at 07:00. Install a
+  plugin from Discover when you are ready to prepare Briefs from
+  your own systems." Onboarding state is permanent and backup-aware
+  (a restored installation is never a first run); onboarding ends
+  when a real plugin is installed and enabled, or when the demo is
+  disabled or uninstalled. Sub-decision for implementation:
+  "Restore the demo plugin" returns it installed but disabled
+  (current preference — restoring code should not silently restore
+  permission to run).
 - **Restore, finished — informed-consent reinstall** — availability
   probe per recorded plugin (available / removed / unreachable /
   manually added, with reasons); backed-up version, currently
