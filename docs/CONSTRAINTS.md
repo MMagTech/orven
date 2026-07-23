@@ -114,6 +114,51 @@ is wrong, not the file.
     pins updates to the recording catalog: updates only ever come from
     the catalog a plugin was installed from.
 
+## The ecosystem
+
+22. **The Brief is why Orven is installed; the ecosystem is why it
+    stays installed.** The ecosystem succeeds when people build the
+    plugins they wished existed — not when the maintainers build
+    plugins for them.
+23. **Difficulty must come from the observed system, never from
+    Orven.** The intended plugin author runs a homelab, understands
+    the system they want observed, and may never have published
+    software. Understanding that system — its API, its
+    authentication, its data model — is their domain knowledge, and
+    may be genuinely hard; Orven adds as little as possible on top.
+    When an author who understands the system they are observing is
+    blocked by Orven itself — the contract, the documentation, a
+    validator message, an error — the defect belongs to Orven, not
+    the author: it is treated as a product defect and never closed as
+    author error.
+24. **The minimum path never grows.** A plugin is, and remains: one
+    folder, one manifest, one entrypoint in any language, JSON in on
+    stdin, JSON out on stdout, testable against a fixture without the
+    real system. No change may add a required build step, framework,
+    toolchain, registry, account, or ceremony to this path.
+    Conveniences may be added, but each one is optional forever, and
+    the plain path remains the **reference path**: documentation,
+    examples, and onboarding lead with the simplest complete
+    workflow. Advanced workflows may exist, but the plain path stays
+    first-class in capability and presentation alike, and is never
+    described as legacy.
+25. **Barriers fall by subtraction, not construction.** The order is
+    fixed: first, refuse to add requirements; second, improve what
+    exists — documentation, validator messages, reference plugins,
+    error output; only last, build something new — and a new
+    authoring tool is core surface that must justify itself under
+    ordinary roadmap discipline. "It lowers the barrier" is never, by
+    itself, a reason to build.
+26. **Maintainer plugins are ordinary plugins.** First-party plugins
+    are written against the same public contract, the same
+    documentation, the same validator, and the same install flow as
+    anyone's. An engine capability reachable only by first-party
+    plugins is a contract defect. When the maintainers meet friction
+    writing a plugin, they fix the shared path; they never route
+    around it privately. (The bundled demo's seed-once lifecycle is
+    an installation convenience, not a capability, and remains the
+    sole documented exception.)
+
 ## Known enforcement gaps (recorded, planned)
 
 These are honest limits of today's containment. Contributors must not
