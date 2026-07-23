@@ -88,6 +88,13 @@ automatically.
 - **Update checks with permission-diff pause** — updates never
   silently expand permissions (constitution §16); builds on the
   granted-permissions records from "Restore, finished."
+- **Plugin authoring on-ramp** — the screens that make constitution
+  §22–26 tangible in the app: the Plugins area gains a "build your
+  own" surface that presents the reference path — copy a reference
+  plugin, the SDK document, `orven validate` — in the paper's own
+  voice, so "I wish it could tell me this" meets "I think I could
+  build one" without leaving Orven. Scoped by §25: present the
+  existing path first; no new authoring tooling implied.
 - **Acid test as a standing gate** — any milestone that changes the
   contract surface, SDK documentation, or validator closes by
   re-running the fresh-context acid test (a fresh AI context builds
