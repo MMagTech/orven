@@ -6,6 +6,55 @@ follow [Semantic Versioning](https://semver.org/). The plugin
 contract's compatibility promise is stronger than semver: contract v1
 plugins work on every future engine, period.
 
+## [0.3.0] — 2026-07-23
+
+The Brief Experience: the reading contract, kept on every page.
+
+### Added
+
+- **The edition projection.** Sections with observations — or that
+  could not be checked, or whose information is stale or partial —
+  are the Brief's stories; failure-to-observe is itself news. Sources
+  that checked successfully and observed nothing collapse into one
+  line ("Also checked: … No new observations."), so the page's length
+  follows the news, never the number of installed plugins. A story
+  leads with at most eight items; the rest wait behind a quiet
+  expansion on the reading page only — the stored Brief, print, and
+  exports remain complete.
+- **The dateline** states the window it can prove: "covers activity
+  since the previous Brief," or "the first Brief." Briefs stored
+  before the field existed stay silent rather than claim a window.
+- **The first-run experience.** A fresh installation seed-enables the
+  bundled demonstration plugin (zero permissions, fixture-only — the
+  constitution's sole exception) and collects once immediately; the
+  Today empty state becomes a welcome card with one action, "Prepare
+  your first Brief." Wherever the demo contributes, Coverage states
+  that its events are fiction. Onboarding is permanent and
+  backup-aware; it ends when a real plugin is enabled or the demo is
+  disabled or uninstalled, and never returns. A restored demo comes
+  back installed but disabled.
+- **The constitution grew three sections**: the ecosystem rules
+  (§22–26), the reading contract (§27), and seeded content (§28).
+
+### Changed
+
+- `/print` before any briefing exists returns the reader to Today
+  instead of a bare 404.
+- Destructive and occasional actions on secondary pages — delete a
+  backup, uninstall a plugin, restore the demo — now speak in the
+  quiet service-line voice instead of competing with content.
+- Plugin SDK documentation: which fixture the validator executes,
+  config-default injection, the `publisher` field, the multi-endpoint
+  fixture pattern, timezone-aware timestamp parsing, and a PowerShell
+  stdin note.
+
+### Fixed
+
+- The engine now sends `now` and `window_start` in canonical UTC. On
+  hosts in a non-UTC timezone it previously marshaled local offsets
+  while every SDK example showed UTC — an offset-naive plugin parser
+  would get window comparisons silently wrong by hours.
+
 ## [0.2.0] — 2026-07-22
 
 Plugin management and Daily Care: plugins now install from catalogs

@@ -9,7 +9,10 @@ already being reviewed.
 ## Now
 
 Nothing in flight. The next milestone is chosen deliberately at the
-planning conversation, never automatically.
+planning conversation, never automatically. An interface identity
+review (see Ideas) is planned for after the product owner has lived
+with v0.3.0 — it guards against accidental UI drift, and real usage
+shapes when it happens and what comes first.
 
 ## Next
 
@@ -143,6 +146,13 @@ Captured, not commitments.
   yours.") instead of the read-only promise ("Orven reads. It never
   changes anything."). Deliberately deferred: live with the new Brief
   experience first.
+- **The interface identity review** — a dedicated design review,
+  scheduled by the product owner after living with the Brief
+  Experience: does the interface read as an edition rather than a
+  dashboard; is its calm confidence or mere minimalism; does the
+  visual hierarchy reinforce the editorial experience; where does
+  restraint read as generic or unfinished rather than intentional?
+  A product review of its own, never part of another milestone.
 
 ## Done
 
@@ -170,3 +180,11 @@ Captured, not commitments.
   public repositories alone, published to the community catalog,
   installed through Discover, and verified observing production —
   core `76f2b07`…`bcc879f` + tag `v0.2.0`; catalog `debe029`
+- 2026-07-23 — **Brief Experience (Milestone 04)**: the reading
+  contract (§27) and seeded content (§28) ratified; the edition
+  projection — stories, the "Also checked" line, the item cap — over
+  a complete, neutral stored artifact; the dateline; the print
+  empty state; the first-run experience (seed-enabled demo with
+  immediate collection, the welcome card, Coverage's fiction
+  disclosure, permanent backup-aware onboarding); the quiet-action
+  pass on secondary pages — `4aeb928`…`d62e95e`
