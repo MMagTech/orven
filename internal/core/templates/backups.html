@@ -78,7 +78,7 @@
         <td>{{if .SecretsIncluded}}<span class="pill">encrypted</span>{{else}}<span class="muted">not included</span>{{end}}</td>
         <td style="text-align:right">
           <a class="btnlink" href="/backups/restore?src={{urlquery .Name}}">Restore…</a>
-          <a class="btnlink" href="/backups?delete={{urlquery .Name}}">Delete…</a>
+          <a class="quiet-action" href="/backups?delete={{urlquery .Name}}">Delete…</a>
         </td>
       </tr>
       {{else}}
