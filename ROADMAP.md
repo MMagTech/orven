@@ -88,6 +88,11 @@ automatically.
 - **Update checks with permission-diff pause** — updates never
   silently expand permissions (constitution §16); builds on the
   granted-permissions records from "Restore, finished."
+- **Acid test as a standing gate** — any milestone that changes the
+  contract surface, SDK documentation, or validator closes by
+  re-running the fresh-context acid test (a fresh AI context builds
+  a useful plugin from the public repositories alone), keeping
+  constitution §23 and §26 measured rather than assumed.
 
 ## Ideas
 

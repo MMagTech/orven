@@ -8,7 +8,7 @@ It never changes anything, and it never tells the reader what to do.
 ## Before any change
 
 Read **`docs/CONSTRAINTS.md`**. It is the product's constitution: if a
-change conflicts with it, the change is wrong, not the file. The three
+change conflicts with it, the change is wrong, not the file. The
 rules most often at stake:
 
 1. **Facts only, everywhere.** No recommendations, remediation steps,
@@ -23,6 +23,10 @@ rules most often at stake:
    `ROADMAP.md` (Backlog or Ideas) as one line — they never expand
    the change you are making. The active milestone grows only when
    the product owner explicitly expands it.
+5. **The ecosystem serves outside authors.** Plugin difficulty must
+   come from the observed system, never from Orven; the minimum
+   plugin path never grows and stays the reference path; maintainer
+   plugins get no private door (`docs/CONSTRAINTS.md` §22–26).
 
 ## Architecture — do not blur these lines
 
