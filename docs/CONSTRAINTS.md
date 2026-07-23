@@ -177,6 +177,22 @@ is wrong, not the file.
     failures and degraded systems belong in the publication, and the
     response belongs to the reader. A Brief is an edition: it ends.
 
+## Seeded content
+
+28. **Seed-enablement is a single, narrow exception.** Only a
+    bundled, first-party plugin that declares zero permissions and
+    observes nothing but its own fixtures may be enabled by the
+    application itself — exactly once, on a genuinely fresh
+    installation, so the first Brief has something to show. Nothing
+    installed from a catalog, curated included, is ever enabled
+    without the user's explicit action (§15). Once the user disables
+    or uninstalls seeded content, Orven never re-enables or
+    re-installs it on its own; the deliberate "Restore the demo
+    plugin" action returns it installed but disabled, because
+    restoring code must not silently restore permission to run.
+    Wherever the demonstration plugin contributes to a briefing,
+    Coverage states that its events are fiction.
+
 ## Known enforcement gaps (recorded, planned)
 
 These are honest limits of today's containment. Contributors must not
