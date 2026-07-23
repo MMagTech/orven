@@ -99,6 +99,14 @@ automatically.
   re-running the fresh-context acid test (a fresh AI context builds
   a useful plugin from the public repositories alone), keeping
   constitution §23 and §26 measured rather than assumed.
+- **Editorial-review checklist for catalog submissions** — the
+  independent-plugin exercise showed editorial review catches what
+  structural validation intentionally cannot (domain logic, honesty
+  of claims, environment assumptions); write the checklist down so
+  the review is repeatable.
+- **Validator success wording** — "0 errors, 0 warnings — OK" could
+  read "contract checks passed," keeping the valid-is-never-trusted
+  distinction visible at the moment of success.
 
 ## Ideas
 

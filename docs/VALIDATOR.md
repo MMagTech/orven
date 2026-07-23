@@ -114,5 +114,14 @@ what can be checked *safely*:
 
 - Judging `event` vs `state` correctness — a domain decision
   (see PLUGIN_SDK.md, "The deciding question").
+- Judging domain logic in general: timestamp interpretation (an
+  offset-naive parser passes validation and still reports wrong facts
+  for hours — see PLUGIN_SDK.md on timezone-aware parsing),
+  deduplication decisions, thresholds, and whether an observation's
+  claim about the observed system is true. The validator runs one
+  fixture through the contract; it cannot know the domain. A plugin's
+  own tests, and review, are where correctness is established —
+  passing validation is never proof a plugin behaves correctly at
+  runtime (CONSTRAINTS.md §17: valid is never trusted).
 - Linting the plugin's source code. Any language is welcome; only the
   manifest and the observable contract behavior are validated.

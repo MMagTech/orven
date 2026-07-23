@@ -210,7 +210,7 @@ func runAndCheckOutput(r *report, p *engine.Plugin, dir string) {
 	in := contract.Input{
 		ContractVersion: contract.Version,
 		PluginID:        p.Manifest.ID,
-		Now:             time.Now(),
+		Now:             time.Now().UTC(), // canonical UTC, matching the engine runner
 		Config:          map[string]any{},
 		Secrets:         map[string]string{},
 	}
