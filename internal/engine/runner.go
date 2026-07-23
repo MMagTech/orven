@@ -28,11 +28,15 @@ func (e *Engine) Run(p *Plugin, manual bool) StoredBatch {
 		window = lastOK.Started
 	}
 
+	// Timestamps cross the contract boundary in canonical UTC ("Z"), so
+	// a plugin never has to reason about the host's local offset. The
+	// SDK still requires offset-aware parsing — engines shipped before
+	// this normalization sent local offsets.
 	in := contract.Input{
 		ContractVersion: contract.Version,
 		PluginID:        p.Manifest.ID,
-		Now:             started,
-		WindowStart:     window,
+		Now:             started.UTC(),
+		WindowStart:     window.UTC(),
 		Config:          e.configWithDefaults(p, cfg),
 		Secrets:         e.Store.Secrets(p.Manifest.ID),
 	}

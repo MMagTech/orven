@@ -51,6 +51,17 @@ what changed since then. `occurred_at` on observations is likewise
 optional: set it when you know when the fact happened, omit it
 otherwise.
 
+**Timestamps are RFC 3339, and you must parse them timezone-aware.**
+The engine now sends `now` and `window_start` in canonical UTC (the
+`Z` suffix shown above), but engines already in the field send the
+host's local offset instead (`2026-07-21T07:30:00.1234567-04:00`), and
+the systems you observe may use offsets of their own. A parser that
+strips or ignores the offset compares wall clocks from different
+zones and silently gets "is this still true?" wrong by hours — the
+validator cannot catch this class of bug. Keep every datetime
+offset-aware and let the library do the comparison; `parse_ts` in
+`examples/jobs-example/main.py` is the pattern to copy.
+
 **Output (stdout):**
 
 ```json
@@ -260,8 +271,14 @@ one JSON object, you exit.
    contract addition) rather than inventing your own.
 4. **Secrets stay out of output.** Never echo config or secrets into
    summaries, observations, or error text.
-5. **Be quick and bounded.** Declare a realistic `timeout`; the engine
-   kills you at 5 minutes regardless.
+5. **Be quick and bounded.** Declare a realistic `timeout` — the
+   engine kills your process at exactly that moment (5 minutes at the
+   absolute most), and a killed run is recorded as a timeout rather
+   than whatever honest status you meant to report. Budget for it: if
+   you call three endpoints in sequence with a 10-second timeout each,
+   your worst case is 30+ seconds and a declared `20s` guarantees the
+   engine sometimes kills you mid-run. Per-request timeouts must sum,
+   worst case, to less than the declared `timeout`.
 6. **Declare everything you touch** in `permissions:` — hosts, files,
    sockets. Users see this list before enabling you.
 7. **Backwards compatibility.** Written against contract v1? You must
@@ -304,6 +321,13 @@ nothing new, source unreachable, bad credentials, malformed response.
 first** file in `fixtures/`; the remaining fixture files are scanned
 only for credential-shaped content. Name your fixtures so the one
 showing normal activity sorts first.
+
+A clean `orven validate` proves contract compliance and house style —
+your manifest parses, your output has the right shape, your titles
+read like headlines. It does not prove your logic is right: scope
+choices, timestamp handling, deduplication, and what your plugin
+actually claims about the world are yours to get right, and your
+tests are where you prove it (see `docs/VALIDATOR.md`, "Non-goals").
 
 `fixture` is a single path. If your plugin reads more than one
 endpoint, put every canned response in one envelope — for example

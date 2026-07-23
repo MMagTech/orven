@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+	"time"
 
 	"orven/contract"
 )
@@ -71,6 +72,85 @@ func TestResolveInterpreter(t *testing.T) {
 		if got := resolveInterpreter(c.declared, have(c.installed...)); got != c.want {
 			t.Errorf("%s: resolveInterpreter(%q) = %q, want %q", c.name, c.declared, got, c.want)
 		}
+	}
+}
+
+// TestPluginInputTimestampsAreUTC pins the contract-boundary guarantee
+// that `now` and `window_start` reach plugins in canonical UTC ("Z"),
+// never with the host's local offset. The prior run is seeded with an
+// explicitly non-UTC Started so the window_start half of the check is
+// deterministic even on hosts whose local zone is UTC.
+func TestPluginInputTimestampsAreUTC(t *testing.T) {
+	realPythonPath(t) // skip when no interpreter is available
+
+	dir := t.TempDir()
+	pdir := filepath.Join(dir, "utc-check")
+	if err := os.MkdirAll(pdir, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	manifest := `schema_version: 1
+id: utc-check
+name: UTC Check
+version: 0.0.1
+entrypoint: ["python", "main.py"]
+engine:
+  min_contract: 1
+timeout: 30s
+`
+	// Echo the two timestamps back verbatim so the test asserts on
+	// exactly what crossed the contract boundary.
+	script := `import json, sys
+inp = json.load(sys.stdin)
+summary = inp["now"] + " | " + inp.get("window_start", "absent")
+json.dump({"contract_version": 1, "status": "ok", "summary": summary}, sys.stdout)
+`
+	if err := os.WriteFile(filepath.Join(pdir, "plugin.yaml"), []byte(manifest), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(pdir, "main.py"), []byte(script), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	store, err := NewStore(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	// A successful prior run whose Started carries a non-UTC offset:
+	// 08:30 at UTC-4 is 12:30Z, so the expected window_start is exact.
+	prior := time.Date(2026, 7, 22, 8, 30, 0, 0, time.FixedZone("UTC-4", -4*60*60))
+	if err := store.AppendRun("utc-check", RunRecord{Started: prior, Finished: prior, Status: contract.StatusOK}); err != nil {
+		t.Fatal(err)
+	}
+
+	e := New(store, dir)
+	p := e.Plugin("utc-check")
+	if p == nil {
+		t.Fatal("utc-check plugin not loaded")
+	}
+	batch, err := e.TryRun(p, true)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if batch.Status != contract.StatusOK {
+		t.Fatalf("echo plugin failed: %q (%s)", batch.Status, batch.Summary)
+	}
+
+	parts := strings.SplitN(batch.Summary, " | ", 2)
+	if len(parts) != 2 {
+		t.Fatalf("unexpected echo summary %q", batch.Summary)
+	}
+	now, window := parts[0], parts[1]
+
+	for name, v := range map[string]string{"now": now, "window_start": window} {
+		if !strings.HasSuffix(v, "Z") {
+			t.Errorf("%s = %q — must be canonical UTC ending in Z, never a local offset", name, v)
+		}
+		if _, err := time.Parse(time.RFC3339, v); err != nil {
+			t.Errorf("%s = %q is not valid RFC3339: %v", name, v, err)
+		}
+	}
+	if want := "2026-07-22T12:30:00Z"; window != want {
+		t.Errorf("window_start = %q, want the prior run's Started normalized to %q", window, want)
 	}
 }
 
