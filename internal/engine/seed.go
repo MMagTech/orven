@@ -37,7 +37,27 @@ func (e *Engine) SeedOnce() {
 		}
 	}
 	os.WriteFile(marker, []byte(time.Now().Format(time.RFC3339)+"\n"), 0o644)
+
+	// Seed-enablement (CONSTRAINTS.md §28): the demonstration plugin —
+	// bundled, first-party, zero permissions, fixture-only — is enabled
+	// on a genuinely fresh installation and collects once immediately,
+	// so the first Prepare has material to compile. This is the sole
+	// exception to "nothing enables without the user's action"; it
+	// happens only inside this fresh-install branch, so a demo the
+	// user disables or uninstalls is never re-enabled.
+	if p := e.Plugin(seedEnabledID); p != nil {
+		cfg := e.Store.PluginConfig(seedEnabledID)
+		cfg.Enabled = true
+		e.Store.SavePluginConfig(seedEnabledID, cfg)
+		e.startOnboarding()
+		go e.TryRun(p, false)
+	}
 }
+
+// seedEnabledID names the one plugin §28 permits to be seed-enabled.
+// The manifest's permission declarations are prose, so the constraint
+// is enforced by naming rather than inspection.
+const seedEnabledID = "demo-activity"
 
 // SeedAvailable reports whether id exists as seed content and is not
 // currently installed — i.e. whether RestoreSeed would succeed.

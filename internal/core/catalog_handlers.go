@@ -187,6 +187,9 @@ func (s *Server) uninstallDo(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/plugins/"+id+"/uninstall?msg="+url.QueryEscape(err.Error()), http.StatusSeeOther)
 		return
 	}
+	if id == demoPluginID {
+		s.Engine.FinishOnboarding() // uninstalling the demo ends the first-run experience
+	}
 	http.Redirect(w, r, "/plugins?msg="+url.QueryEscape(p.Manifest.Name+" was uninstalled. Historical briefings are unchanged."), http.StatusSeeOther)
 }
 

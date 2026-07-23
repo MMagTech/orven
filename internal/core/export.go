@@ -64,6 +64,9 @@ func BriefMarkdown(b engine.Brief) string {
 		if c := view["Contributed"].(string); c != "" {
 			fmt.Fprintf(&sb, "- This briefing draws on: %s.\n", c)
 		}
+		if view["DemoFiction"].(bool) {
+			sb.WriteString("- Demo Activity is a demonstration plugin; its events are fiction.\n")
+		}
 		if p := view["Partial"].(string); p != "" {
 			fmt.Fprintf(&sb, "- Only partial information was available from: %s.\n", p)
 		}

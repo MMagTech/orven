@@ -49,6 +49,7 @@
   <section class="coverage">
     <h3>Coverage</h3>
     {{if .Contributed}}<p>Today's briefing draws on: {{.Contributed}}.</p>{{end}}
+    {{if .DemoFiction}}<p>Demo Activity is a demonstration plugin; its events are fiction.</p>{{end}}
     {{if .Partial}}<p>Only partial information was available from: {{.Partial}}.</p>{{end}}
     {{range .Failures}}<p>Could not be checked: {{.Name}} — {{.Why}}</p>{{end}}
   </section>
@@ -74,6 +75,19 @@
         <a class="quiet-action" href="/brief/{{.Brief.ID}}/export.json">JSON</a>
       </span>
     </details>
+  </div>
+
+  {{if .Onboarding}}
+  <p class="onboarding-note no-print">This Brief is a demonstration. Tomorrow's prepares itself at {{.BriefTime}}. Install a plugin from <a href="/plugins/discover">Discover</a> when you are ready to prepare Briefs from your own systems.</p>
+  {{end}}
+</article>
+{{else if .Onboarding}}
+<article class="paper">
+  <div class="dateline"><h1>Welcome to Orven</h1><p class="when">{{day .Now}}</p></div>
+  <p>Each day, Orven prepares a Brief: one calm page of what changed in the systems you run, while you weren't looking.</p>
+  <p>A demonstration plugin is enabled so your first Brief has something to show. It observes nothing real, touches nothing of yours, and once it has served its purpose you can disable or remove it like any other plugin.</p>
+  <div class="paper-actions no-print">
+    <form method="post" action="/generate"><button type="submit">Prepare your first Brief</button></form>
   </div>
 </article>
 {{else}}

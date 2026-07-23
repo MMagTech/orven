@@ -62,4 +62,22 @@ func TestBriefMarkdown(t *testing.T) {
 	if strings.Contains(md, "## Traefik") {
 		t.Error("a nothing-status section must not become a story heading")
 	}
+	// no demo section here, so no fiction disclosure
+	if strings.Contains(md, "its events are fiction") {
+		t.Error("fiction disclosure must appear only when the demo contributed")
+	}
+}
+
+// Wherever the demo contributes, Coverage labels the fiction —
+// permanently, in the stored record's every projection (§28).
+func TestDemoFictionDisclosure(t *testing.T) {
+	b := exportBrief()
+	b.Sections = append(b.Sections, engine.BriefSection{
+		PluginID: "demo-activity", PluginName: "Demo Activity",
+		Status: contract.StatusNothing,
+	})
+	md := BriefMarkdown(b)
+	if !strings.Contains(md, "- Demo Activity is a demonstration plugin; its events are fiction.") {
+		t.Errorf("missing fiction disclosure\n---\n%s", md)
+	}
 }

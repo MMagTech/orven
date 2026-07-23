@@ -108,10 +108,17 @@ func (s *Server) render(w http.ResponseWriter, page string, data map[string]any)
 
 // ---- pages ----
 
+// demoPluginID is the bundled demonstration plugin — the one plugin
+// the constitution permits to be seed-enabled (CONSTRAINTS.md §28),
+// and whose contributions the Brief labels as fiction.
+const demoPluginID = "demo-activity"
+
 func (s *Server) front(w http.ResponseWriter, r *http.Request) {
 	brief, ok := s.Engine.Store.LatestBrief()
 	data := briefView(brief)
 	data["Have"], data["Now"] = ok, time.Now()
+	data["Onboarding"] = s.Engine.OnboardingActive()
+	data["BriefTime"] = s.Engine.Store.Settings().BriefTime
 	s.render(w, "front", data)
 }
 
@@ -157,7 +164,11 @@ func briefView(b engine.Brief) map[string]any {
 	var alsoChecked []string
 	var contributed, partial, failedNames []string
 	var failures []coverageFailure
+	demoFiction := false
 	for _, sec := range b.Sections {
+		if sec.PluginID == demoPluginID {
+			demoFiction = true // Coverage labels the fiction, forever
+		}
 		checkedQuiet := (sec.Status == contract.StatusOK || sec.Status == contract.StatusNothing) &&
 			len(sec.Items) == 0 && !sec.Stale
 		if checkedQuiet {
@@ -205,6 +216,7 @@ func briefView(b engine.Brief) map[string]any {
 		"Brief":       b,
 		"Stories":     stories,
 		"AlsoChecked": also,
+		"DemoFiction": demoFiction,
 		"Contributed": andJoin(contributed),
 		"Partial":     andJoin(partial),
 		"Failures":    failures,
@@ -360,6 +372,15 @@ func (s *Server) pluginToggle(w http.ResponseWriter, r *http.Request) {
 	cfg := s.Engine.Store.PluginConfig(p.Manifest.ID)
 	cfg.Enabled = !cfg.Enabled
 	s.Engine.Store.SavePluginConfig(p.Manifest.ID, cfg)
+	// Onboarding ends when the user demonstrates command of the
+	// product: a real plugin enabled, or the demo switched off.
+	if p.Manifest.ID == demoPluginID {
+		if !cfg.Enabled {
+			s.Engine.FinishOnboarding()
+		}
+	} else if cfg.Enabled {
+		s.Engine.FinishOnboarding()
+	}
 	http.Redirect(w, r, "/plugins/"+p.Manifest.ID, http.StatusSeeOther)
 }
 

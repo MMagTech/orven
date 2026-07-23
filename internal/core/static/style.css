@@ -64,6 +64,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0 1rem 3rem; }
 .freshness.stale { color: var(--ink); font-style: italic; }
 .quiet { color: var(--faint); font-style: italic; font-size: 1.05rem; text-align: center; padding: 1.4rem 0; }
 .also-checked { color: var(--faint); font-style: italic; padding: 1.1rem 0 0; margin: 0; }
+.onboarding-note { color: var(--faint); font-style: italic; text-align: center; margin: 1rem 0 0; }
 .more-items { margin: .3rem 0 0 1.2rem; }
 .more-items summary { color: var(--faint); font-style: italic; cursor: pointer; }
 .confidence { font-style: italic; margin: 0 0 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }

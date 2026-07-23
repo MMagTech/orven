@@ -32,7 +32,7 @@ import (
 // backupRoots are the only entries a backup contains and the only
 // entries a restore will accept.
 var backupRoots = []string{"briefs", "observations", "config", "runs", "installed"}
-var backupFiles = []string{"settings.json", "seeded"}
+var backupFiles = []string{"settings.json", "seeded", "onboarding"}
 
 const (
 	backupManifestName = "backup-manifest.json"

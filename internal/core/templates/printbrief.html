@@ -77,6 +77,7 @@ body { background: #fff; }
   <section class="coverage">
     <h3>Coverage</h3>
     {{if .Contributed}}<p>This briefing draws on: {{.Contributed}}.</p>{{end}}
+    {{if .DemoFiction}}<p>Demo Activity is a demonstration plugin; its events are fiction.</p>{{end}}
     {{if .Partial}}<p>Only partial information was available from: {{.Partial}}.</p>{{end}}
     {{range .Failures}}<p>Could not be checked: {{.Name}} — {{.Why}}</p>{{end}}
   </section>
