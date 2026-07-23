@@ -6,19 +6,10 @@ time. Ideas that arrive while a milestone is under review are captured
 here — in Backlog or Ideas — rather than expanding work that is
 already being reviewed.
 
-## Now — Deployment & SDK validation
+## Now
 
-Prove the shipped product against reality:
-
-- cut and publish v0.2.0, so the image being deployed is the product
-  being validated;
-- deploy Orven on a real server (Unraid) with persistent storage, as
-  a daily driver, treating every gap between the deployment docs and
-  reality as a finding;
-- then the ecosystem acid test: a fresh AI context builds a useful
-  plugin using only the public repositories, SDK documentation, and
-  validator — installed into the running deployment and verified in a
-  real morning briefing.
+Nothing in flight. The next milestone is chosen deliberately at the
+planning conversation, never automatically.
 
 ## Next
 
@@ -76,6 +67,14 @@ automatically.
 - **Print empty-state handling** — direct access to `/print` before
   any briefing exists returns a bare Go 404; provide an Orven-native
   empty state or redirect.
+- **docker-containers plugin evolution** (catalog) — observe Docker's
+  explicit `restart` events so a clean-exit restart can surface as an
+  event, and name the attempted address in the `unavailable` summary
+  so misconfiguration is diagnosable from run history.
+- **Collection recency visibility** — a Brief prepared between a
+  change and the source's next collection is honestly quiet, but no
+  surface tells an administrator how recent each source's last look
+  was; decide whether Coverage should quietly carry it.
 - **Catalog release versioning and checksums** (trust roadmap tier
   2) — installs verify code matches the published release; recorded
   versions become reinstallable.
@@ -124,3 +123,12 @@ Captured, not commitments.
 - 2026-07-22 — **Daily Care**: backups with encrypted credentials,
   strict restore ("put me back exactly where I was"), schedule
   overview, print preview, exports, the service line — `b42b675`…`b808d4d`
+- 2026-07-22 — **Deployment & SDK validation**: v0.2.0 released
+  (multi-arch on GHCR, anonymous pull verified, tz database embedded);
+  production deployment on Unraid; local validation of the published
+  image (health, persistence, seed-once, backups, strict restore,
+  scheduler firing naturally with no duplicate generation); the SDK
+  acid test — a fresh AI context built `docker-containers` from the
+  public repositories alone, published to the community catalog,
+  installed through Discover, and verified observing production —
+  core `76f2b07`…`bcc879f` + tag `v0.2.0`; catalog `debe029`
