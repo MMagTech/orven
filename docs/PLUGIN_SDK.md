@@ -270,8 +270,13 @@ one JSON object, you exit.
 
 ## plugin.yaml
 
-See `plugins/demo-activity/plugin.yaml` for a complete annotated
+See `plugins/demo-activity/plugin.yaml` for a complete working
 example.
+
+`publisher` names who ships the plugin. It is shown wherever the
+plugin is seen — Discover, the install trust page, the catalog
+index — so third-party authors put their own name or handle there,
+never `orven`.
 
 Declare `collection.freshness` honestly: it is how long your results
 stay trustworthy. If a briefing has to fall back on data older than
@@ -283,9 +288,30 @@ expiry could declare a day or more. Config field types the settings form can ren
 values are stored separately, shown as "configured", and never
 displayed again.
 
+Declared `default` values are merged into `config` by the engine
+before your plugin runs: a setting the user never touched arrives as
+its declared default, so you do not need to re-apply defaults in
+code.
+
 ## Testing
 
 Ship fixtures and tests that run without the real system: the engine
 passes `fixture` in test input so your plugin can read canned source
 data instead of calling the network. Cover at minimum: normal activity,
 nothing new, source unreachable, bad credentials, malformed response.
+
+`orven validate` executes your plugin against the **alphabetically
+first** file in `fixtures/`; the remaining fixture files are scanned
+only for credential-shaped content. Name your fixtures so the one
+showing normal activity sorts first.
+
+`fixture` is a single path. If your plugin reads more than one
+endpoint, put every canned response in one envelope — for example
+`{"containers": [...], "events": [...]}` — and have your live fetch
+assemble that same shape, so everything after fetching is identical
+in tests and production.
+
+One Windows note: piping JSON to your plugin by hand from Windows
+PowerShell 5.1 prepends a byte-order mark that strict JSON parsers
+reject. The engine, the validator, and the test pattern above feed
+stdin directly and are unaffected.

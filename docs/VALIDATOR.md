@@ -15,7 +15,9 @@ go run ./cmd/orven validate ./plugins/my-plugin
 errors, 1 = errors, and warnings are listed either way)
 
 The validator runs the plugin against its own fixtures via the real
-engine runner and inspects the manifest and output.
+engine runner — executing it on the alphabetically first file in
+`fixtures/`, and scanning the rest only for credential-shaped
+content — then inspects the manifest and output.
 
 ## Severity model
 
