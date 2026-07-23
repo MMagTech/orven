@@ -128,16 +128,46 @@ func (s *Server) brief(w http.ResponseWriter, r *http.Request) {
 
 type coverageFailure struct{ Name, Why string }
 
-// briefView groups a brief's sections into the three concepts the page
-// presents: observed changes (the stories), the sources today's
-// briefing draws on (its scope), and the sources it could not draw on.
+// sectionItemCap is the engine-owned guarantee that the page's calm
+// never depends on a plugin author's restraint: a story leads with
+// this many items, and the rest wait one quiet expansion away. Only
+// the reading page folds — the stored Brief, print, and exports stay
+// complete.
+const sectionItemCap = 8
+
+// storyView is one story as the page presents it: the section itself
+// plus the fold the item cap imposes.
+type storyView struct {
+	engine.BriefSection
+	Lead []contract.Observation // shown immediately
+	Rest []contract.Observation // behind "N more items"
+}
+
+// briefView projects a stored brief into the edition the page
+// presents. Sections that observed something — or that could not be
+// checked, or whose information is stale or partial — are the
+// edition's stories; that failure-to-observe is itself news is part
+// of the reading contract (CONSTRAINTS.md §27). Sections that checked
+// successfully and observed nothing collapse into the "Also checked"
+// line, so the page's length follows the news, never the number of
+// installed plugins. The stored Brief remains complete and neutral;
+// this ordering and folding exist only in the projection.
 func briefView(b engine.Brief) map[string]any {
-	var stories []engine.BriefSection
+	var stories []storyView
+	var alsoChecked []string
 	var contributed, partial, failedNames []string
 	var failures []coverageFailure
 	for _, sec := range b.Sections {
-		if len(sec.Items) > 0 {
-			stories = append(stories, sec)
+		checkedQuiet := (sec.Status == contract.StatusOK || sec.Status == contract.StatusNothing) &&
+			len(sec.Items) == 0 && !sec.Stale
+		if checkedQuiet {
+			alsoChecked = append(alsoChecked, sec.PluginName)
+		} else {
+			sv := storyView{BriefSection: sec, Lead: sec.Items}
+			if len(sec.Items) > sectionItemCap {
+				sv.Lead, sv.Rest = sec.Items[:sectionItemCap], sec.Items[sectionItemCap:]
+			}
+			stories = append(stories, sv)
 		}
 		switch sec.Status {
 		case contract.StatusOK, contract.StatusNothing:
@@ -164,9 +194,17 @@ func briefView(b engine.Brief) map[string]any {
 		phrases = append(phrases, andJoin(partial)+" reported only partial information")
 	}
 
+	// The all-quiet statement already says every source was checked;
+	// the "Also checked" line earns its place only on a page with news.
+	also := ""
+	if !b.Quiet && len(alsoChecked) > 0 {
+		also = strings.Join(alsoChecked, ", ")
+	}
+
 	return map[string]any{
 		"Brief":       b,
 		"Stories":     stories,
+		"AlsoChecked": also,
 		"Contributed": andJoin(contributed),
 		"Partial":     andJoin(partial),
 		"Failures":    failures,

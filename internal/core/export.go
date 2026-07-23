@@ -23,7 +23,9 @@ func BriefMarkdown(b engine.Brief) string {
 		sb.WriteString("> All quiet. Every source was checked; nothing changed since your last briefing.\n\n")
 	}
 
-	stories := view["Stories"].([]engine.BriefSection)
+	// The export is the complete record: the reading page's item cap
+	// never folds here.
+	stories := view["Stories"].([]storyView)
 	for _, sec := range stories {
 		fmt.Fprintf(&sb, "## %s\n\n", sec.PluginName)
 		if sec.Status == "partial" {
@@ -36,11 +38,18 @@ func BriefMarkdown(b engine.Brief) string {
 				fmt.Fprintf(&sb, "- **%s**\n", o.Title)
 			}
 		}
+		if len(sec.Items) == 0 && sec.Summary != "" {
+			fmt.Fprintf(&sb, "*%s*\n", sec.Summary)
+		}
 		sb.WriteString("\n")
 		if sec.Stale {
 			fmt.Fprintf(&sb, "*This information is from %s and may be out of date.*\n\n",
 				staleWhen(sec.Freshness, b.Generated))
 		}
+	}
+
+	if also := view["AlsoChecked"].(string); also != "" {
+		fmt.Fprintf(&sb, "*Also checked: %s. No new observations.*\n\n", also)
 	}
 
 	if len(b.Sections) > 0 {

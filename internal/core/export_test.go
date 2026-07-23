@@ -37,6 +37,11 @@ func TestBriefMarkdown(t *testing.T) {
 		"> **Unable to verify all sources** — CrashPlan could not be checked.",
 		"## Sonarr",
 		"- **2 episodes downloaded overnight** — Both ready to watch.",
+		// failure-to-observe is itself news: the unreachable source is a story
+		"## CrashPlan",
+		"*The backup host could not be reached.*",
+		// checked-and-quiet sources collapse into one line
+		"*Also checked: Traefik. No new observations.*",
 		"**Coverage**",
 		"- This briefing draws on: Sonarr and Traefik.",
 		"- Could not be checked: CrashPlan — The backup host could not be reached.",

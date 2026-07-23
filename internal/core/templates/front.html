@@ -17,16 +17,32 @@
   <section class="story">
     <h2>{{.PluginName}}</h2>
     {{if eq .Status "partial"}}<p class="status-note">Only partial information was available.</p>{{end}}
+    {{if .Lead}}
     <ul class="facts">
-      {{range .Items}}
+      {{range .Lead}}
       <li><strong>{{.Title}}</strong>{{if .Body}} — {{.Body}}{{end}}</li>
       {{end}}
     </ul>
+    {{if .Rest}}
+    <details class="more-items">
+      <summary>{{len .Rest}} more item{{if gt (len .Rest) 1}}s{{end}}</summary>
+      <ul class="facts">
+        {{range .Rest}}
+        <li><strong>{{.Title}}</strong>{{if .Body}} — {{.Body}}{{end}}</li>
+        {{end}}
+      </ul>
+    </details>
+    {{end}}
+    {{else if .Summary}}<p class="status-note">{{.Summary}}</p>{{end}}
     {{/* Freshness speaks only when noteworthy: fresh data earns no caption. */}}
     {{if .Stale}}
     <p class="freshness stale">This information is from {{staleWhen .Freshness $.Brief.Generated}} and may be out of date.</p>
     {{end}}
   </section>
+  {{end}}
+
+  {{if .AlsoChecked}}
+  <p class="also-checked">Also checked: {{.AlsoChecked}}. No new observations.</p>
   {{end}}
 
   {{if .Brief.Sections}}

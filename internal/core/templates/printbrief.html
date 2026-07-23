@@ -59,11 +59,18 @@ body { background: #fff; }
   <section class="story">
     <h2>{{.PluginName}}</h2>
     {{if eq .Status "partial"}}<p class="status-note">Only partial information was available.</p>{{end}}
+    {{/* Print is the complete record: the item cap folds only on the reading page. */}}
+    {{if .Items}}
     <ul class="facts">
       {{range .Items}}<li><strong>{{.Title}}</strong>{{if .Body}} — {{.Body}}{{end}}</li>{{end}}
     </ul>
+    {{else if .Summary}}<p class="status-note">{{.Summary}}</p>{{end}}
     {{if .Stale}}<p class="freshness stale">This information is from {{staleWhen .Freshness $.Brief.Generated}} and may be out of date.</p>{{end}}
   </section>
+  {{end}}
+
+  {{if .AlsoChecked}}
+  <p class="also-checked">Also checked: {{.AlsoChecked}}. No new observations.</p>
   {{end}}
 
   {{if .Brief.Sections}}
