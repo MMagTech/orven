@@ -138,6 +138,11 @@ Captured, not commitments.
 - **AI-assisted briefing enhancement** (original vision) — would
   consume the structured observation model, never replace it, and
   stay traceable to observations.
+- **The footer sentence** — whether the colophon should carry the
+  preparation philosophy ("Orven prepares the Brief. The response is
+  yours.") instead of the read-only promise ("Orven reads. It never
+  changes anything."). Deliberately deferred: live with the new Brief
+  experience first.
 
 ## Done
 

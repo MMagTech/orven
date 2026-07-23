@@ -53,9 +53,11 @@ app itself (Plugins → Discover), or by dropping a plugin folder there
 and restarting.
 
 The Demo Activity plugin is seeded into a fresh installation exactly
-once. Uninstalling it is permanent — it will not come back after a
-restart or image update — and Settings offers "Restore the demo
-plugin" if you ever want it again.
+once, enabled so your first Brief has something to show (its events
+are fiction, and every briefing it contributes to says so).
+Uninstalling or disabling it is permanent — it will not come back
+after a restart or image update — and Settings offers "Restore the
+demo plugin" if you ever want it again (it returns disabled).
 
 ## Configuration
 

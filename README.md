@@ -59,9 +59,9 @@ update checks. See [CHANGELOG.md](CHANGELOG.md).
 docker run -d -p 8420:8420 -v ./orven-data:/app/data ghcr.io/mmagtech/orven:latest
 ```
 
-Open <http://localhost:8420>, enable the bundled **Demo Activity**
-plugin under *Plugins*, press **Run now**, then **Prepare the first
-briefing**. You'll be reading a briefing inside two minutes.
+Open <http://localhost:8420> and press **Prepare your first Brief** —
+a bundled demonstration plugin is already enabled (it observes nothing
+real), so you'll be reading a briefing inside a minute.
 
 Compose, Unraid, and persistent-storage details:
 [docs/DEPLOY.md](docs/DEPLOY.md). From source: `go run ./cmd/orven`
