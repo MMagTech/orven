@@ -159,6 +159,24 @@ is wrong, not the file.
     an installation convenience, not a capability, and remains the
     sole documented exception.)
 
+## The reading contract
+
+27. **The Brief prepares the reader; the reader prepares the
+    response.** The plugin reports observations; Orven prepares the
+    Brief; the operator decides what, if anything, to do. The
+    editorial standard is the traditional nightly news: what
+    happened, without speculation, prediction, recommendation, or
+    importance ranking. Kept on every page, the contract is three
+    promises. **When you reach the end, you are caught up** — the
+    edition is complete for its window, and its length follows the
+    news, never the number of installed plugins. **If it says quiet,
+    it looked** — silence is earned by verified coverage; a source
+    that could not be checked, or whose information is stale or
+    partial, is itself news and is never folded into quiet. **The
+    page tells you what happened; it never tells you what to do** —
+    failures and degraded systems belong in the publication, and the
+    response belongs to the reader. A Brief is an edition: it ends.
+
 ## Known enforcement gaps (recorded, planned)
 
 These are honest limits of today's containment. Contributors must not
