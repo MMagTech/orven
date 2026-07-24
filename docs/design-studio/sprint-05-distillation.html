@@ -1,0 +1,303 @@
+<title>Orven — Sprint 05: The Distillation</title>
+<style>
+  :root {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-edge: #cfcabf; --accent: #3d5a4e;
+    --keep: #3d5a4e; --transform: #7a5a2a; --drop: #7d4038;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3;
+      --keep: #8fb3a3; --transform: #c9a86a; --drop: #c98b80; }
+  }
+  :root[data-theme="dark"] { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; --keep: #8fb3a3; --transform: #c9a86a; --drop: #c98b80; }
+  :root[data-theme="light"] { --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2; --plate-edge: #cfcabf; --accent: #3d5a4e; --keep: #3d5a4e; --transform: #7a5a2a; --drop: #7d4038; }
+
+  body { background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.55; margin: 0; padding: 0 20px; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 56px 0 96px; }
+  .studio-head { border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 8px; }
+  .eyebrow { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h1 { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 42px); font-weight: 400; margin: 0 0 14px; line-height: 1.12; text-wrap: balance; }
+  .standfirst { max-width: 62ch; color: var(--muted); margin: 0; font-size: 16px; }
+  section { border-bottom: 1px solid var(--hairline); padding: 46px 0 50px; }
+  h2 { font-family: Georgia, serif; font-size: 26px; font-weight: 400; margin: 0 0 14px; }
+  .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  .note { max-width: 65ch; }
+
+  /* tribunal */
+  .trow { display: grid; grid-template-columns: 150px 1fr 108px; gap: 18px; padding: 16px 0; border-top: 1px solid var(--hairline); align-items: start; }
+  @media (max-width: 640px) { .trow { grid-template-columns: 1fr; gap: 6px; } }
+  .trow .el { font-family: Georgia, serif; font-size: 16px; padding-top: 1px; }
+  .trow .case { font-size: 13.5px; }
+  .trow .case p { margin: 0 0 6px; }
+  .trow .case b { font-weight: 600; }
+  .trow .case .vs { color: var(--muted); }
+  .verdict { font-size: 10.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; text-align: right; white-space: nowrap; }
+  @media (max-width: 640px) { .verdict { text-align: left; } }
+  .v-keep { color: var(--keep); } .v-transform { color: var(--transform); } .v-drop { color: var(--drop); }
+
+  /* survived summary */
+  .sgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 34px; max-width: 860px; }
+  @media (max-width: 640px) { .sgrid { grid-template-columns: 1fr; } }
+  .sgrid .s b { display: block; font-family: Georgia, serif; font-style: italic; font-weight: 400; font-size: 16px; margin-bottom: 3px; }
+  .sgrid .s p { margin: 0; font-size: 13.5px; color: var(--muted); }
+
+  .plate { border: 1px solid var(--plate-edge); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,.08); margin: 24px 0 10px; }
+  .plate-caption { font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+  .held { font-size: 13px; max-width: 66ch; margin: 0 0 4px; }
+  .held b { font-weight: 600; }
+  .m * { box-sizing: border-box; }
+
+  .closing { padding-top: 46px; border-bottom: 0; }
+  .closing ol { max-width: 60ch; padding-left: 22px; }
+  .closing li { margin-bottom: 10px; }
+
+  /* ====== THE DISTILLED BRIEF — shared grammar ====== */
+  .brief { background: #faf9f6; color: #211f1b; font-family: Georgia, "Iowan Old Style", serif; }
+  .brief .apparatus { font-family: "Segoe UI", system-ui, sans-serif; }
+  .brief .bound { border-top: 3px double #211f1b; }
+  .brief .wordline { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 2px 16px; padding: 10px 0 8px; }
+  .brief .wordmark { font-family: Georgia, serif; font-size: 17px; letter-spacing: .3em; text-indent: .05em; font-weight: 700; }
+  .brief .cert { font-family: "Segoe UI", sans-serif; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #57534a; }
+  .brief .manifest { font-family: "Segoe UI", sans-serif; font-size: 11px; color: #57534a; border-top: 1px solid #d8d4ca; border-bottom: 1px solid #d8d4ca; padding: 7px 0; display: flex; flex-wrap: wrap; gap: 3px 14px; }
+  .brief .manifest b { color: #211f1b; font-weight: 600; }
+  .brief .story { padding-top: 22px; }
+  .brief .skick { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #57534a; margin: 0 0 6px; }
+  .brief .hed1 { font-size: 24px; line-height: 1.18; font-weight: 700; margin: 0 0 8px; text-wrap: balance; }
+  .brief .hed2 { font-size: 17.5px; line-height: 1.25; font-weight: 700; margin: 0 0 7px; text-wrap: balance; }
+  .brief .btext { font-size: 14.5px; line-height: 1.62; max-width: 62ch; }
+  .brief .btext p { margin: 0 0 10px; }
+  .brief .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+  .brief .record { margin-top: 26px; border-top: 1px solid #d8d4ca; padding-top: 14px; }
+  .brief .rtitle { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #57534a; margin: 0 0 8px; }
+  .brief .rgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
+  .brief .ritem { font-size: 13px; line-height: 1.5; padding: 6px 0; border-bottom: 1px dotted #c9c4b8; }
+  .brief .ritem b { font-family: "Segoe UI", sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-right: 6px; color: #57534a; }
+  .brief .silence { border: 1px solid #211f1b; padding: 11px 14px; margin-top: 24px; max-width: 460px; }
+  .brief .silence .rtitle { margin-bottom: 5px; }
+  .brief .silence p { margin: 0; font-size: 13px; }
+  .brief .endmark { margin-top: 28px; border-top: 3px double #211f1b; padding-top: 9px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; }
+  .brief .endmark .e1 { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+  .brief .endmark .e2 { font-family: "Segoe UI", sans-serif; font-size: 11px; color: #57534a; }
+
+  /* desktop */
+  .db { padding: 30px 44px 30px; }
+
+  /* mobile */
+  .mobile-stage { background: var(--bg); display: flex; justify-content: center; padding: 30px 16px; }
+  .mob { width: 372px; max-width: 100%; border: 1px solid var(--plate-edge); border-radius: 26px; overflow: hidden; box-shadow: 0 6px 24px rgba(0,0,0,.14); }
+  .mb { padding: 22px 20px 24px; }
+  .mb .hed1 { font-size: 21px; }
+  .mb .hed2 { font-size: 16.5px; }
+  .mb .btext { font-size: 14px; }
+  .mb .duo, .mb .rgrid { grid-template-columns: 1fr; }
+  .mb .duo > div + div { margin-top: 18px; }
+  .mb .silence { max-width: none; }
+
+  /* print */
+  .print-stage { background: #8e8a82; padding: 34px 26px; display: flex; justify-content: center; }
+  .sheet { background: #ffffff; color: #000; width: 620px; max-width: 100%; padding: 44px 52px 36px; box-shadow: 0 3px 18px rgba(0,0,0,.35); }
+  .pb { background: #ffffff; color: #000; }
+  .pb .cert, .pb .manifest, .pb .skick, .pb .rtitle, .pb .ritem b, .pb .endmark .e2 { color: #333; }
+  .pb .bound, .pb .endmark { border-color: #000; }
+  .pb .manifest { border-color: #999; }
+  .pb .record { border-color: #999; }
+  .pb .ritem { border-color: #aaa; }
+  .pb .silence { border-color: #000; }
+  .pb .btext { font-size: 12.5px; line-height: 1.5; }
+  .pb .hed1 { font-size: 21px; }
+  .pb .hed2 { font-size: 15.5px; }
+  .pb .ritem { font-size: 11.5px; }
+  .pb .pagefoot { font-family: "Segoe UI", sans-serif; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #555; display: flex; justify-content: space-between; margin-top: 22px; }
+</style>
+
+<div class="wrap">
+  <header class="studio-head">
+    <p class="eyebrow">Orven Product Design Studio · Sprint 05</p>
+    <h1>The distillation</h1>
+    <p class="standfirst">Every element of the Broadsheet, tried individually on one question: does it improve a briefing, or does it exist because newspapers printed on paper? Then the survivors, reassembled — and proven as one brief across desktop, phone, and the printed page.</p>
+  </header>
+
+  <!-- ============ THE TRIBUNAL ============ -->
+  <section>
+    <p class="kicker">Part one</p>
+    <h2>The tribunal</h2>
+    <p class="note">Each verdict was reached against all three mediums at once. The pattern that emerged: <b>what survives is grammar — what falls is geometry.</b> Newspapers solved "many facts, finite space, reader in a hurry" (Orven's exact problem) and also "cheap ink, expensive paper, newsstand competition" (not Orven's problem). We keep the first inheritance and decline the second.</p>
+
+    <div class="trow"><div class="el">Masthead</div><div class="case"><p><b>For the briefing:</b> the brief needs an opening ceremony — a fixed signal that the document has begun. <span class="vs"><b>Paper nostalgia:</b> its newsstand scale. A 40px letterspaced name exists to out-shout rival papers on a rack. Orven competes with no one on your own server.</span></p></div><div class="verdict v-transform">Transform</div></div>
+    <div class="trow"><div class="el">Edition number &amp; dateline</div><div class="case"><p><b>For the briefing:</b> genuinely load-bearing. The date scopes every fact; the number certifies continuity — No. 215 tells you 214 came before and nothing slipped between. This is finiteness and self-accounting in four words.</p></div><div class="verdict v-keep">Keep</div></div>
+    <div class="trow"><div class="el">“Inside” summary</div><div class="case"><p><b>For the briefing:</b> the counts are not navigation — they are content: the shape of the night in one line, and the public arithmetic behind the layout. <span class="vs"><b>Paper nostalgia:</b> the word "Inside," which assumes page-turning.</span> It becomes the <b>manifest</b> — same line, honest name.</p></div><div class="verdict v-transform">Transform</div></div>
+    <div class="trow"><div class="el">Horizontal rules</div><div class="case"><p><b>For the briefing:</b> two rules earn their place — the double rule that opens the brief and the one that closes it. The document literally lives between them. <span class="vs"><b>Paper nostalgia:</b> everything else. Newspapers ruled everywhere because ink was cheap and whitespace cost paper; on screen, whitespace is free and calmer.</span> One boundary pair, a hairline under the manifest, dotted leaders in the record — nothing more.</p></div><div class="verdict v-transform">Transform</div></div>
+    <div class="trow"><div class="el">Multi-column body text</div><div class="case"><p><b>Paper nostalgia, almost entirely.</b> Snaking columns exist because a broadsheet page was too wide to read across. On desktop they force the eye to climb back up; on a phone they are impossible; only print can justify them. Side-by-side <i>stories</i> (parallel placement on wide media) survive; snaking <i>text</i> does not.</p></div><div class="verdict v-drop">Drop</div></div>
+    <div class="trow"><div class="el">Justified text &amp; hyphenation</div><div class="case"><p><b>Paper nostalgia.</b> Justification is a narrow-column device; on screen it opens rivers of whitespace and adds visual tension. Ragged right is quieter — and calm outranks tidiness of edge.</p></div><div class="verdict v-drop">Drop</div></div>
+    <div class="trow"><div class="el">Headline typography</div><div class="case"><p><b>For the briefing:</b> this is the volume rule made visible — size as a unit of measurement, and a declarative sentence you can stop reading after. The essential Orven invention of Sprints 02–03. <span class="vs"><b>Tuned:</b> newspaper scale-drama (27px shouting) compresses to a measured three-step scale.</span></p></div><div class="verdict v-keep">Keep</div></div>
+    <div class="trow"><div class="el">Italic decks</div><div class="case"><p><b>Paper nostalgia.</b> The deck was the newsstand's second sales pitch. A brief has no second pitch: the headline states the fact, the body gives detail. Two summary layers above every story is one more than a calm document needs.</p></div><div class="verdict v-drop">Drop</div></div>
+    <div class="trow"><div class="el">Serif typefaces</div><div class="case"><p><b>For the briefing:</b> serifs are reading typography, not paper typography — warmth and long-form trust. <span class="vs"><b>Paper nostalgia:</b> Times/Cambria specifically, which is the newspaper costume itself.</span> Resolved as <b>two inks</b>: a screen-bred serif (Georgia-class) for the report's voice; a quiet sans for the apparatus — labels, counts, times, frame. The report speaks; the instrument labels.</p></div><div class="verdict v-transform">Transform</div></div>
+    <div class="trow"><div class="el">Section dividers &amp; kickers</div><div class="case"><p><b>For the briefing:</b> the kicker with its count ("Containers · 6 observations") is the audit trail of the whole design — it stays. <span class="vs"><b>Paper nostalgia:</b> the heavy black bar above each one.</span> On screen, space does the dividing; the label does the naming.</p></div><div class="verdict v-transform">Transform</div></div>
+    <div class="trow"><div class="el">Boxed silence</div><div class="case"><p><b>For the briefing:</b> the one enclosure in the whole design, reserved for missing coverage. The box is meaning, not decoration — absence made structural. Identical in all three mediums.</p></div><div class="verdict v-keep">Keep</div></div>
+    <div class="trow"><div class="el">End of the brief</div><div class="case"><p><b>For the briefing:</b> the closing boundary is the edition principle embodied — the document certifies its own completeness and states its accounting. <span class="vs"><b>Paper nostalgia:</b> the fleuron ❦. Ornament borrowed from letterpress; the double rule and the words are enough.</span></p></div><div class="verdict v-keep">Keep</div></div>
+    <div class="trow"><div class="el">Cream paper tint</div><div class="case"><p><b>Half and half.</b> A near-white with a slight warm bias is screen comfort and deliberate neutrality — chosen, not inherited. Parchment yellow would be costume. Print resolves it honestly: real paper is whatever paper it is, so print sets pure black on white.</p></div><div class="verdict v-transform">Transform</div></div>
+  </section>
+
+  <!-- ============ WHAT SURVIVED ============ -->
+  <section>
+    <p class="kicker">Part two</p>
+    <h2>What survived: the Orven grammar</h2>
+    <p class="note">Not a newspaper anymore — a document grammar of six devices. Any medium that can draw a rule and set two typefaces can speak it.</p>
+    <div class="sgrid">
+      <div class="s"><b>The bounds</b><p>One double rule opens the brief, one closes it. Everything between them is the edition; nothing outside them exists.</p></div>
+      <div class="s"><b>The certification line</b><p>Wordmark, date, edition number, observation count — one quiet line, identical every morning, heavy or empty.</p></div>
+      <div class="s"><b>The manifest</b><p>Every beat and its count, one line, before anything else. The night's shape at a glance and the layout's public arithmetic.</p></div>
+      <div class="s"><b>Two inks</b><p>A reading serif for the facts; a small quiet sans for the apparatus — labels, counts, times. The report speaks, the instrument labels.</p></div>
+      <div class="s"><b>Size as measurement</b><p>Three headline steps assigned by count alone. Single reading column, ragged right; parallel stories sit side by side only when the medium is wide.</p></div>
+      <div class="s"><b>The reserved seat &amp; the end</b><p>Silence in the design's only box. Then the closing rule: END OF THE BRIEF, with the edition's own accounting.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ TRI-MEDIUM PROOF ============ -->
+  <section>
+    <p class="kicker">Part three</p>
+    <h2>One brief, three mediums</h2>
+    <p class="note">Edition No. 215 — the 21-observation morning from Sprint 02 — set in the distilled grammar. Watch what changes and what refuses to: geometry flexes, grammar holds.</p>
+
+    <h2 style="font-size:19px; margin-top:30px;">Desktop</h2>
+    <div class="plate"><div class="m brief db">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">Thursday 24 July 2026 · Edition No. 215 · 21 observations</span></div>
+      <div class="manifest apparatus"><b>Containers</b> 6<span>·</span><b>Updates</b> 5<span>·</span><b>Backups</b> 3<span>·</span><b>Storage</b> 2<span>·</span><b>Network</b> 2<span>·</span><b>Certificates</b> 1<span>·</span><b>DNS</b> 1<span>·</span><b>Media</b> 1<span>·</span><b>one silent</b></div>
+
+      <div class="story">
+        <p class="skick">Containers · 6 observations</p>
+        <p class="hed1">Six container events overnight as jellyfin cycles and two images update</p>
+        <div class="btext">
+          <p>Jellyfin restarted at 2:10 and again at 2:14, and has run continuously since. Watchtower pulled new images for postgres and redis at 4:02; both containers were recreated and running by 4:05. The paperless image was pulled at 4:06 but its container has not been recreated.</p>
+        </div>
+      </div>
+
+      <div class="duo">
+        <div class="story">
+          <p class="skick">Updates · 5 observations</p>
+          <p class="hed2">Five packages applied at 5:00; no reboot since the kernel update</p>
+          <div class="btext"><p>The unattended run applied kernel 6.9.4, openssl, curl, and two library packages. The machine has not rebooted since.</p></div>
+        </div>
+        <div class="story">
+          <p class="skick">Backups · 3 observations</p>
+          <p class="hed2">Nightly run completes in 38 minutes; two snapshots pruned</p>
+          <div class="btext"><p>The backup to tank/backups completed at 3:09 — 17.9 GB written. Snapshots from April 21 and 22 were pruned on schedule.</p></div>
+        </div>
+      </div>
+
+      <div class="record">
+        <p class="rtitle">The record in brief</p>
+        <div class="rgrid">
+          <div class="ritem"><b>Storage</b> Pool at 72 percent, up one point this week; sdb steady below 41°C.</div>
+          <div class="ritem"><b>Network</b> The WAN address changed at 1:44; peer laptop last seen Tuesday.</div>
+          <div class="ritem"><b>Certificates</b> All nine certificates more than 30 days from expiry.</div>
+          <div class="ritem"><b>DNS</b> 41,203 queries answered yesterday; 12 percent blocked.</div>
+          <div class="ritem"><b>Media</b> Three items added to the library overnight.</div>
+        </div>
+      </div>
+
+      <div class="silence">
+        <p class="rtitle">Not heard from</p>
+        <p>The UPS plugin has not reported since Monday 20 July — four days.</p>
+      </div>
+
+      <div class="endmark apparatus"><span class="e1">End of the brief</span><span class="e2">21 observations from 11 of 12 plugins · next edition 7:00 tomorrow</span></div>
+    </div></div>
+    <p class="held"><b>Flexed:</b> two parallel stories sit side by side; the record runs in two dotted columns. <b>Held:</b> bounds, certification, manifest, two inks, tiered headlines, the box, the end.</p>
+    <p class="plate-caption">Plate 1 — desktop. No masthead theater, no snaking columns, no justification, no decks: the grammar alone.</p>
+
+    <h2 style="font-size:19px; margin-top:34px;">Mobile</h2>
+    <div class="plate"><div class="mobile-stage"><div class="mob"><div class="m brief mb">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">No. 215 · Thu 24 Jul</span></div>
+      <div class="manifest apparatus"><b>Containers</b> 6<span>·</span><b>Updates</b> 5<span>·</span><b>Backups</b> 3<span>·</span><b>+5 beats</b><span>·</span><b>one silent</b></div>
+      <div class="story">
+        <p class="skick">Containers · 6 observations</p>
+        <p class="hed1">Six container events overnight as jellyfin cycles and two images update</p>
+        <div class="btext"><p>Jellyfin restarted at 2:10 and 2:14, and has run continuously since. Postgres and redis were recreated by 4:05; the paperless image was pulled but its container has not been recreated.</p></div>
+      </div>
+      <div class="duo">
+        <div class="story">
+          <p class="skick">Updates · 5 observations</p>
+          <p class="hed2">Five packages applied at 5:00; no reboot since the kernel update</p>
+        </div>
+        <div class="story">
+          <p class="skick">Backups · 3 observations</p>
+          <p class="hed2">Nightly run completes in 38 minutes; two snapshots pruned</p>
+        </div>
+      </div>
+      <div class="record">
+        <p class="rtitle">The record in brief</p>
+        <div class="rgrid">
+          <div class="ritem"><b>Storage</b> Pool at 72 percent; sdb below 41°C.</div>
+          <div class="ritem"><b>Network</b> WAN address changed at 1:44.</div>
+          <div class="ritem"><b>Certificates</b> All nine beyond 30 days.</div>
+          <div class="ritem"><b>DNS</b> 41,203 queries; 12 percent blocked.</div>
+          <div class="ritem"><b>Media</b> Three items added overnight.</div>
+        </div>
+      </div>
+      <div class="silence">
+        <p class="rtitle">Not heard from</p>
+        <p>UPS has not reported since Monday — four days.</p>
+      </div>
+      <div class="endmark apparatus"><span class="e1">End of the brief</span><span class="e2">21 obs · 11 of 12 plugins</span></div>
+    </div></div></div></div>
+    <p class="held"><b>Flexed:</b> everything stacks; the manifest truncates to the busiest beats; parallel stories become headline-only until tapped. <b>Held:</b> the identical opening line, the same tier sizes in miniature, the same box, the same end.</p>
+    <p class="plate-caption">Plate 2 — mobile. One thumb-length is the certification, manifest, and lead headline: the whole night before the first scroll.</p>
+
+    <h2 style="font-size:19px; margin-top:34px;">Print / PDF</h2>
+    <div class="plate"><div class="print-stage"><div class="sheet"><div class="m brief pb">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">Thursday 24 July 2026 · Edition No. 215 · 21 observations</span></div>
+      <div class="manifest apparatus"><b>Containers</b> 6<span>·</span><b>Updates</b> 5<span>·</span><b>Backups</b> 3<span>·</span><b>Storage</b> 2<span>·</span><b>Network</b> 2<span>·</span><b>Certificates</b> 1<span>·</span><b>DNS</b> 1<span>·</span><b>Media</b> 1<span>·</span><b>one silent</b></div>
+      <div class="story">
+        <p class="skick">Containers · 6 observations</p>
+        <p class="hed1">Six container events overnight as jellyfin cycles and two images update</p>
+        <div class="btext"><p>Jellyfin restarted at 2:10 and again at 2:14, and has run continuously since. Watchtower pulled new images for postgres and redis at 4:02; both were recreated by 4:05. The paperless image was pulled at 4:06 but its container has not been recreated.</p></div>
+      </div>
+      <div class="duo">
+        <div class="story">
+          <p class="skick">Updates · 5 observations</p>
+          <p class="hed2">Five packages applied; no reboot since</p>
+          <div class="btext"><p>Kernel 6.9.4, openssl, curl, and two libraries at 5:00.</p></div>
+        </div>
+        <div class="story">
+          <p class="skick">Backups · 3 observations</p>
+          <p class="hed2">Nightly run completes; two snapshots pruned</p>
+          <div class="btext"><p>3:09, 38 minutes, 17.9 GB to tank/backups.</p></div>
+        </div>
+      </div>
+      <div class="record">
+        <p class="rtitle">The record in brief</p>
+        <div class="rgrid">
+          <div class="ritem"><b>Storage</b> Pool at 72 percent; sdb below 41°C.</div>
+          <div class="ritem"><b>Network</b> WAN changed 1:44; laptop last seen Tuesday.</div>
+          <div class="ritem"><b>Certificates</b> All nine beyond 30 days from expiry.</div>
+          <div class="ritem"><b>DNS</b> 41,203 queries; 12 percent blocked.</div>
+          <div class="ritem"><b>Media</b> Three items added overnight.</div>
+        </div>
+      </div>
+      <div class="silence">
+        <p class="rtitle">Not heard from</p>
+        <p>The UPS plugin has not reported since Monday 20 July — four days.</p>
+      </div>
+      <div class="endmark apparatus"><span class="e1">End of the brief</span><span class="e2">21 observations from 11 of 12 plugins</span></div>
+      <div class="pagefoot"><span>Orven · maple.lan</span><span>Edition No. 215 · Page 1 of 1</span></div>
+    </div></div></div></div>
+    <p class="held"><b>Flexed:</b> pure black on true white; slightly denser type; a page footer with folio, because paper has pages. <b>Held:</b> everything else, line for line.</p>
+    <p class="plate-caption">Plate 3 — the printed brief. The medium the grammar secretly comes from — and it needs almost no translation to get there.</p>
+  </section>
+
+  <section class="closing">
+    <p class="kicker">For your review</p>
+    <h2>The distillation test</h2>
+    <ol>
+      <li>Cover the wordmark and squint: is this still unmistakably a <i>daily brief</i> — the instant read you valued — without the newspaper costume?</li>
+      <li>Any tribunal verdict you'd overturn? (The decks and justified columns are the two I'd expect you might miss.)</li>
+      <li>Mobile truncates the manifest and collapses parallel stories to headlines. Acceptable adaptation, or does it break "the same Brief everywhere"?</li>
+      <li>Print sets pure black on white while screens keep the warm near-white. One grammar, two papers — honest, or inconsistent?</li>
+      <li>Does anything in the distilled version feel <i>missing</i> — a place where the newspaper's warmth did work we haven't replaced?</li>
+    </ol>
+  </section>
+</div>

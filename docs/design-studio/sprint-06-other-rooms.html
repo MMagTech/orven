@@ -1,0 +1,246 @@
+<title>Orven — Sprint 06: The Other Rooms</title>
+<style>
+  :root {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-edge: #cfcabf; --accent: #3d5a4e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; }
+  }
+  :root[data-theme="dark"] { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; }
+  :root[data-theme="light"] { --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2; --plate-edge: #cfcabf; --accent: #3d5a4e; }
+
+  body { background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.55; margin: 0; padding: 0 20px; }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 56px 0 96px; }
+  .studio-head { border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 8px; }
+  .eyebrow { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h1 { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 42px); font-weight: 400; margin: 0 0 14px; line-height: 1.12; text-wrap: balance; }
+  .standfirst { max-width: 62ch; color: var(--muted); margin: 0; font-size: 16px; }
+  section { border-bottom: 1px solid var(--hairline); padding: 46px 0 50px; }
+  h2 { font-family: Georgia, serif; font-size: 25px; font-weight: 400; margin: 0 0 12px; }
+  .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  .note { max-width: 64ch; margin: 0 0 22px; }
+  .plate { border: 1px solid var(--plate-edge); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,.08); margin: 0 0 10px; }
+  .plate-caption { font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+  .m * { box-sizing: border-box; }
+  .closing { padding-top: 46px; border-bottom: 0; }
+  .closing ol { max-width: 60ch; padding-left: 22px; }
+  .closing li { margin-bottom: 10px; }
+
+  /* ====== shared distilled grammar ====== */
+  .brief { background: #faf9f6; color: #211f1b; font-family: Georgia, "Iowan Old Style", serif; padding: 28px 42px 28px; }
+  .brief .bound { border-top: 3px double #211f1b; }
+  .brief .wordline { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 2px 16px; padding: 10px 0 8px; }
+  .brief .wordmark { font-size: 16px; letter-spacing: .3em; font-weight: 700; }
+  .brief .roomname { font-family: "Segoe UI", sans-serif; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #57534a; }
+  .brief .cert { font-family: "Segoe UI", sans-serif; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #57534a; }
+  .brief .hairline { border-top: 1px solid #d8d4ca; }
+  .brief .skick { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #57534a; margin: 22px 0 6px; }
+  .brief .endmark { margin-top: 26px; border-top: 3px double #211f1b; padding-top: 9px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; }
+  .brief .endmark .e1 { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+  .brief .endmark .e2 { font-family: "Segoe UI", sans-serif; font-size: 11px; color: #57534a; }
+
+  /* A · archive */
+  .arch .monthlbl { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #57534a; margin: 24px 0 2px; }
+  .arch .ed { display: grid; grid-template-columns: 108px 1fr auto; gap: 0 18px; align-items: baseline; padding: 10px 0; border-bottom: 1px dotted #c9c4b8; }
+  .arch .ed .no { font-family: "Segoe UI", sans-serif; font-size: 11px; letter-spacing: .04em; color: #57534a; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .arch .ed .no b { color: #211f1b; font-weight: 600; }
+  .arch .ed .lede { font-size: 14.5px; line-height: 1.4; }
+  .arch .ed .lede i { color: #716a5e; }
+  .arch .ed .count { font-family: "Segoe UI", sans-serif; font-size: 11px; color: #57534a; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  /* B · beat page */
+  .beat .bhead { margin-top: 20px; }
+  .beat .bname { font-size: 25px; font-weight: 700; margin: 0 0 4px; }
+  .beat .bcred { font-family: "Segoe UI", sans-serif; font-size: 11.5px; color: #57534a; margin: 0 0 4px; }
+  .beat .entry { display: grid; grid-template-columns: 118px 1fr; gap: 0 18px; padding: 8px 0; border-bottom: 1px dotted #c9c4b8; align-items: baseline; }
+  .beat .entry .ed { font-family: "Segoe UI", sans-serif; font-size: 10.5px; color: #57534a; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .beat .entry .f { font-size: 13.5px; line-height: 1.5; }
+  .beat .entry.gap .f { color: #716a5e; font-style: italic; }
+  .beat .silence { border: 1px solid #211f1b; padding: 10px 13px; margin-top: 20px; max-width: 480px; }
+  .beat .silence .t { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 4px; }
+  .beat .silence p { margin: 0; font-size: 13px; }
+
+  /* C · settings */
+  .set { font-family: "Segoe UI", system-ui, sans-serif; }
+  .set .srow { display: grid; grid-template-columns: 190px 1fr auto; gap: 0 20px; align-items: baseline; padding: 11px 0; border-bottom: 1px dotted #c9c4b8; }
+  .set .srow .lbl { font-size: 12.5px; font-weight: 600; letter-spacing: .02em; }
+  .set .srow .why { font-family: Georgia, serif; font-size: 12.5px; color: #716a5e; }
+  .set .srow .val { font-size: 12.5px; color: #211f1b; white-space: nowrap; border-bottom: 1px solid #a09a8c; padding-bottom: 1px; }
+  .set .srow .val.choice { letter-spacing: .08em; text-transform: uppercase; font-size: 10.5px; font-weight: 600; }
+  .set .beatrow { display: grid; grid-template-columns: 150px 1fr auto; gap: 0 20px; align-items: baseline; padding: 8px 0; border-bottom: 1px dotted #c9c4b8; }
+  .set .beatrow .bn { font-family: Georgia, serif; font-size: 13.5px; }
+  .set .beatrow .bd { font-size: 11.5px; color: #716a5e; }
+  .set .beatrow .st { font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+  .set .beatrow .st.obs { color: #3d5a4e; }
+  .set .beatrow .st.paused { color: #716a5e; }
+
+  /* D · quiet edition */
+  .quiet .qwell { text-align: center; padding: 40px 20px 30px; }
+  .quiet .qhed { font-size: 21px; font-weight: 700; margin: 0 0 8px; }
+  .quiet .qsub { font-size: 14px; color: #57534a; margin: 0; font-style: italic; }
+
+  /* E · night palette — colors only */
+  .night { background: #14181f; color: #cdd5de; }
+  .night .bound, .night .endmark { border-color: #cdd5de; }
+  .night .wordmark { color: #eef2f6; }
+  .night .cert, .night .roomname, .night .skick, .night .endmark .e2, .night .manifest { color: #8d99a8; }
+  .night .hairline, .night .manifest { border-color: #2c3542; }
+  .night .manifest b { color: #cdd5de; }
+  .night .hed1 { color: #eef2f6; }
+  .night .btext { color: #cdd5de; }
+  .night .ritem { border-color: #2c3542; }
+  .night .ritem b { color: #8d99a8; }
+  .night .silence { border-color: #cdd5de; }
+  .night .endmark .e1 { color: #eef2f6; }
+  .brief .manifest { font-family: "Segoe UI", sans-serif; font-size: 11px; color: #57534a; border-top: 1px solid #d8d4ca; border-bottom: 1px solid #d8d4ca; padding: 7px 0; display: flex; flex-wrap: wrap; gap: 3px 14px; }
+  .brief .manifest b { color: #211f1b; font-weight: 600; }
+  .brief .hed1 { font-size: 22px; line-height: 1.2; font-weight: 700; margin: 0 0 8px; text-wrap: balance; }
+  .brief .btext { font-size: 14px; line-height: 1.6; max-width: 62ch; }
+  .brief .btext p { margin: 0 0 10px; }
+  .brief .ritem { font-size: 13px; line-height: 1.5; padding: 6px 0; border-bottom: 1px dotted #c9c4b8; }
+  .brief .ritem b { font-family: "Segoe UI", sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-right: 6px; color: #57534a; }
+  .brief .silence { border: 1px solid #211f1b; padding: 10px 13px; margin-top: 20px; max-width: 460px; }
+  .brief .silence .t { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 4px; }
+  .brief .silence p { margin: 0; font-size: 13px; }
+</style>
+
+<div class="wrap">
+  <header class="studio-head">
+    <p class="eyebrow">Orven Product Design Studio · Sprint 06</p>
+    <h1>The other rooms</h1>
+    <p class="standfirst">A design language isn't proven on its best page — it's proven in the rooms nobody designs for. Five of them, each in the distilled grammar from Sprint 05: the archive, a single beat's record, settings, the quiet day, and the night. Same bounds, same certification, same two inks, everywhere.</p>
+  </header>
+
+  <!-- ============ A · THE ARCHIVE ============ -->
+  <section>
+    <p class="kicker">Room A</p>
+    <h2>The Archive</h2>
+    <p class="note">Every past edition, one per row: number, date, lead headline, count. The archive's quiet argument is continuity — an unbroken run of numbered editions is the deepest trust signal Orven has, and quiet days sit in the record with the same dignity as heavy ones. The lead headline doubles as the morning's caption in history.</p>
+    <div class="plate"><div class="m brief arch">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="roomname">The Archive</span></div>
+      <div class="hairline"></div>
+      <p class="monthlbl">July 2026</p>
+      <div class="ed"><span class="no"><b>No. 217</b> · Sat 26</span><span class="lede">Nine container events overnight; paperless stopped since 4:52</span><span class="count">47 obs · 15/17</span></div>
+      <div class="ed"><span class="no"><b>No. 216</b> · Fri 25</span><span class="lede"><i>Nothing changed overnight.</i></span><span class="count">0 obs · 12/12</span></div>
+      <div class="ed"><span class="no"><b>No. 215</b> · Thu 24</span><span class="lede">Six container events overnight as jellyfin cycles and two images update</span><span class="count">21 obs · 11/12</span></div>
+      <div class="ed"><span class="no"><b>No. 214</b> · Wed 23</span><span class="lede">Nightly backup completes at 3:12, forty-one minutes end to end</span><span class="count">7 obs · 11/12</span></div>
+      <div class="ed"><span class="no"><b>No. 213</b> · Tue 22</span><span class="lede"><i>Nothing changed overnight.</i></span><span class="count">0 obs · 12/12</span></div>
+      <div class="ed"><span class="no"><b>No. 212</b> · Mon 21</span><span class="lede">Certificate for vault.home.arpa within thirty days of expiry</span><span class="count">4 obs · 12/12</span></div>
+      <p class="monthlbl">June 2026</p>
+      <div class="ed"><span class="no"><b>No. 211</b> · Tue 30</span><span class="lede">Kernel update applied; machine rebooted at 5:14</span><span class="count">9 obs · 12/12</span></div>
+      <div class="ed"><span class="no"><b>No. 210</b> · Mon 29</span><span class="lede"><i>Nothing changed overnight.</i></span><span class="count">0 obs · 12/12</span></div>
+      <div class="endmark"><span class="e1">217 editions since 14 March 2026</span><span class="e2">an unbroken daily record</span></div>
+    </div></div>
+    <p class="plate-caption">Plate A — the archive as a run of certification lines. On mobile the three columns stack into two lines per edition; in print this is the index page of a bound month.</p>
+  </section>
+
+  <!-- ============ B · THE BEAT PAGE ============ -->
+  <section>
+    <p class="kicker">Room B</p>
+    <h2>A beat's record</h2>
+    <p class="note">One plugin's full history — the Backups beat. The page opens with the beat's credentials (how long it has reported, how faithfully), then its observations run edition by edition. A gap in coverage appears <i>in the record itself</i>, in its chronological place — the reserved-seat principle applied to history. No charts, no uptime percentage bars: the record is sentences.</p>
+    <div class="plate"><div class="m brief beat">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="roomname">The Beats · Backups</span></div>
+      <div class="hairline"></div>
+      <div class="bhead">
+        <p class="bname">Backups</p>
+        <p class="bcred">Reporting since 14 March 2026 · filed in 213 of 217 editions · observes restic via tank/backups and rsync.net</p>
+      </div>
+      <p class="skick">The record, most recent first</p>
+      <div class="entry"><span class="ed">No. 217 · Sat 26 Jul</span><span class="f">Offsite run ended at 2:47 with exit status 1 — first incomplete run since 30 May. Local run completed, 19.4 GB.</span></div>
+      <div class="entry"><span class="ed">No. 216 · Fri 25 Jul</span><span class="f">Both runs completed; 18.1 GB local, 2.2 GB offsite.</span></div>
+      <div class="entry"><span class="ed">No. 215 · Thu 24 Jul</span><span class="f">Local run completed at 3:09 in 38 minutes; snapshots from April 21 and 22 pruned.</span></div>
+      <div class="entry"><span class="ed">No. 214 · Wed 23 Jul</span><span class="f">Nightly backup completed at 3:12, forty-one minutes end to end; 18.2 GB written.</span></div>
+      <div class="entry gap"><span class="ed">No. 213 · Tue 22 Jul</span><span class="f">Did not file — the beat missed this edition's collection.</span></div>
+      <div class="entry"><span class="ed">No. 212 · Mon 21 Jul</span><span class="f">Both runs completed; retention pruned one snapshot.</span></div>
+      <div class="silence">
+        <p class="t">Coverage</p>
+        <p>Four editions without a filing: No. 213, No. 181, No. 92, No. 91. Each appears in its place above.</p>
+      </div>
+      <div class="endmark"><span class="e1">End of the record shown</span><span class="e2">213 filings · earlier editions in the archive</span></div>
+    </div></div>
+    <p class="plate-caption">Plate B — a beat's page: credentials, then the record, gaps included in their chronological seats.</p>
+  </section>
+
+  <!-- ============ C · SETTINGS ============ -->
+  <section>
+    <p class="kicker">Room C</p>
+    <h2>Settings</h2>
+    <p class="note">The hardest test — forms in an editorial language. The two-inks rule inverts here: settings are the instrument's own room, so the sans leads and the serif drops to a supporting voice, explaining each choice in plain sentences. Values sit on a single underline — the one visual signal of "this can change." No toggles, no cards, no switches pretending to be hardware.</p>
+    <div class="plate"><div class="m brief set">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="roomname">Settings</span></div>
+      <div class="hairline"></div>
+      <p class="skick">The edition</p>
+      <div class="srow"><span class="lbl">Morning edition at</span><span class="why">The brief is compiled once and dated; it does not update during the day.</span><span class="val">7:00</span></div>
+      <div class="srow"><span class="lbl">Week begins</span><span class="why">Affects only how the archive groups its months and weeks.</span><span class="val choice">Monday</span></div>
+      <p class="skick">Appearance</p>
+      <div class="srow"><span class="lbl">Ink</span><span class="why">Day and night use the same page; only the colors change.</span><span class="val choice">Follow the system</span></div>
+      <div class="srow"><span class="lbl">Type size</span><span class="why">Scales the reading serif; the apparatus stays small.</span><span class="val choice">Regular</span></div>
+      <p class="skick">The beats</p>
+      <div class="beatrow"><span class="bn">Backups</span><span class="bd">restic via tank/backups and rsync.net</span><span class="st obs">Observing</span></div>
+      <div class="beatrow"><span class="bn">Containers</span><span class="bd">docker on maple</span><span class="st obs">Observing</span></div>
+      <div class="beatrow"><span class="bn">Storage</span><span class="bd">zfs pools and SMART</span><span class="st obs">Observing</span></div>
+      <div class="beatrow"><span class="bn">UPS</span><span class="bd">apcupsd on maple</span><span class="st paused">Paused by you, 12 July</span></div>
+      <div class="endmark"><span class="e1">Settings</span><span class="e2">changes take effect from the next edition</span></div>
+    </div></div>
+    <p class="plate-caption">Plate C — settings in the same bounds and inks. Every option explained in a sentence; the paused beat says who paused it and when — a fact, like everything else.</p>
+  </section>
+
+  <!-- ============ D · THE QUIET EDITION ============ -->
+  <section>
+    <p class="kicker">Room D</p>
+    <h2>The quiet edition, distilled</h2>
+    <p class="note">Sprint 02's open question, answered in the new grammar. The full apparatus appears — bounds, certification, manifest, end — because the frame is what certifies the quiet. The manifest on a quiet day is the reassurance itself: every beat, present and accounted for.</p>
+    <div class="plate"><div class="m brief quiet">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">Friday 25 July 2026 · Edition No. 216 · No observations</span></div>
+      <div class="manifest"><b>All twelve beats reported</b><span>·</span>Backups<span>·</span>Containers<span>·</span>Storage<span>·</span>Network<span>·</span>Certificates<span>·</span>DNS<span>·</span>Media<span>·</span>VMs<span>·</span>Git<span>·</span>Photos<span>·</span>Mail<span>·</span>UPS</div>
+      <div class="qwell">
+        <p class="qhed">Nothing changed overnight</p>
+        <p class="qsub">The UPS beat filed for the first time since Monday.</p>
+      </div>
+      <div class="endmark"><span class="e1">End of the brief</span><span class="e2">0 observations from 12 of 12 plugins · next edition 7:00 tomorrow</span></div>
+    </div></div>
+    <p class="plate-caption">Plate D — the quiet edition. Note the manifest's inversion: on a quiet day it lists the beats <i>by name</i>, because presence is the day's only news.</p>
+  </section>
+
+  <!-- ============ E · THE NIGHT ============ -->
+  <section>
+    <p class="kicker">Room E</p>
+    <h2>The night ink</h2>
+    <p class="note">Dark mode as the constitution permits it: colors only, nothing else moves. The palette borrows what you liked in the Observatory — a deep blue-black, cool grays, pale headline ink — without importing any of its structure. Same page, same grammar, read at 11 PM instead of 7 AM.</p>
+    <div class="plate"><div class="m brief night">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">Thursday 24 July 2026 · Edition No. 215 · 21 observations</span></div>
+      <div class="manifest"><b>Containers</b> 6<span>·</span><b>Updates</b> 5<span>·</span><b>Backups</b> 3<span>·</span><b>Storage</b> 2<span>·</span><b>Network</b> 2<span>·</span><b>Certificates</b> 1<span>·</span><b>DNS</b> 1<span>·</span><b>Media</b> 1<span>·</span><b>one silent</b></div>
+      <p class="skick">Containers · 6 observations</p>
+      <p class="hed1">Six container events overnight as jellyfin cycles and two images update</p>
+      <div class="btext"><p>Jellyfin restarted at 2:10 and again at 2:14, and has run continuously since. Watchtower pulled new images for postgres and redis at 4:02; both containers were recreated and running by 4:05.</p></div>
+      <div class="ritem"><b>Storage</b> Pool at 72 percent, up one point this week; sdb steady below 41°C.</div>
+      <div class="ritem"><b>Network</b> The WAN address changed at 1:44; peer laptop last seen Tuesday.</div>
+      <div class="silence">
+        <p class="t">Not heard from</p>
+        <p>The UPS plugin has not reported since Monday 20 July — four days.</p>
+      </div>
+      <div class="endmark"><span class="e1">End of the brief</span><span class="e2">21 observations from 11 of 12 plugins · next edition 7:00 tomorrow</span></div>
+    </div></div>
+    <p class="plate-caption">Plate E — the night ink: #14181f ground, cool gray apparatus, pale headline ink. Every rule, size, and position identical to the day page.</p>
+  </section>
+
+  <section class="closing">
+    <p class="kicker">For your review</p>
+    <h2>Room by room</h2>
+    <ol>
+      <li><b>Archive:</b> is "a run of certification lines" the right history — or do you want more of each morning visible (the manifest counts, say) per row?</li>
+      <li><b>Beat page:</b> the coverage box lists every gap the beat ever had. Trust-building, or too confessional?</li>
+      <li><b>Settings:</b> does the underlined-value, sentence-explained form language feel like Orven — or does it need more conventional controls to feel operable?</li>
+      <li><b>Quiet edition:</b> the manifest names every beat on quiet days ("presence is the news"). Keep that inversion?</li>
+      <li><b>Night ink:</b> is this the right dark — or should night lean warmer (candlelight) rather than cooler (observatory)?</li>
+      <li>Across all five rooms: do they feel like one product — could you tell any of these pages was Orven from ten feet away?</li>
+    </ol>
+  </section>
+</div>

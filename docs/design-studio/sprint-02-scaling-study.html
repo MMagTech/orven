@@ -1,0 +1,246 @@
+<title>Orven — Sprint 02: The Heavy Morning</title>
+<style>
+  :root {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-bg: #ffffff; --plate-edge: #cfcabf; --accent: #3d5a4e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d;
+      --plate-bg: #221f1c; --plate-edge: #454038; --accent: #8fb3a3; }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d;
+    --plate-bg: #221f1c; --plate-edge: #454038; --accent: #8fb3a3;
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-bg: #ffffff; --plate-edge: #cfcabf; --accent: #3d5a4e;
+  }
+
+  body { background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.55; margin: 0; padding: 0 20px; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 56px 0 96px; }
+
+  .studio-head { border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 8px; }
+  .eyebrow { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h1 { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 42px); font-weight: 400; margin: 0 0 14px; line-height: 1.12; text-wrap: balance; }
+  .standfirst { max-width: 62ch; color: var(--muted); margin: 0; font-size: 16px; }
+
+  .study { border-bottom: 1px solid var(--hairline); padding: 48px 0 56px; }
+  .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  h2 { font-family: Georgia, serif; font-size: 26px; font-weight: 400; margin: 0 0 14px; }
+  .study > p { max-width: 64ch; }
+  .principle {
+    font-family: Georgia, serif; font-style: italic; font-size: 19px;
+    border-left: 2px solid var(--accent); padding: 4px 0 4px 20px; margin: 26px 0; max-width: 56ch;
+  }
+  .plate { border: 1px solid var(--plate-edge); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,.08); margin: 26px 0 10px; }
+  .plate-caption { font-size: 12px; color: var(--muted); margin: 0 0 8px; }
+  .m * { box-sizing: border-box; }
+
+  /* ============ BROADSHEET, HEAVY ============ */
+  .bs { background: #f8f6f1; color: #191817; font-family: Cambria, Georgia, "Times New Roman", serif; padding: 30px 36px 30px; }
+  .bs .masthead { text-align: center; border-bottom: 3.5px double #191817; padding-bottom: 10px; }
+  .bs .paper-name { display: block; font-size: 36px; letter-spacing: .3em; text-indent: .3em; font-weight: 700; font-family: "Times New Roman", serif; }
+  .bs .dateline { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; border-bottom: 1px solid #191817; padding: 5px 2px; font-family: "Segoe UI", sans-serif; }
+  .bs .index { font-family: "Segoe UI", sans-serif; font-size: 10.5px; letter-spacing: .04em; color: #4a463f; padding: 6px 2px 8px; border-bottom: 1px solid #d9d4c8; margin-bottom: 18px; text-align: center; }
+  .bs .index b { color: #191817; font-weight: 600; }
+  .bs .sheet { display: grid; grid-template-columns: 2fr 1px 1fr; gap: 0 20px; }
+  .bs .vrule { background: #d9d4c8; }
+  .bs .lead-hed { font-size: 23px; line-height: 1.15; margin: 0 0 5px; font-weight: 700; text-wrap: balance; }
+  .bs .deck { font-style: italic; font-size: 14px; margin: 0 0 10px; color: #3c3a35; }
+  .bs .body { font-size: 13px; line-height: 1.5; text-align: justify; hyphens: auto; }
+  .bs .body p { margin: 0 0 8px; }
+  .bs .kick { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; margin: 13px 0 4px; border-top: 1px solid #191817; padding-top: 5px; }
+  .bs .subhed { font-size: 16.5px; font-weight: 700; line-height: 1.2; margin: 2px 0 4px; }
+  .bs .rail .kick:first-child, .bs .body > .kick:first-child { margin-top: 0; }
+  .bs .rail { font-size: 12.5px; line-height: 1.45; }
+  .bs .brief-item { padding: 6px 0; border-bottom: 1px dotted #c4beb0; }
+  .bs .brief-item:last-of-type { border-bottom: 0; }
+  .bs .brief-item b { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-right: 5px; }
+  .bs .silent { border: 1px solid #191817; padding: 9px 11px; margin-top: 12px; }
+  .bs .silent .kick { border-top: 0; padding-top: 0; margin: 0 0 4px; }
+  .bs .silent p { margin: 0; font-size: 12.5px; }
+
+  /* ============ BROADSHEET, QUIET ============ */
+  .bsq { background: #f8f6f1; color: #191817; font-family: Cambria, Georgia, serif; padding: 30px 36px 44px; }
+  .bsq .quiet-well { text-align: center; padding: 44px 20px 8px; }
+  .bsq .quiet-hed { font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+  .bsq .quiet-sub { font-style: italic; font-size: 14px; color: #3c3a35; margin: 0 0 22px; }
+  .bsq .quiet-foot { font-family: "Segoe UI", sans-serif; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: #7a756a; }
+
+  /* ============ OBSERVATORY, HEAVY ============ */
+  .obsy { background: #10151d; color: #c6d2de; font-family: Bahnschrift, "Segoe UI", sans-serif; padding: 28px 34px 30px; }
+  .obsy .ohead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+  .obsy .ohead b { font-size: 14px; letter-spacing: .3em; font-weight: 400; color: #eef3f8; }
+  .obsy .ohead span { font-size: 11.5px; color: #64758a; letter-spacing: .08em; }
+  .obsy .osum { font-size: 12px; color: #8fa0b4; border-bottom: 1px solid #263243; padding-bottom: 10px; margin-bottom: 22px; }
+  .obsy .phase { font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: #64758a; margin: 0 0 12px 84px; }
+  .obsy .obs { display: grid; grid-template-columns: 52px 20px 1fr; }
+  .obsy .obs .t { font-size: 11.5px; color: #64758a; text-align: right; padding-right: 10px; padding-top: 2px; font-variant-numeric: tabular-nums; }
+  .obsy .obs .rail { position: relative; }
+  .obsy .obs .rail::before { content: ""; position: absolute; left: 8px; top: 0; bottom: 0; width: 1px; background: #263243; }
+  .obsy .obs .rail::after { content: ""; position: absolute; left: 5px; top: 5px; width: 7px; height: 7px; border-radius: 50%; background: #10151d; border: 1.5px solid #7fa8c9; }
+  .obsy .obs.cluster .rail::after { box-shadow: 0 10px 0 -1.5px #10151d, 0 10px 0 0 #7fa8c9, 0 20px 0 -1.5px #10151d, 0 20px 0 0 #7fa8c9; }
+  .obsy .obs.gap .rail::after { border-style: dotted; border-color: #64758a; }
+  .obsy .obs .f { font-size: 13px; line-height: 1.45; padding: 0 0 18px 12px; }
+  .obsy .obs.cluster .f { padding-bottom: 34px; }
+  .obsy .obs .f small { display: block; color: #64758a; font-size: 11.5px; margin-top: 2px; }
+  .obsy .standing { border-top: 1px solid #263243; margin-top: 8px; padding-top: 14px; }
+  .obsy .standing .phase { margin-left: 0; }
+  .obsy .stand-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 26px; }
+  .obsy .stand-grid p { margin: 0; font-size: 12.5px; color: #a9b8c8; }
+  .obsy .stand-grid p b { color: #64758a; font-weight: 400; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; display: block; }
+
+  /* ============ DARK EDITION ============ */
+  .de { background: #10151d; color: #c9d3dd; font-family: Cambria, Georgia, serif; padding: 28px 36px 26px; }
+  .de .masthead { text-align: center; border-bottom: 3.5px double #c9d3dd; padding-bottom: 9px; }
+  .de .paper-name { display: block; font-size: 32px; letter-spacing: .3em; text-indent: .3em; font-weight: 700; font-family: "Times New Roman", serif; color: #eef3f8; }
+  .de .dateline { display: flex; justify-content: space-between; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; border-bottom: 1px solid #38455a; padding: 5px 2px; font-family: "Segoe UI", sans-serif; color: #8fa0b4; margin-bottom: 16px; }
+  .de .lead-hed { font-size: 20px; font-weight: 700; line-height: 1.18; margin: 0 0 5px; color: #eef3f8; }
+  .de .deck { font-style: italic; font-size: 13.5px; color: #8fa0b4; margin: 0 0 10px; }
+  .de .body { font-size: 13px; line-height: 1.55; column-count: 2; column-gap: 22px; column-rule: 1px solid #263243; text-align: justify; hyphens: auto; }
+  .de .body p { margin: 0 0 8px; }
+  .de .kick { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; border-top: 1px solid #38455a; padding-top: 5px; margin: 12px 0 4px; color: #7fa8c9; break-inside: avoid; }
+  .de .body .kick:first-child { margin-top: 0; }
+
+  .closing { padding-top: 48px; }
+  .closing ol { max-width: 60ch; padding-left: 22px; }
+  .closing li { margin-bottom: 10px; }
+</style>
+
+<div class="wrap">
+  <header class="studio-head">
+    <p class="eyebrow">Orven Product Design Studio · Sprint 02</p>
+    <h1>The heavy morning</h1>
+    <p class="standfirst">Your question — how do the survivors hold up when twelve plugins all have something to say? Below: the Broadsheet and the Observatory under real load (a morning of 21 observations), the Broadsheet on a quiet day, and one reconciliation that may let you keep both. One rule governs everything here.</p>
+  </header>
+
+  <!-- ============ THE PRINCIPLE ============ -->
+  <section class="study">
+    <p class="kicker">The governing rule</p>
+    <h2>Prominence follows volume, never importance</h2>
+    <p>A newspaper scales through mixed density: the story with the most to tell gets the headline and column inches; single facts go to a digest column. Normally an editor decides that by judging importance — which Orven must never do. But the same visual grammar works on a mechanical rule instead:</p>
+    <p class="principle">The plugin with the most observations gets the most space. A one-fact morning is one line in the briefs column. Nothing is ever promoted because it "matters" — only because more of it happened.</p>
+    <p>This is arithmetic, not opinion — the reader can verify it every morning, which is exactly what builds trust. It also means the layout breathes with the day: a heavy morning composes itself into a full page; a quiet one contracts without embarrassment. Sections always appear in the same fixed order, so position on the page never implies a verdict either.</p>
+  </section>
+
+  <!-- ============ BROADSHEET HEAVY ============ -->
+  <section class="study">
+    <p class="kicker">Study A</p>
+    <h2>The Broadsheet, fully loaded</h2>
+    <p>Twelve plugins, 21 observations. Three devices absorb the load: an <b>index line</b> under the dateline (the whole morning in one glance), a <b>lead well</b> earned by volume (containers had the busiest night), and an <b>“In brief” rail</b> where every one-fact plugin gets exactly one dotted line. Silence keeps its own boxed corner — the one thing a newspaper never does is forget a beat reporter who didn't file.</p>
+    <div class="plate"><div class="m bs">
+      <div class="masthead"><span class="paper-name">ORVEN</span></div>
+      <div class="dateline"><span>Thursday, July 24, 2026</span><span>Edition No. 215</span><span>21 observations</span></div>
+      <div class="index"><b>Inside:</b> Containers 6 &nbsp;·&nbsp; Updates 5 &nbsp;·&nbsp; Backups 3 &nbsp;·&nbsp; Storage 2 &nbsp;·&nbsp; Network 2 &nbsp;·&nbsp; Certificates 1 &nbsp;·&nbsp; DNS 1 &nbsp;·&nbsp; Media 1 &nbsp;·&nbsp; one plugin silent</div>
+      <div class="sheet">
+        <div class="main">
+          <p class="kick">Containers</p>
+          <div class="lead-hed">Six container events overnight as jellyfin cycles and two images update</div>
+          <p class="deck">The busiest beat of the night: two restarts, three image pulls, one recreation.</p>
+          <div class="body">
+            <p>Jellyfin restarted at 2:10 and again at 2:14 AM, and has run continuously since. Watchtower pulled new images for <i>postgres</i> and <i>redis</i> at 4:02; both containers were recreated and running by 4:05. The <i>paperless</i> image was pulled at 4:06 but its container has not been recreated.</p>
+            <p class="kick">Updates</p>
+            <p class="subhed">Five package updates applied on maple</p>
+            <p>The unattended run at 5:00 applied kernel 6.9.4, openssl, curl, and two library packages. A reboot has not occurred since the kernel update.</p>
+            <p class="kick">Backups</p>
+            <p class="subhed">Nightly run completes; two snapshots pruned</p>
+            <p>The backup to tank/backups completed at 3:09 — 38 minutes, 17.9 GB. Snapshots from April 21 and 22 were pruned per the retention schedule.</p>
+          </div>
+        </div>
+        <div class="vrule"></div>
+        <div class="rail">
+          <p class="kick">In brief</p>
+          <div class="brief-item"><b>Storage</b> Pool at 72%, up one point this week. Disk sdb steady below 41&deg;C.</div>
+          <div class="brief-item"><b>Network</b> WAN IP changed at 1:44 AM. Tailscale peer <i>laptop</i> last seen Tuesday.</div>
+          <div class="brief-item"><b>Certificates</b> All nine certificates more than 30 days from expiry.</div>
+          <div class="brief-item"><b>DNS</b> Pi-hole answered 41,203 queries yesterday; 12% blocked.</div>
+          <div class="brief-item"><b>Media</b> Three items added to the library overnight.</div>
+          <div class="silent">
+            <p class="kick">Not heard from</p>
+            <p>The UPS plugin has not reported since Monday, July 20 — four days.</p>
+          </div>
+        </div>
+      </div>
+    </div></div>
+    <p class="plate-caption">Plate 1 — 21 observations, one screen-height page. Lead well earned by count (6 events), digest rail for one-fact beats, boxed silence.</p>
+  </section>
+
+  <!-- ============ BROADSHEET QUIET ============ -->
+  <section class="study">
+    <p class="kicker">Study B</p>
+    <h2>The Broadsheet on a quiet day</h2>
+    <p>The inverse test. Sprint 01 flagged it as this concept's risk: a newspaper with nothing to report. The answer is that the masthead, dateline, and edition number carry the page alone — the apparatus <i>is</i> the reassurance. The page doesn't apologize for the quiet; it certifies it.</p>
+    <div class="plate"><div class="m bsq">
+      <div class="masthead" style="text-align:center;border-bottom:3.5px double #191817;padding-bottom:10px;"><span class="paper-name" style="display:block;font-size:36px;letter-spacing:.3em;text-indent:.3em;font-weight:700;font-family:'Times New Roman',serif;">ORVEN</span></div>
+      <div class="dateline" style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:.07em;text-transform:uppercase;border-bottom:1px solid #191817;padding:5px 2px;font-family:'Segoe UI',sans-serif;"><span>Friday, July 25, 2026</span><span>Edition No. 216</span><span>No observations</span></div>
+      <div class="quiet-well">
+        <p class="quiet-hed">Nothing changed overnight</p>
+        <p class="quiet-sub">All twelve plugins reported. The UPS plugin filed for the first time since Monday.</p>
+        <p class="quiet-foot">Next edition tomorrow, 7:00 AM</p>
+      </div>
+    </div></div>
+    <p class="plate-caption">Plate 2 — the quiet edition. Same masthead, same dateline; the whitespace is the news.</p>
+  </section>
+
+  <!-- ============ OBSERVATORY HEAVY ============ -->
+  <section class="study">
+    <p class="kicker">Study C</p>
+    <h2>The Observatory, fully loaded</h2>
+    <p>The rail scales in the opposite way: it doesn't paginate load, it <i>draws</i> it. Twenty-one observations make the night's shape more legible, not less — the 4 AM cluster is visibly a cluster. Two devices carry the weight: burst events collapse into <b>grouped marks</b> (three dots, one entry), and undated facts move off the rail entirely into a <b>standing observations</b> block, fixing Sprint 01's flagged weakness.</p>
+    <div class="plate"><div class="m obsy">
+      <div class="ohead"><b>ORVEN</b><span>NIGHT OBSERVATION LOG — 23/24 JUL 2026 — SERIES 215</span></div>
+      <p class="osum">21 observations · 11 of 12 plugins reporting · UPS silent since 20 Jul</p>
+      <p class="phase">Overnight</p>
+      <div class="obs"><div class="t">01:44</div><div class="rail"></div><div class="f">WAN IP address changed</div></div>
+      <div class="obs"><div class="t">02:10</div><div class="rail"></div><div class="f">Jellyfin restarted twice over four minutes<small>running continuously since 02:14</small></div></div>
+      <div class="obs"><div class="t">03:09</div><div class="rail"></div><div class="f">Backup to tank/backups completed<small>38 minutes · 17.9 GB · two snapshots pruned</small></div></div>
+      <div class="obs cluster"><div class="t">04:02</div><div class="rail"></div><div class="f">Three container images updated<small>postgres and redis recreated by 04:05 · paperless pulled, not recreated</small></div></div>
+      <div class="obs"><div class="t">05:00</div><div class="rail"></div><div class="f">Five package updates applied<small>kernel 6.9.4 among them · no reboot since</small></div></div>
+      <div class="obs gap"><div class="t">—</div><div class="rail"></div><div class="f">No observation from UPS<small>silent four days</small></div></div>
+      <div class="standing">
+        <p class="phase">Standing observations</p>
+        <div class="stand-grid">
+          <p><b>Storage</b>Pool at 72%, up one point this week; sdb below 41&deg;C</p>
+          <p><b>Certificates</b>All nine certificates more than 30 days from expiry</p>
+          <p><b>DNS</b>41,203 queries answered yesterday, 12% blocked</p>
+          <p><b>Network</b>Tailscale peer laptop last seen Tuesday</p>
+        </div>
+      </div>
+    </div></div>
+    <p class="plate-caption">Plate 3 — the same morning on the rail. Clustered marks for the 04:02 burst; timeless facts live below the rail, not on it.</p>
+  </section>
+
+  <!-- ============ THE RECONCILIATION ============ -->
+  <section class="study">
+    <p class="kicker">Study D</p>
+    <h2>One product, two lights</h2>
+    <p>You chose one warm paper concept and one cool night concept — which might not be a conflict at all. The Broadsheet supplies the <i>structure</i>: masthead, dateline, volume-led composition. The Observatory supplies the <i>night palette</i>: its deep blue-black ground, cool grays, and pale-blue accents become the Broadsheet's dark mode — same page, different light. (This also happens to be the one kind of dark mode Orven's constitution permits: colors only.) The rail itself could remain a second view for reading the night chronologically — but the identity would be one paper.</p>
+    <div class="plate"><div class="m de">
+      <div class="masthead"><span class="paper-name">ORVEN</span></div>
+      <div class="dateline"><span>Thursday, July 24, 2026</span><span>Edition No. 215</span><span>21 observations</span></div>
+      <div class="lead-hed">Six container events overnight as jellyfin cycles and two images update</div>
+      <p class="deck">The busiest beat of the night: two restarts, three image pulls, one recreation.</p>
+      <div class="body">
+        <p>Jellyfin restarted at 2:10 and again at 2:14 AM, and has run continuously since. Watchtower pulled new images for <i>postgres</i> and <i>redis</i>; both were recreated by 4:05.</p>
+        <p class="kick">Updates</p>
+        <p>The unattended run at 5:00 applied five packages, kernel 6.9.4 among them. A reboot has not occurred since.</p>
+        <p class="kick">Backups</p>
+        <p>The nightly run completed at 3:09 — 38 minutes, 17.9 GB written.</p>
+      </div>
+    </div></div>
+    <p class="plate-caption">Plate 4 — the dark edition: Broadsheet structure, Observatory ink. Same typography, same layout, the night palette you liked.</p>
+  </section>
+
+  <section class="closing">
+    <p class="kicker">For your review</p>
+    <h2>Signals wanted</h2>
+    <ol>
+      <li>Does <b>prominence-by-volume</b> feel honest to you — would you trust a page where the lead story is simply "what happened most"?</li>
+      <li>Under load, which reads calmer to you: the composed page (Study A) or the plotted rail (Study C)?</li>
+      <li>Study D proposes: Broadsheet structure everywhere, Observatory palette as its dark mode, rail as an optional chronological view. Does that resolve your two choices — or does the Observatory deserve to stay its own full concept?</li>
+      <li>The quiet edition (Study B): is a nearly empty page with a masthead dignified, or wasteful?</li>
+      <li>Anything in the heavy morning that still feels like too much — the index line, the digest rail, the boxed silence?</li>
+    </ol>
+  </section>
+</div>

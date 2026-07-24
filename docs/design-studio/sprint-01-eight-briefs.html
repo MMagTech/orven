@@ -1,0 +1,443 @@
+<title>Orven — Sprint 01: Eight Briefs</title>
+<style>
+  :root {
+    --bg: #f4f3f0;
+    --ink: #26241f;
+    --muted: #716c62;
+    --hairline: #dedad2;
+    --plate-bg: #ffffff;
+    --plate-edge: #cfcabf;
+    --accent: #3d5a4e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1b1a18;
+      --ink: #e6e2da;
+      --muted: #9a948a;
+      --hairline: #35322d;
+      --plate-bg: #221f1c;
+      --plate-edge: #454038;
+      --accent: #8fb3a3;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d;
+    --plate-bg: #221f1c; --plate-edge: #454038; --accent: #8fb3a3;
+  }
+  :root[data-theme="light"] {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-bg: #ffffff; --plate-edge: #cfcabf; --accent: #3d5a4e;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, sans-serif;
+    line-height: 1.55;
+    margin: 0;
+    padding: 0 20px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 56px 0 96px; }
+
+  /* ---------- studio chrome ---------- */
+  .studio-head { border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 8px; }
+  .eyebrow {
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 14px;
+  }
+  h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(30px, 5vw, 44px); font-weight: 400;
+    margin: 0 0 14px; line-height: 1.12; text-wrap: balance;
+  }
+  .standfirst { max-width: 60ch; color: var(--muted); margin: 0; font-size: 16px; }
+
+  .concept { border-bottom: 1px solid var(--hairline); padding: 48px 0 56px; }
+  .concept-kicker {
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 8px;
+  }
+  h2 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 27px; font-weight: 400; margin: 0 0 6px;
+  }
+  .register { color: var(--muted); font-style: italic; font-family: Georgia, serif; margin: 0 0 16px; font-size: 15px; }
+  .philosophy { max-width: 62ch; margin: 0 0 26px; }
+
+  .plate {
+    border: 1px solid var(--plate-edge);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 14px rgba(0,0,0,.08);
+    margin: 0 0 10px;
+  }
+  .plate-caption { font-size: 12px; color: var(--muted); margin: 0 0 26px; letter-spacing: .02em; }
+
+  .notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  @media (max-width: 640px) { .notes { grid-template-columns: 1fr; } }
+  .notes h3 {
+    font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 8px; font-weight: 600;
+  }
+  .notes p, .notes ul { margin: 0; font-size: 14px; }
+  .notes ul { padding-left: 17px; }
+  .notes li { margin-bottom: 5px; }
+
+  .closing { padding-top: 48px; }
+  .closing ol { max-width: 58ch; padding-left: 22px; }
+  .closing li { margin-bottom: 10px; }
+
+  /* Every mockup is a committed, single-theme world by design. */
+  .m { padding: 0; }
+  .m * { box-sizing: border-box; }
+
+  /* ---------- 1 · The Broadsheet ---------- */
+  .m1 { background: #f8f6f1; color: #191817; font-family: Cambria, Georgia, "Times New Roman", serif; padding: 34px 38px 30px; }
+  .m1 .masthead { text-align: center; border-bottom: 3.5px double #191817; padding-bottom: 14px; }
+  .m1 .masthead h1-x, .m1 .paper-name {
+    display: block; font-size: 46px; letter-spacing: .3em; text-indent: .3em;
+    font-weight: 700; font-family: "Times New Roman", Cambria, serif;
+  }
+  .m1 .motto { font-style: italic; font-size: 13px; margin-top: 2px; color: #4a463f; }
+  .m1 .dateline {
+    display: flex; justify-content: space-between; font-size: 11.5px;
+    letter-spacing: .08em; text-transform: uppercase;
+    border-bottom: 1px solid #191817; padding: 6px 2px;
+    font-family: "Segoe UI", sans-serif; margin-bottom: 20px;
+  }
+  .m1 .lead-hed { font-size: 27px; line-height: 1.15; margin: 0 0 6px; font-weight: 700; text-wrap: balance; }
+  .m1 .deck { font-style: italic; font-size: 15px; margin: 0 0 12px; color: #3c3a35; }
+  .m1 .cols { column-count: 2; column-gap: 26px; column-rule: 1px solid #d9d4c8; font-size: 13.5px; line-height: 1.5; text-align: justify; hyphens: auto; }
+  .m1 .cols p { margin: 0 0 9px; }
+  .m1 .kick {
+    font-family: "Segoe UI", sans-serif; font-size: 10.5px; font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase; margin: 14px 0 4px;
+    border-top: 1px solid #191817; padding-top: 6px; break-inside: avoid;
+  }
+  .m1 .cols .kick:first-child { margin-top: 0; }
+
+  /* ---------- 2 · The Reading Room ---------- */
+  .m2 { background: #fbfaf7; color: #2c2a25; font-family: Georgia, "Iowan Old Style", serif; padding: 52px 64px 56px; }
+  .m2 .meta { font-size: 12px; color: #8b857a; letter-spacing: .14em; text-transform: uppercase; font-family: "Segoe UI", sans-serif; margin-bottom: 34px; }
+  .m2 .title { font-size: 25px; font-weight: 400; margin: 0 0 26px; line-height: 1.25; }
+  .m2 p { font-size: 16.5px; line-height: 1.75; margin: 0 0 18px; max-width: 58ch; }
+  .m2 .sect { font-variant: small-caps; letter-spacing: .06em; color: #6b665c; }
+  .m2 .fin { color: #8b857a; font-style: italic; }
+
+  /* ---------- 3 · The Ledger ---------- */
+  .m3 {
+    background: #f1f3ec; color: #262a24; padding: 30px 0 26px;
+    font-family: Constantia, "Palatino Linotype", Georgia, serif;
+    background-image: repeating-linear-gradient(#f1f3ec 0 27px, #dee4d6 27px 28px);
+  }
+  .m3 .lhead {
+    padding: 0 26px 10px 96px; border-bottom: 2px solid #262a24;
+    display: flex; justify-content: space-between; align-items: baseline; background: #f1f3ec;
+  }
+  .m3 .lhead b { font-size: 18px; letter-spacing: .1em; font-weight: 700; }
+  .m3 .lhead span { font-size: 12.5px; color: #5a6152; }
+  .m3 .sheet { position: relative; }
+  .m3 .sheet::before { content: ""; position: absolute; top: 0; bottom: 0; left: 82px; width: 2px; background: #c0524a; opacity: .65; }
+  .m3 .row { display: grid; grid-template-columns: 82px 1fr; min-height: 28px; align-items: baseline; }
+  .m3 .row .t {
+    font-family: Consolas, monospace; font-size: 12.5px; text-align: right;
+    padding-right: 12px; color: #414a3c; font-variant-numeric: tabular-nums;
+  }
+  .m3 .row .f { font-size: 14px; padding: 3px 26px 0 14px; line-height: 28px; }
+  .m3 .row .f em { font-style: normal; border-bottom: 1px dotted #9aa38f; }
+  .m3 .rule-row { border-top: 1px solid #262a24; margin: 0; }
+  .m3 .foot { padding: 8px 26px 0 96px; font-size: 12.5px; color: #5a6152; font-style: italic; background: #f1f3ec; }
+
+  /* ---------- 4 · The Wire ---------- */
+  .m4 { background: #131410; color: #e8b23c; font-family: Consolas, "Courier New", monospace; padding: 30px 34px 30px; font-size: 13px; line-height: 1.65; }
+  .m4 .dim { color: #8a7434; }
+  .m4 .hr { color: #57491f; margin: 10px 0; letter-spacing: 1px; overflow: hidden; white-space: nowrap; }
+  .m4 p { margin: 0 0 13px; }
+  .m4 .slug { color: #f5d488; font-weight: 700; }
+  .m4 .end { color: #8a7434; margin-top: 20px; }
+
+  /* ---------- 5 · The Almanac ---------- */
+  .m5 { background: #f7f1e3; color: #33301f; font-family: "Palatino Linotype", "Book Antiqua", Georgia, serif; padding: 36px 52px 34px; }
+  .m5 .crown { text-align: center; border-bottom: 1px solid #33301f; padding-bottom: 16px; margin-bottom: 22px; }
+  .m5 .crown .orn { font-size: 15px; letter-spacing: .6em; color: #7c6a35; }
+  .m5 .crown .name { font-size: 24px; font-variant: small-caps; letter-spacing: .18em; margin: 6px 0 2px; }
+  .m5 .crown .sub { font-size: 12.5px; font-style: italic; color: #6b6247; }
+  .m5 .entry { display: flex; justify-content: space-between; gap: 20px; align-items: baseline; padding: 9px 0; border-bottom: 1px dotted #c9bd9d; }
+  .m5 .entry .txt { font-size: 14.5px; line-height: 1.55; }
+  .m5 .entry .when { font-size: 12px; color: #7c6a35; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .m5 .ephem {
+    margin-top: 22px; padding-top: 12px; border-top: 1px solid #33301f;
+    display: flex; justify-content: center; gap: 26px; font-size: 12px;
+    font-variant: small-caps; letter-spacing: .08em; color: #6b6247;
+  }
+
+  /* ---------- 6 · The Observatory ---------- */
+  .m6 { background: #10151d; color: #c6d2de; font-family: Bahnschrift, "Segoe UI", sans-serif; padding: 30px 36px 32px; }
+  .m6 .ohead { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 26px; }
+  .m6 .ohead b { font-size: 15px; letter-spacing: .3em; font-weight: 400; color: #eef3f8; }
+  .m6 .ohead span { font-size: 12px; color: #64758a; letter-spacing: .1em; }
+  .m6 .obs { display: grid; grid-template-columns: 52px 20px 1fr; }
+  .m6 .obs .t { font-size: 12px; color: #64758a; text-align: right; padding-right: 10px; padding-top: 2px; font-variant-numeric: tabular-nums; }
+  .m6 .obs .rail { position: relative; }
+  .m6 .obs .rail::before { content: ""; position: absolute; left: 8px; top: 0; bottom: 0; width: 1px; background: #263243; }
+  .m6 .obs .rail::after {
+    content: ""; position: absolute; left: 5px; top: 6px; width: 7px; height: 7px;
+    border-radius: 50%; background: #10151d; border: 1.5px solid #7fa8c9;
+  }
+  .m6 .obs.gap .rail::after { border-style: dotted; border-color: #64758a; }
+  .m6 .obs .f { font-size: 13.5px; line-height: 1.5; padding: 0 0 26px 12px; color: #c6d2de; }
+  .m6 .obs .f small { display: block; color: #64758a; font-size: 12px; margin-top: 3px; }
+  .m6 .obs:last-child .f { padding-bottom: 4px; }
+
+  /* ---------- 7 · The Minutes ---------- */
+  .m7 { background: #ffffff; color: #1c1c1e; font-family: Arial, "Helvetica Neue", sans-serif; padding: 40px 52px 40px; }
+  .m7 .letterhead { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 2.5px solid #1c355e; padding-bottom: 10px; margin-bottom: 22px; }
+  .m7 .letterhead b { font-size: 15px; letter-spacing: .34em; }
+  .m7 .letterhead span { font-size: 11px; letter-spacing: .18em; color: #1c355e; }
+  .m7 .memo-grid { display: grid; grid-template-columns: 64px 1fr; row-gap: 4px; font-size: 12.5px; margin-bottom: 24px; }
+  .m7 .memo-grid dt { color: #6c6c70; letter-spacing: .1em; font-size: 10.5px; text-transform: uppercase; padding-top: 1px; }
+  .m7 .memo-grid dd { margin: 0; }
+  .m7 ol { margin: 0; padding-left: 22px; }
+  .m7 ol li { font-size: 13.5px; line-height: 1.6; margin-bottom: 13px; padding-left: 6px; }
+  .m7 .nothing { margin-top: 24px; font-size: 13px; color: #6c6c70; }
+
+  /* ---------- 8 · The Forecast ---------- */
+  .m8 {
+    background: linear-gradient(180deg, #232b3a 0%, #2b3140 60%, #34363f 100%);
+    color: #dfe3ea; font-family: "Segoe UI Light", "Segoe UI", sans-serif;
+    padding: 56px 48px 48px; text-align: center;
+  }
+  .m8 .issue { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: #8b93a5; margin-bottom: 34px; }
+  .m8 .verdict-x, .m8 .headline { font-size: 33px; font-weight: 200; line-height: 1.25; margin: 0 0 44px; letter-spacing: .01em; }
+  .m8 .area { margin: 0 0 19px; font-size: 14.5px; font-weight: 300; line-height: 1.5; }
+  .m8 .area b { display: block; font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: #8b93a5; font-weight: 400; margin-bottom: 3px; }
+  .m8 .issued { margin-top: 42px; font-size: 12px; color: #8b93a5; font-style: italic; }
+</style>
+
+<div class="wrap">
+  <header class="studio-head">
+    <p class="eyebrow">Orven Product Design Studio · Sprint 01</p>
+    <h1>Eight briefs, eight identities</h1>
+    <p class="standfirst">The same morning — Wednesday, 23 July 2026, edition No. 214 — rendered eight fundamentally different ways. Same facts, same restraint, eight different rooms to read them in. React to the feeling first; we'll argue details later.</p>
+  </header>
+
+  <!-- ================= 1 ================= -->
+  <section class="concept">
+    <p class="concept-kicker">Concept 01</p>
+    <h2>The Broadsheet</h2>
+    <p class="register">Emotional target: civic authority — “the record of what happened.”</p>
+    <p class="philosophy">A morning paper in the fullest sense: masthead, dateline, headlines with decks, justified columns. The newspaper is the one artifact civilization already trusts to report without instructing. Orven borrows two centuries of that credibility wholesale.</p>
+    <div class="plate"><div class="m m1">
+      <div class="masthead">
+        <span class="paper-name">ORVEN</span>
+        <div class="motto">What changed overnight on maple.lan</div>
+      </div>
+      <div class="dateline"><span>Wednesday, July 23, 2026</span><span>Edition No. 214</span><span>Seven observations</span></div>
+      <div class="lead-hed">Nightly backup completes at 3:12, forty-one minutes end to end</div>
+      <p class="deck">18.2 GB written to tank/backups; the fourth consecutive completed run this week.</p>
+      <div class="cols">
+        <p class="kick">Containers</p>
+        <p>The container <i>jellyfin</i> restarted twice between 2:10 and 2:14 AM. It has been running continuously since 2:14.</p>
+        <p class="kick">Storage</p>
+        <p>Disk sdb reached 54&deg;C at 4:41 PM yesterday and returned below 45&deg;C by 7:05 PM. Pool capacity stands at 71 percent.</p>
+        <p class="kick">Certificates</p>
+        <p>The certificate for vault.home.arpa was renewed; the new expiry is October 21, 2026.</p>
+        <p class="kick">Not heard from</p>
+        <p>The UPS plugin has not reported since Monday, July 20. Its last reading is three days old.</p>
+      </div>
+    </div></div>
+    <p class="plate-caption">Plate 1 — the Brief as a front page. Times/Cambria, double-rule masthead, justified two-column body.</p>
+    <div class="notes">
+      <div><h3>Why it fits</h3><p>“Reads like a newspaper page” is already in Orven's own constitution. Headlines force facts into declarative sentences — advisory language physically doesn't fit the form.</p></div>
+      <div><h3>Strengths</h3><ul><li>Instantly communicates “report, not dashboard”</li><li>The edition number becomes a ritual object</li><li>Dense mornings scale naturally into more column inches</li></ul></div>
+      <div><h3>Risks</h3><ul><li>The most obvious answer — closest to costume if executed timidly</li><li>Justified columns are fussy on phones</li><li>Quiet days give a newspaper very little to be a newspaper about</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ================= 2 ================= -->
+  <section class="concept">
+    <p class="concept-kicker">Concept 02</p>
+    <h2>The Reading Room</h2>
+    <p class="register">Emotional target: unhurried privacy — a letter, not a lobby.</p>
+    <p class="philosophy">The opposite bet: no masthead, no columns, no apparatus at all. One measure of large, warm serif prose, the way a reading app or a well-set essay treats text. The night is narrated as continuous writing; sections are whispered in small caps inside the prose rather than shouted as headings. The interface disappears entirely and leaves only the reading.</p>
+    <div class="plate"><div class="m m2">
+      <p class="meta">Orven &nbsp;·&nbsp; 23 July 2026 &nbsp;·&nbsp; No. 214</p>
+      <p class="title">The night was mostly quiet, with one interruption worth recording.</p>
+      <p>The nightly backup to tank/backups completed at 3:12, taking forty-one minutes and writing 18.2&nbsp;GB — the fourth completed run this week.</p>
+      <p><span class="sect">Containers.</span> Jellyfin restarted twice between 2:10 and 2:14, and has run continuously since. <span class="sect">Storage.</span> Disk sdb reached 54&deg;C yesterday afternoon and was back below 45&deg;C by early evening.</p>
+      <p class="fin">The UPS plugin has not reported since Monday. Nothing else changed overnight.</p>
+    </div></div>
+    <p class="plate-caption">Plate 2 — the Brief as bedside reading. Georgia at 16.5px, 58-character measure, sections set inline in small caps.</p>
+    <div class="notes">
+      <div><h3>Why it fits</h3><p>“Reduce attention, not compete for it,” taken literally. If the Brief is truly for reading in minutes, the strongest identity may be having almost none — just superb typesetting.</p></div>
+      <div><h3>Strengths</h3><ul><li>Calmest possible register; genuinely restful to open</li><li>Trivially responsive — it's one column of prose</li><li>Ages perfectly; nothing here can go out of fashion</li></ul></div>
+      <div><h3>Risks</h3><ul><li>Depends on prose-quality narration; a bag of facts set beautifully is still a bag of facts</li><li>Hard to scan back for “what was that time again?”</li><li>May read as unfinished rather than restrained — the current problem, refined</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ================= 3 ================= -->
+  <section class="concept">
+    <p class="concept-kicker">Concept 03</p>
+    <h2>The Ledger</h2>
+    <p class="register">Emotional target: diligence — someone kept the books all night.</p>
+    <p class="philosophy">An operations daybook on ruled ledger paper: a red margin rule, a time column in tabular figures, one fact per line, sections closed with a bookkeeper's rule. Ledgers carry a moral weight no screen ever earned — they say <i>every entry is permanent, nothing is embellished, the account balances</i>. Orven as the institution's book of record.</p>
+    <div class="plate"><div class="m m3">
+      <div class="lhead"><b>DAY BOOK</b><span>maple.lan &nbsp;·&nbsp; Wednesday 23 July 2026 &nbsp;·&nbsp; folio 214</span></div>
+      <div class="sheet">
+        <div class="row"><div class="t">02:10</div><div class="f">Container <em>jellyfin</em> restarted — first of two</div></div>
+        <div class="row"><div class="t">02:14</div><div class="f">Second restart; running continuously since</div></div>
+        <div class="row"><div class="t">03:12</div><div class="f">Backup to <em>tank/backups</em> completed — 41 min, 18.2 GB</div></div>
+        <div class="row"><div class="t">04:00</div><div class="f">Certificate <em>vault.home.arpa</em> renewed; expires 21 Oct 2026</div></div>
+        <div class="rule-row"></div>
+        <div class="row"><div class="t">yest.</div><div class="f">Disk sdb 54&deg;C at 16:41; below 45&deg;C by 19:05</div></div>
+        <div class="row"><div class="t">—</div><div class="f">UPS plugin: no entry since Monday 20 July</div></div>
+      </div>
+      <div class="foot">Six entries posted. Nothing else changed overnight.</div>
+    </div></div>
+    <p class="plate-caption">Plate 3 — the Brief as a book of record. Ruled green paper, red margin rule, Consolas time column, Constantia entries.</p>
+    <div class="notes">
+      <div><h3>Why it fits</h3><p>Chronology is the one ordering that never editorializes — time is not a severity ranking. The form makes “no entry since Monday” look exactly like what it is: a gap in the books.</p></div>
+      <div><h3>Strengths</h3><ul><li>Time column answers “when?” before it's asked</li><li>Visually unmistakable; nobody else's infra tool looks like this</li><li>History view is free — yesterday is just the previous folio</li></ul></div>
+      <div><h3>Risks</h3><ul><li>Ruled-paper skeuomorphism could tip into theme-park</li><li>Line-per-fact resists multi-sentence observations</li><li>Green paper + red rule is a strong flavor to live with daily</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ================= 4 ================= -->
+  <section class="concept">
+    <p class="concept-kicker">Concept 04</p>
+    <h2>The Wire</h2>
+    <p class="register">Emotional target: operational gravity — a dispatch worth standing up for.</p>
+    <p class="philosophy">A teletype dispatch on amber phosphor: slugged bulletins, terse declaratives, an explicit END. Wire services solved Orven's exact problem a century ago — moving verified facts, stripped of opinion, in a form the recipient trusts precisely because it is unadorned. The terseness is the aesthetic.</p>
+    <div class="plate"><div class="m m4">
+      <p class="dim">ORVEN WIRE &nbsp;//&nbsp; MORNING DISPATCH &nbsp;//&nbsp; 0700 &nbsp;23&nbsp;JUL&nbsp;26 &nbsp;//&nbsp; NO. 214</p>
+      <div class="hr">= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =</div>
+      <p><span class="slug">BACKUPS</span> -- TANK/BACKUPS COMPLETE 0312. 41 MIN. 18.2 GB. FOURTH RUN THIS WEEK.</p>
+      <p><span class="slug">CONTAINERS</span> -- JELLYFIN RESTARTED TWICE, 0210-0214. RUNNING SINCE 0214.</p>
+      <p><span class="slug">STORAGE</span> -- DISK SDB 54C AT 1641 YESTERDAY. BELOW 45C BY 1905. POOL AT 71 PCT.</p>
+      <p><span class="slug">CERTS</span> -- VAULT.HOME.ARPA RENEWED. NEW EXPIRY 21 OCT 26.</p>
+      <p><span class="slug">NO REPORT</span> -- UPS PLUGIN SILENT SINCE MON 20 JUL. LAST READING 3 DAYS OLD.</p>
+      <p class="end">-- END OF DISPATCH. NEXT EDITION 0700 TOMORROW. --</p>
+    </div></div>
+    <p class="plate-caption">Plate 4 — the Brief as a wire dispatch. Consolas on near-black, amber phosphor, slug-and-bulletin structure.</p>
+    <div class="notes">
+      <div><h3>Why it fits</h3><p>Wire style is factual by construction — there is no room in a slugged bulletin for “you should.” The explicit END OF DISPATCH is the strongest possible statement that the Brief is finite, not a feed.</p></div>
+      <div><h3>Strengths</h3><ul><li>Deep resonance with the self-hosting audience</li><li>Fastest possible scan; every line is one fact</li><li>Absolute visual identity — recognizable from across the room</li></ul></div>
+      <div><h3>Risks</h3><ul><li>All-caps mono is fatiguing beyond a dozen items</li><li>Reads “urgent” at rest — tension with calm</li><li>Retro-terminal is a well-worn homelab aesthetic; less timeless than it feels</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ================= 5 ================= -->
+  <section class="concept">
+    <p class="concept-kicker">Concept 05</p>
+    <h2>The Almanac</h2>
+    <p class="register">Emotional target: seasonal ritual — a well-thumbed reference, opened daily.</p>
+    <p class="philosophy">Neither news nor log: a reference book. Palatino small caps, dotted leader lines carrying each entry to its time like a table of contents, an ephemeris footer that roots the edition in the long series it belongs to. Almanacs are the oldest calm-information product in existence — consulted daily for centuries, never once urgent.</p>
+    <div class="plate"><div class="m m5">
+      <div class="crown">
+        <div class="orn">&#10087;</div>
+        <div class="name">The Orven Almanac</div>
+        <div class="sub">Daily register of maple.lan &mdash; Wednesday the 23rd of July, 2026</div>
+      </div>
+      <div class="entry"><span class="txt">The nightly backup to tank/backups completed; 41 minutes, 18.2&nbsp;GB written.</span><span class="when">03:12</span></div>
+      <div class="entry"><span class="txt">Jellyfin restarted twice, then held; running continuously since.</span><span class="when">02:10&ndash;02:14</span></div>
+      <div class="entry"><span class="txt">Disk sdb warmed to 54&deg;C in the afternoon, settling below 45&deg;C by evening.</span><span class="when">yesterday</span></div>
+      <div class="entry"><span class="txt">The certificate for vault.home.arpa was renewed, good through October.</span><span class="when">04:00</span></div>
+      <div class="entry"><span class="txt">The UPS plugin has made no entry since Monday.</span><span class="when">&mdash;</span></div>
+      <div class="ephem"><span>Edition 214</span><span>Observing since 14 March</span><span>Next edition 07:00</span></div>
+    </div></div>
+    <p class="plate-caption">Plate 5 — the Brief as a daily register. Palatino, centered crown, entries with right-set times, ephemeris footer.</p>
+    <div class="notes">
+      <div><h3>Why it fits</h3><p>“Timeless rather than trendy” is the almanac's entire nature. The ephemeris footer quietly expresses continuity — this edition is one of hundreds — which is exactly what earns long-term trust.</p></div>
+      <div><h3>Strengths</h3><ul><li>Warmest register of the eight; a genuine morning pleasure</li><li>Ritual is built into the form, not bolted on</li><li>Handles quiet days gracefully — an almanac with one entry is still an almanac</li></ul></div>
+      <div><h3>Risks</h3><ul><li>Ornament budget must stay near zero or it turns twee</li><li>Least “infrastructure” of the eight; may feel soft to some operators</li><li>Small caps and fleurons demand real typographic discipline in a browser</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ================= 6 ================= -->
+  <section class="concept">
+    <p class="concept-kicker">Concept 06</p>
+    <h2>The Observatory</h2>
+    <p class="register">Emotional target: scientific composure — the night watch, plotted.</p>
+    <p class="philosophy">A night-observation log from an instrument that watched while you slept. Cool darkness, DIN-flavored type, and the one structural idea no other concept has: a vertical time rail with each observation plotted at its moment. Events are points; the missing plugin is a dotted point. The night becomes a shape you can see.</p>
+    <div class="plate"><div class="m m6">
+      <div class="ohead"><b>ORVEN</b><span>NIGHT OBSERVATION LOG &mdash; 22/23 JUL 2026 &mdash; SERIES 214</span></div>
+      <div class="obs"><div class="t">02:10</div><div class="rail"></div><div class="f">Container jellyfin restarted twice over four minutes<small>running continuously since 02:14</small></div></div>
+      <div class="obs"><div class="t">03:12</div><div class="rail"></div><div class="f">Backup to tank/backups completed<small>41 minutes &middot; 18.2 GB &middot; fourth completed run this week</small></div></div>
+      <div class="obs"><div class="t">04:00</div><div class="rail"></div><div class="f">Certificate vault.home.arpa renewed<small>new expiry 21 Oct 2026</small></div></div>
+      <div class="obs gap"><div class="t">&mdash;</div><div class="rail"></div><div class="f">No observation from UPS since Mon 20 Jul<small>coverage gap, three days</small></div></div>
+    </div></div>
+    <p class="plate-caption">Plate 6 — the Brief as an instrument log. Bahnschrift on deep blue-black, time rail with plotted observations, dotted mark for missing coverage.</p>
+    <div class="notes">
+      <div><h3>Why it fits</h3><p>“The platform observes” — this is the only concept whose form <i>is</i> observation. Plotting facts on time visualizes without ranking: position on the rail is when, never how much it matters.</p></div>
+      <div><h3>Strengths</h3><ul><li>The rail shows the night's shape — clustered, sparse, or empty — at a glance</li><li>Dotted marks make missing coverage first-class and visible</li><li>Dark-native; the honest form of a thing that works at night</li></ul></div>
+      <div><h3>Risks</h3><ul><li>Closest of the eight to drifting dashboard-ward if it ever grows charts</li><li>Cool register — precise but not warm</li><li>Undated facts (“pool at 71%”) sit awkwardly on a time rail</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ================= 7 ================= -->
+  <section class="concept">
+    <p class="concept-kicker">Concept 07</p>
+    <h2>The Minutes</h2>
+    <p class="register">Emotional target: institutional composure — briefed, in one page, by someone with no agenda.</p>
+    <p class="philosophy">A one-page memorandum: letterhead, TO/FROM/RE, numbered paragraphs, and a sign-off. The memo genre has a built-in power structure that matches Orven's exactly — the writer reports, the recipient decides, and the writer would never presume otherwise. “Nothing further.” is the genre's native way to end a quiet day.</p>
+    <div class="plate"><div class="m m7">
+      <div class="letterhead"><b>ORVEN</b><span>MORNING MINUTES</span></div>
+      <dl class="memo-grid">
+        <dt>To</dt><dd>The operator, maple.lan</dd>
+        <dt>From</dt><dd>Orven &middot; seven plugins reporting, one silent</dd>
+        <dt>Date</dt><dd>Wednesday, 23 July 2026 &middot; No. 214</dd>
+        <dt>Re</dt><dd>Overnight observations</dd>
+      </dl>
+      <ol>
+        <li>The nightly backup to tank/backups completed at 03:12, taking 41 minutes and writing 18.2 GB.</li>
+        <li>Container jellyfin restarted twice between 02:10 and 02:14 and has run continuously since.</li>
+        <li>Disk sdb reached 54&deg;C at 16:41 yesterday and returned below 45&deg;C by 19:05.</li>
+        <li>The certificate for vault.home.arpa was renewed; new expiry 21 October 2026.</li>
+        <li>The UPS plugin has not reported since Monday, 20 July.</li>
+      </ol>
+      <p class="nothing">Nothing further.</p>
+    </div></div>
+    <p class="plate-caption">Plate 7 — the Brief as a memorandum. Helvetica-class sans, federal-blue rule, numbered paragraphs, “Nothing further.”</p>
+    <div class="notes">
+      <div><h3>Why it fits</h3><p>Numbered paragraphs are enumeration, not ranking — the memo's own conventions say order is arbitrary. The FROM line gives coverage a natural home: “seven plugins reporting, one silent.”</p></div>
+      <div><h3>Strengths</h3><ul><li>One-page discipline is structural, not aspirational</li><li>Easiest of the eight to skim and to cite (“item 3”)</li><li>Zero ornament to date; genuinely timeless</li></ul></div>
+      <div><h3>Risks</h3><ul><li>Bureaucratic chill — corporate memo, not morning ritual</li><li>Lowest visual distinctiveness; nearest to “just a document”</li><li>Numbering invites reading item 1 as most important</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ================= 8 ================= -->
+  <section class="concept">
+    <p class="concept-kicker">Concept 08</p>
+    <h2>The Forecast</h2>
+    <p class="register">Emotional target: ritual recitation — the shipping forecast for your infrastructure.</p>
+    <p class="philosophy">The wildcard. Modeled on the maritime radio forecast: a fixed litany of areas, recited in the same order every single day, in a voice so steady that millions listen who own no boat. The Brief opens with one composed sentence — the day's character — and then the areas, always in order, including the silent one. The order never changing <i>is</i> the calm.</p>
+    <div class="plate"><div class="m m8">
+      <p class="issue">Orven &middot; Edition 214 &middot; Issued 07:00</p>
+      <p class="headline">A quiet night, with one<br>interruption recorded.</p>
+      <p class="area"><b>Backups</b>Completed at 03:12. Forty-one minutes, 18.2 GB.</p>
+      <p class="area"><b>Containers</b>Jellyfin restarted twice, 02:10 to 02:14. Running since.</p>
+      <p class="area"><b>Storage</b>Sdb reached 54&deg; yesterday, settled by evening. Pool at 71%.</p>
+      <p class="area"><b>Certificates</b>Vault renewed, good through October.</p>
+      <p class="area"><b>Power</b>No report since Monday.</p>
+      <p class="issued">And that is the end of the brief. The next follows at 07:00 tomorrow.</p>
+    </div></div>
+    <p class="plate-caption">Plate 8 — the Brief as a recitation. Light-weight Segoe on dusk slate, centered litany, fixed area order, formal sign-off.</p>
+    <div class="notes">
+      <div><h3>Why it fits</h3><p>The shipping forecast is the most trusted calm broadcast ever made, and it is pure Orven: fixed form, plain facts, no advice, and silence reported in its turn like everything else.</p></div>
+      <div><h3>Strengths</h3><ul><li>The strongest ritual of the eight — the fixed order becomes muscle memory</li><li>The opening sentence gives the day a character without ranking anything</li><li>Utterly unlike any infrastructure tool in existence</li></ul></div>
+      <div><h3>Risks</h3><ul><li>Lowest information density; long mornings strain the litany</li><li>Centered light type is atmosphere-first — some operators will want a denser register</li><li>The composed opening sentence walks the line: character, never judgment</li></ul></div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <p class="concept-kicker">For your review</p>
+    <h2>Design signals, not decisions</h2>
+    <ol>
+      <li>Which concepts immediately resonate — a gut yes before any analysis?</li>
+      <li>Which feel wrong for Orven, and can you name why?</li>
+      <li>Which elements would you steal across concepts — a masthead here, a time rail there?</li>
+      <li>Which of these will still look right in ten years?</li>
+      <li>Which one would you genuinely enjoy opening every single morning?</li>
+    </ol>
+  </section>
+</div>
