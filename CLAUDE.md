@@ -12,8 +12,11 @@ change conflicts with it, the change is wrong, not the file. For any
 change to something a reader sees, **`docs/DESIGN_CHARTER.md`** governs
 the design language the same way: label every design decision law /
 grammar / furniture, and surface ambiguities for owner review instead
-of resolving them with new design decisions. The rules most often at
-stake:
+of resolving them with new design decisions. The Charter defines *what*
+Orven feels like; **`docs/DESIGN_SYSTEM.md`** is the normative spec that
+defines *how* it is built (tokens, components, per-room conformance) and
+whose conformance register (CG-1…CG-14) is the standing backlog for
+reader-facing implementation work. The rules most often at stake:
 
 1. **Facts only, everywhere.** No recommendations, remediation steps,
    or advice in any briefing, observation, or summary — "The backup
