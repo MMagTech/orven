@@ -1,8 +1,21 @@
 # The Orven Design System
 
-**Status: Draft 1 — Design System Office, Phase 2.** This is the
-normative implementation specification for everything a reader of Orven
-sees. It translates the ratified **Design Charter**
+**Status: Draft 2 — Design System Office, Phase 2.** Draft 2 closes the
+conformance passes Draft 1 deferred (the Archive, a beat's record, the
+action rooms, and the loading state — §4.2–4.4, §5.4) and performs the
+two audits Draft 1 called for but had not run: the CG-9 warn-colour
+scope audit (§1.3, §9.4) and the CG-11 accessibility contrast
+measurement (§8). Every reader-facing room has now been assessed against
+the Charter, and every audit the document promised has been executed and
+recorded. One law-level ambiguity surfaced during the passes — the
+evaluative "Healthy" health-state word — and, with the owner's judgment
+delegated to this office, was ruled at the level of the standard: the
+label should read as the factual "Reporting". Enacting it is a
+one-string implementation change, recorded as conformance debt CG-14 and
+left to implementation, not made here (§9.5, SR-1).
+
+This is the normative implementation specification for everything a
+reader of Orven sees. It translates the ratified **Design Charter**
 ([`docs/DESIGN_CHARTER.md`](DESIGN_CHARTER.md)) into engineering
 standards that an engineer — or an AI coding agent — can build against
 without reinterpreting the Charter.
@@ -238,13 +251,20 @@ new use is an amendment-level decision.
   currently rendered as *smaller serif*, not a sans voice
   (`.pill`, `.coverage h3`, nav, and captions all inherit Georgia). The
   second ink face does not exist yet. → **CG-7**.
-- **Warn palette — permitted, audit its scope.** A warn palette
-  (`--warn-ink`, `--warn-bg`, `--warn-border`) exists and renders a
-  muted red in notices and the third-party acknowledgement label. Under
-  the settled ruling (§1.1) this is allowed **only** in action rooms for
-  genuine risk/consequence; the conformance task is to **audit that its
-  current usage never reaches the Brief and never marks routine status**.
-  → **CG-9**.
+- **Warn palette — permitted; audit performed (Draft 2).** A warn
+  palette (`--warn-ink`, `--warn-bg`, `--warn-border`) exists and renders
+  a muted red. The CG-9 audit (§9.4) has now been run. **The
+  load-bearing check passes:** neither the Brief nor its print rendering
+  ([`front.html`](../internal/core/templates/front.html),
+  [`printbrief.html`](../internal/core/templates/printbrief.html))
+  contains any `--warn-*` usage — the reader's report is clean of the
+  soft-alarm channel [Law III]. The residual is action-room debt: the
+  warn colour is also spent on **error/failure states** (a repository
+  fetch error, a plugin load error, an engine-incompatibility notice, an
+  install error) and on **one list-status marking** (a failed plugin's
+  load error in the Installed list), which are error reporting governed
+  by "no alarm" (§5.6), not "genuine risk or consequence before
+  proceeding" (§9.4). → **CG-9** (audited; residual itemised).
 - **Prominence scale — absent.** No tier tokens exist; stories render
   at one uniform size. → **CG-3**.
 - **Measure & ragged-right — met.** `max-width: 46rem`; body text is
@@ -603,8 +623,29 @@ the room-identity that governs them.
   Each edition appears as its certification line (§2.2).
 - **Implementation Notes.** Ensure quiet and incomplete editions are
   listed identically to eventful ones — equal standing is the law here.
-- **Current Conformance.** To be assessed against `history.html` during
-  drafting of the room's detailed spec; listed as a follow-up in §9.3.
+- **Current Conformance (assessed, Draft 2).** Against
+  [`history.html`](../internal/core/templates/history.html):
+  - **Equal standing — met.** Editions are grouped by day and each is
+    listed as a row (a time-link with a muted "all quiet" or "*n*
+    section(s)" note). A quiet day is listed identically to an eventful
+    one — a full citizen [Law IV]. That a single-edition day renders
+    open is furniture, not ranking.
+  - **No ranking / no aggregation — met.** There are no streaks, scores,
+    or day-vs-day comparisons; "*n* sections" is a count relationship,
+    not a grade [Law VII].
+  - **States its own extent — partial.** The room states its retention
+    window ("kept for *N* days") but not the actual span it holds (the
+    earliest edition still present). Retention is a policy, extent is a
+    fact; the Charter asks the Archive to state its extent.
+  - **Editions as certification lines — not met.** Editions are listed
+    as bare time-links plus a muted section count, not as the
+    certification line (§2.2). When the certification line gains its
+    edition number and accounting (CG-5), the Archive's rows should adopt
+    that same structure so every edition is cited identically wherever it
+    appears. → tracked under **CG-5**.
+  - **Empty state — not the enclosure.** "No briefings yet" renders as
+    `.quiet` centred italic, not the reserved-seat enclosure (§2.6).
+    → **CG-8**.
 
 ### 4.3 A beat's record — `plugin.html`
 
@@ -618,7 +659,38 @@ the room-identity that governs them.
 - **Implementation Notes.** "filed in 213 of 217 editions," never "98.2
   percent" [Law VII]. The silence enclosure (§2.6) is reused for a
   source's gaps.
-- **Current Conformance.** To be assessed against `plugin.html`; §9.3.
+- **Current Conformance (assessed, Draft 2).** Against
+  [`plugin.html`](../internal/core/templates/plugin.html):
+  - **Trust labelling — met.** The curated / third-party / manual
+    distinction is shown via the pills (§3.4) [C§17].
+  - **Credentials as counts and dates — partial.** The record shows the
+    source's collection interval and relative "last ran / last success"
+    times, and a "Recent runs" table (when · result · note). It does
+    **not** present the Charter's signature credential — the count of
+    editions the source has filed in ("filed in 213 of 217 editions").
+    The record reads as a controls-and-runs panel, not the "record as
+    dated sentences" the room is defined by. → **CG-13**.
+  - **Silences seated chronologically — not met.** A source's gaps are
+    not seated as the reserved-seat enclosure within its record (§2.6);
+    the runs table lists runs but does not structurally seat silence.
+    → tracked under **CG-8**.
+  - **Health label — evaluative "Healthy" (specified fix, not yet
+    implemented).** The `{{.Health}}` pill renders a derived current-state
+    word. All but one of its values are neutral facts about the last run
+    or configuration ("Disabled", "Ready", "Waiting for next scheduled
+    run", "Running", "Partial data", "Source unavailable",
+    "Authentication failed", "Timed out", "Failed" —
+    [`engine.go`](../internal/engine/engine.go)), which are Law
+    VII-compatible state facts. The one evaluative value, **"Healthy"**,
+    is Orven characterising its own witness's condition, where Law VII
+    holds that about its own operation Orven speaks "only in counts and
+    dates … never a score, streak, or grade" and "does not rate its
+    witnesses." **The Design System's standard: this label must read as a
+    factual state, not a rating — "Reporting"** (the last collection ran
+    and completed; what the source *is doing*). Applying it is a
+    one-string change in `engine.go` that belongs to implementation, not
+    to this specification — tracked as **CG-14**. Rationale and the
+    considered alternative ("Filed") are recorded at **§9.5, SR-1**.
 
 ### 4.4 Settings — the room where the reader acts
 
@@ -632,8 +704,36 @@ the room-identity that governs them.
   room-identity, to every acting surface: `discover.html`,
   `install.html`, `uninstall.html`, `restore.html`, backups, and secret
   entry. Secrets are write-only after entry and never echoed [C§13].
-- **Current Conformance.** To be assessed against the action-room
-  templates; voice inversion pending **CG-7**; §9.3.
+- **Current Conformance (assessed, Draft 2).** Against `settings.html`,
+  `discover.html`, `install.html`, `uninstall.html`, `backups.html`,
+  `restore.html`, `restored.html`:
+  - **Sentence of consequence — met.** The rooms explain choices in
+    consequence sentences rather than leaning on widgetry; the backups,
+    restore, and uninstall flows are exemplary ("Restoring overwrites the
+    present with the past. A safety backup … is written first") [Law
+    VIII]. Conventional controls are used freely, as permitted.
+  - **Nothing advises — met, with two borderline lines.** The rooms
+    state facts and consequences, not recommendations. Two lines lean
+    toward guidance and are worth an editorial eye without being clear
+    violations: install's "treat that silence as a reason for more
+    caution, not less" and backups' "point this at a mapped path your
+    existing backup tooling already covers." Both concern the reader's
+    own action (a trust decision, an operational setup), the room where
+    consequence-guidance is permitted [Charter, Settings] — distinct from
+    the forbidden advice *about an observed system* [C§1, C§8].
+  - **Attributed, dated fact effective at next edition — not met.** This
+    is the room's defining law and its clearest gap. A change is applied
+    and confirmed with a transient `.flash` line, but it is not recorded
+    as an attributed, dated fact effective at the next edition — there is
+    no "Disabled by you, 23 July, effective next Brief" [Law VIII]. The
+    fact of the change, its attribution, and its effective edition are
+    not surfaced. → **CG-12**.
+  - **Voice inversion — not met.** The sans apparatus does not exist, so
+    the action rooms cannot invert their voices (§2.4). → **CG-7**.
+  - **Secrets — met.** Secret fields are write-only after entry and
+    render only "configured — leave blank to keep", never the value
+    ([`plugin.html`](../internal/core/templates/plugin.html),
+    [`backups.html`](../internal/core/templates/backups.html)) [C§13].
 
 ### 4.5 The quiet edition
 
@@ -741,7 +841,17 @@ bounds, enclosure, end). → carried by CG-1…CG-8.
   simplest way to satisfy the rule; a spinner or a live-updating counter
   tends to read as an alert and is best avoided. Any motion used must
   respect reduced-motion (§8).
-- **Current Conformance.** To be assessed; §9.3.
+- **Current Conformance (assessed, Draft 2).** **Met by synchronous
+  design.** Preparing a Brief is a discrete `POST /generate` from a
+  quiet-action button that returns the finished edition; there is no
+  spinner, no live counter, and **no perpetual or self-refreshing
+  state** anywhere in the templates or the chrome script — the edition
+  either exists or is being prepared, exactly as the law requires [Law
+  I], [C§2]. No progress indication exists to read as urgency, so the
+  rule is satisfied. Note for the future: should generation ever become
+  slow or asynchronous, the sanctioned pattern is a plain "Preparing…"
+  apparatus line (never a spinner or live tally), honouring reduced
+  motion (§8).
 
 ### 5.5 Stale / partial (freshness)
 
@@ -766,8 +876,18 @@ bounds, enclosure, end). → carried by CG-1…CG-8.
   not from the secret rule.
 - **Implementation Notes.** The Coverage "Could not be checked" line is
   the model; reuse its phrasing for any reader-facing error.
-- **Current Conformance.** Met for coverage failures; audit other
-  surfaces for stray remediation phrasing during room drafting; §9.3.
+- **Current Conformance (audited, Draft 2).** Met for the reader-facing
+  surfaces. The Brief reports failures as attributed facts with no
+  remediation ("Could not be checked: *name* — *reason*",
+  [`front.html`](../internal/core/templates/front.html)); no
+  reader-facing error surface carries remediation phrasing, and
+  `logs.html` is a technical operator surface (monospace, exempt from the
+  reporting voice but not the secret rule) [C§13]. The one cross-cutting
+  finding is presentational, tracked under CG-9: several **action-room**
+  error notices (repository fetch error, plugin load error, engine
+  incompatibility, install error) render in the warn colour, which is a
+  soft-alarm channel — errors are to be stated "with no alarm." The
+  wording is conformant; the colouring is the residual CG-9 debt.
 
 ---
 
@@ -867,18 +987,52 @@ meaning.
 
 **Implementation Notes.**
 
-- Contrast of the current token pairs is **unverified**; measure every
-  `--ink`/`--faint`/`--mid`/`--accent` value against its surface in both
-  lightings and record results before claiming AA. Do not assert pass
-  without measurement.
+- Contrast has now been **measured** (Draft 2) with the sRGB WCAG 2.1
+  formula; results are recorded below. When a token value changes,
+  re-measure — the pairs are owner-revisable furniture (§1.1) and a new
+  value re-opens the question.
 - Ensure the third-party trust cue (§3.4) does not depend on the accent
   colour alone (the dashed border satisfies this today — keep it).
 
-**Current Conformance.**
+**Current Conformance (measured, Draft 2).**
 
-- **Unverified.** No recorded contrast measurement exists; focus states
-  are browser-default and unspecified in the stylesheet. These are
-  audit items, not assumed passes. → **CG-11**.
+Contrast of every text token against both reading surfaces (`--sheet`,
+`--paper`), each lighting, WCAG 2.1 (4.5:1 body / 3:1 large):
+
+| Token | Light on sheet / paper | Dark on sheet / paper | Verdict |
+|---|---|---|---|
+| `--ink` | 14.1 / 13.0 | 10.1 / 10.9 | AA-body, both lightings |
+| `--mid` | 5.3 / 4.9 | 6.1 / 6.6 | AA-body, both lightings |
+| `--accent` | 7.4 / 6.8 | 6.3 / 6.8 | AA-body, both lightings |
+| `--warn-ink` | 8.3 (sheet), 7.4 (own bg) | 6.8 | AA-body, both lightings |
+| `--faint` | **3.6 / 3.3** | 4.8 / 5.2 | **light: AA-large only** |
+
+- **One measured failure: `--faint` in light mode.** At 3.6 / 3.3 it
+  clears AA-large (3:1) but **fails AA-body (4.5:1)** — and `--faint`
+  carries small apparatus copy well under the large-text threshold (help
+  text at `.82rem`, captions, freshness, coverage, table headers). In
+  dark mode `--faint` passes (4.8 / 5.2). This is a genuine AA gap for
+  light-mode apparatus text. → **CG-11**.
+  - *The tension the fix exposes.* Darkening `--faint` (light) to reach
+    4.5:1 on both surfaces lands it at roughly `#726d5d`, essentially the
+    current `--mid` (`#6f6a5e`) — collapsing the two-level apparatus
+    quietness in light mode. So the resolution is a furniture tradeoff
+    with an accessibility floor, not a free edit: either accept a
+    quieter-but-distinct faint that meets only AA-large for genuinely
+    secondary text, or darken faint toward mid and lose one level of
+    apparatus quiet. Both are owner-revisable furniture (§1.1, OD-7); the
+    Design System records the measured floor and the tradeoff and leaves
+    the palette choice to the owner.
+- **Non-text: `--rule`.** Hairlines measure ~1.4–1.5:1 against the
+  surface — appropriate for decorative structural rules, but note that
+  form-field and tab boundaries drawn in `--rule` fall below the 3:1 of
+  WCAG 1.4.11 for meaningful UI boundaries. Recorded as an observation
+  under CG-11; the trust cues that *must* be legible do not rely on
+  `--rule` (§3.4 uses border-style and accent).
+- **Focus states — still unspecified.** No focus styling is declared in
+  [`style.css`](../internal/core/static/style.css); controls fall back to
+  browser defaults. A visible, non-colour-only focus ring remains an
+  open CG-11 item.
 
 ---
 
@@ -937,15 +1091,20 @@ Sequencing and prioritisation are product decisions for the owner.
 | CG-6 | No explicit end mark | §2.6 | Law I/V grammar |
 | CG-7 | Two inks: apparatus sans not implemented; no voice inversion | §2.4 | Law III grammar |
 | CG-8 | Silence not in an enclosure (centred italic, not a box) | §2.6 | Law IV grammar |
-| CG-9 | Audit that `--warn-*` usage stays within the settled rule (action rooms only, genuine-consequence only; never in the Brief, never routine status) | §1.1/§3.7/§9.4 | Law III — **rule settled**; residual is an audit |
+| CG-9 | **Audited (Draft 2).** Brief clean of `--warn-*` (load-bearing check passes); residual: warn colour spent on action-room error/failure states and one list-status marking, outside the "before-proceeding consequence" fence | §1.1/§3.7/§9.4 | Law III — rule settled; residual is presentational debt |
 | CG-10 | Type/size/spacing not tokenised (inline values) | §1.1 | Token discipline |
-| CG-11 | Accessibility unverified (contrast unmeasured, focus unspecified) | §8 | Accessibility |
+| CG-11 | **Measured (Draft 2).** `--faint` fails AA-body in light mode (3.6/3.3; AA-large only); all other text tokens pass AA in both lightings; focus states still unspecified | §8 | Accessibility |
+| CG-12 | Reader's changes applied but not recorded as an attributed, dated fact effective at the next edition ("Paused by you, 12 July") | §4.4 | Law VIII |
+| CG-13 | A beat's record shows credentials as relative times + a runs table, not as the counts-and-dates record ("filed in *n* of *m* editions") and dated sentences | §4.3 | Law VII/IV |
+| CG-14 | The evaluative health-state word "Healthy" should read as a factual state, "Reporting" (`engine.go`) — a one-string implementation change | §4.3/§9.5 | Law VII |
 
-Rooms still to receive a detailed template spec and conformance pass:
-the Archive (`history.html`), a beat's record (`plugin.html`), the
-action rooms (`settings.html`, discover/install/uninstall,
-backups/restore), and the loading state — noted here so the follow-up is
-explicit, not forgotten.
+All five reader-facing rooms have now received a conformance pass (Draft
+2): the Brief (§4.1), the Archive (§4.2), a beat's record (§4.3), the
+action rooms (§4.4), and the quiet edition (§4.5), plus the loading
+state (§5.4). No room remains unassessed. Detailed room-by-room
+*template specs* beyond the essence-and-devices treatment in §4 are a
+furniture-level elaboration that can follow the conformance-debt work;
+the conformance status of every room is now recorded, not deferred.
 
 ### 9.4 The warn-colour ruling (CG-9), settled 23 July 2026
 
@@ -959,14 +1118,67 @@ irreversible decision. It must never appear in the Brief, never mark
 routine status, never manufacture urgency for an ordinary condition, and
 never become a general third visual voice; its use stays rare and
 confined to those cases. The reader's report remains governed by "no
-third voice" [Law III]. The residual work is the CG-9 audit: confirm
-today's `--warn-*` usage sits inside this fence.
+third voice" [Law III].
+
+**Audit outcome (Draft 2).** The CG-9 audit has been run. The
+load-bearing check **passes**: the Brief and its print rendering carry no
+`--warn-*` usage — the reader's report is clean of the soft-alarm
+channel. Inside the fence, correctly: the install "no permissions"
+caution, the Settings "no sign-in protection" security notice, the
+backups/restored "credentials will not be included" consequence, the
+manual-files deletion warning, and the restore/uninstall acknowledgement
+labels — each a genuine before-proceeding risk, consequence, or trust
+acknowledgement in an action room. Outside the fence (residual CG-9
+debt): the warn colour is also spent on **error/failure states** (a
+repository fetch error, a plugin load error, an engine-incompatibility
+notice, an install error) and on **one list-status marking** (a failed
+plugin's load error in the Installed list). Errors are governed by "no
+alarm" (§5.6) and are not "genuine risk or consequence before
+proceeding"; the fix is to state them in the neutral apparatus voice and
+reserve `--warn-*` for the before-proceeding cases. This is presentation
+debt, not a design question — the wording is already conformant.
+
+### 9.5 Law-level items surfaced from the conformance passes
+
+Per §0.2 and §9.1, an implementation ambiguity that touches a **law** is
+surfaced for owner review rather than resolved inside this office. The
+Draft 2 conformance passes surfaced one such item; the owner delegated
+the terminology judgment to this office, which sets the standard here
+and leaves enactment to implementation (CG-14).
+
+- **SR-1 — Is a derived "Healthy" state a Law VII grade? — ruled at the
+  standard.** The beat's record and the plugin lists render a source's
+  `Health` as a single word (§4.3). Every value but one is a neutral
+  state fact about the last run or configuration ("Disabled", "Ready",
+  "Partial data", "Source unavailable", "Authentication failed", "Timed
+  out", "Failed") — clearly Law VII-compatible. The value **"Healthy"**
+  is evaluative: Orven characterising its own witness's condition, where
+  Law VII holds that about its own operation Orven speaks "only in counts
+  and dates … never a score, streak, or grade" and "does not rate its
+  witnesses." Because the question touched a law it was surfaced; the
+  owner delegated the wording judgment to this office. **The standard:**
+  the last-run-succeeded state must read as a factual state, not a
+  rating — **"Reporting"** (what the source *is doing*), parallel to the
+  present-tense "Running"/"Waiting" and to the factual outcome states,
+  with no evaluative charge. "Filed" was the considered newspaper-native
+  alternative; "Reporting" was chosen for unambiguous legibility to a
+  self-hosting operator. **Scope note:** this office specifies the
+  wording; it does not change production code. The edit itself — a
+  one-string change in [`engine.go`](../internal/engine/engine.go) — is
+  implementation work, recorded as **CG-14** and applied when
+  implementation reaches this area, alongside the frontend/backend work.
 
 ---
 
-**End of the Design System, Draft 1.** It translates 8 laws · 6 devices
+**End of the Design System, Draft 2.** It translates 8 laws · 6 devices
 · 5 rooms into token, component, template, and state specifications;
-marks 7 owner-defined parameters; records 11 conformance gaps as the
-roadmap to full Charter conformance; and carries the owner's settled
-warn-colour ruling (§1.1, §9.4). It adds no design philosophy of its
-own and invents no owner-reserved value.
+assesses **every** reader-facing room for conformance; marks 7
+owner-defined parameters; records 14 conformance gaps (CG-1…CG-14) as the
+roadmap to full Charter conformance; carries the owner's settled
+warn-colour ruling and its executed audit (§1.1, §9.4); records the
+measured contrast results (§8); and rules one surfaced law-level item at
+the level of the standard, leaving its enactment to implementation (§9.5,
+SR-1 → CG-14). It adds no design philosophy of its own, invents no
+owner-reserved value, resolves nothing that belongs to the owner, and
+changes no production code — it specifies the standard, and the code is
+expected to move toward it.
