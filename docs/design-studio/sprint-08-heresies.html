@@ -1,0 +1,222 @@
+<title>Orven — Sprint 08: The Heresies</title>
+<style>
+  :root {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-edge: #cfcabf; --accent: #3d5a4e;
+    --fail: #7d4038; --partial: #7a5a2a; --succeed: #3d5a4e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3;
+      --fail: #c98b80; --partial: #c9a86a; --succeed: #8fb3a3; }
+  }
+  :root[data-theme="dark"] { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; --fail: #c98b80; --partial: #c9a86a; --succeed: #8fb3a3; }
+  :root[data-theme="light"] { --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2; --plate-edge: #cfcabf; --accent: #3d5a4e; --fail: #7d4038; --partial: #7a5a2a; --succeed: #3d5a4e; }
+
+  body { background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.55; margin: 0; padding: 0 20px; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 56px 0 96px; }
+  .studio-head { border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 8px; }
+  .eyebrow { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h1 { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 42px); font-weight: 400; margin: 0 0 14px; line-height: 1.12; text-wrap: balance; }
+  .standfirst { max-width: 62ch; color: var(--muted); margin: 0; font-size: 16px; }
+  section { border-bottom: 1px solid var(--hairline); padding: 46px 0 50px; }
+  h2 { font-family: Georgia, serif; font-size: 25px; font-weight: 400; margin: 0 0 8px; }
+  .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  .target { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  .steelman { max-width: 64ch; margin: 0 0 22px; }
+  .steelman b { font-weight: 600; }
+  .plate { border: 1px solid var(--plate-edge); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,.08); margin: 0 0 10px; }
+  .plate-caption { font-size: 12px; color: var(--muted); margin: 0 0 20px; }
+  .m * { box-sizing: border-box; }
+  .verdict { border-left: 3px solid var(--muted); padding: 4px 0 4px 20px; max-width: 62ch; }
+  .verdict .vtag { font-size: 10.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .verdict.v-fail { border-color: var(--fail); } .verdict.v-fail .vtag { color: var(--fail); }
+  .verdict.v-partial { border-color: var(--partial); } .verdict.v-partial .vtag { color: var(--partial); }
+  .verdict.v-succeed { border-color: var(--succeed); } .verdict.v-succeed .vtag { color: var(--succeed); }
+  .verdict p { margin: 0 0 8px; font-size: 14px; }
+  .closing { padding-top: 46px; border-bottom: 0; }
+  .closing ol { max-width: 60ch; padding-left: 22px; }
+  .closing li { margin-bottom: 10px; }
+  .amend { max-width: 66ch; }
+  .amend .a { border-top: 1px solid var(--hairline); padding: 13px 0; }
+  .amend .a b { font-family: Georgia, serif; font-style: italic; font-weight: 400; font-size: 16px; }
+  .amend .a p { margin: 4px 0 0; font-size: 13.5px; color: var(--muted); }
+
+  /* shared distilled grammar */
+  .brief { background: #faf9f6; color: #211f1b; font-family: Georgia, "Iowan Old Style", serif; padding: 26px 40px 26px; }
+  .brief .bound { border-top: 3px double #211f1b; }
+  .brief .wordline { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 2px 16px; padding: 9px 0 7px; }
+  .brief .wordmark { font-size: 15px; letter-spacing: .3em; font-weight: 700; }
+  .brief .cert { font-family: "Segoe UI", sans-serif; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: #57534a; }
+  .brief .manifest { font-family: "Segoe UI", sans-serif; font-size: 10.5px; color: #57534a; border-top: 1px solid #d8d4ca; border-bottom: 1px solid #d8d4ca; padding: 6px 0; display: flex; flex-wrap: wrap; gap: 3px 13px; }
+  .brief .manifest b { color: #211f1b; font-weight: 600; }
+  .brief .skick { font-family: "Segoe UI", sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #57534a; margin: 18px 0 5px; }
+  .brief .hed1 { font-size: 20px; line-height: 1.2; font-weight: 700; margin: 0 0 7px; text-wrap: balance; }
+  .brief .btext { font-size: 13.5px; line-height: 1.6; max-width: 62ch; }
+  .brief .btext p { margin: 0 0 9px; }
+  .brief .ritem { font-size: 12.5px; line-height: 1.5; padding: 5px 0; border-bottom: 1px dotted #c9c4b8; }
+  .brief .ritem b { font-family: "Segoe UI", sans-serif; font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-right: 6px; color: #57534a; }
+  .brief .endmark { margin-top: 22px; border-top: 3px double #211f1b; padding-top: 8px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; }
+  .brief .endmark .e1 { font-family: "Segoe UI", sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+  .brief .endmark .e2 { font-family: "Segoe UI", sans-serif; font-size: 10.5px; color: #57534a; }
+
+  /* H1 — the current page */
+  .cur .livehead { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 0 7px; }
+  .cur .livehead .asof { font-family: "Segoe UI", sans-serif; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: #57534a; }
+  .cur .item { display: grid; grid-template-columns: 78px 1fr; gap: 14px; padding: 8px 0; border-bottom: 1px dotted #c9c4b8; align-items: baseline; }
+  .cur .item .t { font-family: "Segoe UI", sans-serif; font-size: 10.5px; color: #57534a; text-align: right; font-variant-numeric: tabular-nums; }
+  .cur .item .f { font-size: 13.5px; }
+  .cur .item.fresh .f { font-weight: 700; }
+  .cur .morelink { font-family: "Segoe UI", sans-serif; font-size: 11px; color: #57534a; padding-top: 12px; font-style: italic; }
+
+  /* H2 — the even page */
+  .even .eitem { padding: 9px 0; border-bottom: 1px dotted #c9c4b8; font-size: 13.5px; line-height: 1.55; max-width: 66ch; }
+  .even .eitem b { font-family: "Segoe UI", sans-serif; font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-right: 6px; color: #57534a; }
+
+  /* H3 — the red ink */
+  .redink .rd { color: #a02c1e; }
+  .redink .silence { border: 1px solid #a02c1e; padding: 9px 12px; margin-top: 18px; max-width: 460px; }
+  .redink .silence .t { font-family: "Segoe UI", sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 4px; color: #a02c1e; }
+  .redink .silence p { margin: 0; font-size: 12.5px; }
+
+  /* H4 — the honest fraction */
+  .frac .bname { font-size: 22px; font-weight: 700; margin: 16px 0 4px; }
+  .frac .grades { display: flex; gap: 34px; margin: 12px 0 6px; }
+  .frac .g { text-align: left; }
+  .frac .g .big { font-family: "Segoe UI", sans-serif; font-size: 26px; font-weight: 300; font-variant-numeric: tabular-nums; }
+  .frac .g small { display: block; font-family: "Segoe UI", sans-serif; font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: #57534a; margin-top: 2px; }
+</style>
+
+<div class="wrap">
+  <header class="studio-head">
+    <p class="eyebrow">Orven Product Design Studio · Sprint 08</p>
+    <h1>The heresies</h1>
+    <p class="standfirst">Final challenge before ratification: assume every law is wrong. Four counter-languages, each argued in earnest and mocked up at full strength against the law it contradicts. Verdicts are given honestly — and one law does not survive intact.</p>
+  </header>
+
+  <!-- ============ H1 ============ -->
+  <section>
+    <p class="kicker">Heresy one</p>
+    <h2>The Current Page</h2>
+    <p class="target">Against Law I — the edition, not the feed</p>
+    <p class="steelman"><b>The argument, made in earnest:</b> the edition is artificial latency. An operator who opens Orven at 2 PM is handed seven-hour-old news and told to wait until tomorrow — the calmest interface is simply <i>the present truth</i>, one page, always current, newest first. No numbers, no ceremony, no pretense that a server's life divides into days. Editions are nostalgia for printing presses; the honest document is the one that is never wrong about now.</p>
+    <div class="plate"><div class="m brief cur">
+      <div class="bound"></div>
+      <div class="livehead"><span class="wordmark">ORVEN</span><span class="asof">Current as of 14:32</span></div>
+      <div class="item fresh"><span class="t">14:07</span><span class="f">Container paperless remains stopped — tenth hour.</span></div>
+      <div class="item fresh"><span class="t">13:52</span><span class="f">Scrub of tank completed; no errors found.</span></div>
+      <div class="item"><span class="t">05:00</span><span class="f">Seven packages applied, kernel 6.9.4 among them; no reboot since.</span></div>
+      <div class="item"><span class="t">04:52</span><span class="f">Paperless restarted five times over 21 minutes, then stopped.</span></div>
+      <div class="item"><span class="t">03:09</span><span class="f">Local backup completed; 19.4 GB written.</span></div>
+      <div class="item"><span class="t">02:47</span><span class="f">Offsite backup ended with exit status 1.</span></div>
+      <div class="morelink">earlier facts continue below …</div>
+    </div></div>
+    <p class="plate-caption">Heresy 1 — no edition, no end, no accounting; recency order; the newest facts bolded because they are newest.</p>
+    <div class="verdict v-fail">
+      <span class="vtag">Verdict — the attack fails</span>
+      <p>Read it twice and the trap is visible: “current as of 14:32” makes the page <i>expire</i>. The moment it can be stale, the reader is responsible for refreshing it — and a page you must keep checking is an alert stream with good typography. The bolded “fresh” items are a ranking by recency; the trailing “earlier facts continue…” abolishes the finish line, and with it the entire feeling of <i>being done</i>. The edition is not latency; it is the license to not look. That license is the product.</p>
+      <p><b>What the heresy leaves behind:</b> one honest scar. The edition must declare its coverage window — “observations through 6:45 this morning” — so its staleness is stated, not discovered. That folds into Law V's accounting.</p>
+    </div>
+  </section>
+
+  <!-- ============ H2 ============ -->
+  <section>
+    <p class="kicker">Heresy two</p>
+    <h2>The Even Page</h2>
+    <p class="target">Against Law II — prominence is arithmetic</p>
+    <p class="steelman"><b>The argument, made in earnest:</b> volume-prominence is judgment smuggled through a side door. “More happened” is not neutral — it hands the front page to whoever talks most. A chatty DNS plugin files nine trivial observations and out-headlines a single failed backup; worse, <i>plugin authors control their own verbosity</i>, so prominence is available for purchase by whoever writes the most granular plugin. The only incorruptible layout is perfect flatness: fixed order, one size, every fact equal, the reader as the sole ranking function — which is what Orven claims to believe anyway.</p>
+    <div class="plate"><div class="m brief even">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">Saturday 26 July 2026 · Edition No. 217 · 47 observations</span></div>
+      <div class="manifest"><b>17 beats in fixed order</b><span>·</span><b>two silent</b></div>
+      <div class="eitem"><b>Backups</b> The offsite run to rsync.net ended at 2:47 after 12 minutes with exit status 1 — the first incomplete run since 30 May. The local run completed at 3:09; 19.4 GB.</div>
+      <div class="eitem"><b>Certificates</b> vault.home.arpa was renewed; all nine certificates are more than 30 days from expiry.</div>
+      <div class="eitem"><b>Containers</b> Paperless restarted five times between 4:31 and 4:52 and has been stopped since. Postgres and redis were recreated at 4:05. Jellyfin restarted once at 2:10.</div>
+      <div class="eitem"><b>DNS</b> 44,807 queries answered yesterday; 13 percent blocked.</div>
+      <div class="eitem"><b>Git</b> Two pushes to infra-config; last commit 10:41 PM.</div>
+      <div class="eitem"><b>Media</b> Three items added to the library overnight.</div>
+      <div class="endmark"><span class="e1">End of the brief</span><span class="e2">47 observations from 15 of 17 plugins</span></div>
+    </div></div>
+    <p class="plate-caption">Heresy 2 — alphabetical fixed order, one type size, no tiers, no lead. The failed backup happens to surface first only because B precedes C.</p>
+    <div class="verdict v-partial">
+      <span class="vtag">Verdict — the attack partially succeeds</span>
+      <p>This page is legitimate. It obeys every other law, it is calm, and its incorruptibility argument is real: the verbosity objection is the strongest single criticism of the tier system, because plugin authors do control their own observation counts. Law II survives — size-as-measurement is still honest <i>when the count is printed beside the claim</i>, which converts verbosity from hidden bias into visible fact ("Containers · 9 observations" tells you exactly who is talking a lot). But the law must stop pretending flatness is merely its degenerate case. The Even Page is a coherent rival mode, and the charter should either subordinate it explicitly (tiers are the language; flat is what tiers become when counts are equal) or offer it as the reader's choice. That decision is yours, not mine.</p>
+    </div>
+  </section>
+
+  <!-- ============ H3 ============ -->
+  <section>
+    <p class="kicker">Heresy three</p>
+    <h2>The Red Ink</h2>
+    <p class="target">Against Law III — two voices, no third</p>
+    <p class="steelman"><b>The argument, made in earnest:</b> bookkeepers — the most factual profession in history — have used red ink for five centuries, and nobody ever called a ledger an alarm. Printing “exit status 1” in the same gray as a media count is not neutrality, it is <i>camouflage</i>: the reader must excavate the one fact they'd most regret missing. A single restrained red, applied by a mechanical rule — completion-state facts only: did-not-complete, stopped, not-reporting — is no more a judgment than boldface. It is a fact about a fact.</p>
+    <div class="plate"><div class="m brief redink">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">Saturday 26 July 2026 · Edition No. 217 · 47 observations</span></div>
+      <p class="skick">Backups · 4 observations</p>
+      <p class="hed1">Offsite backup <span class="rd">did not complete</span>; nightly local run finished</p>
+      <div class="btext"><p>The offsite run to rsync.net ended at 2:47 after 12 minutes with <span class="rd">exit status 1</span> — its first incomplete run since 30 May. The local run completed at 3:09: 38 minutes, 19.4 GB.</p></div>
+      <p class="skick">Containers · 9 observations</p>
+      <div class="btext"><p>Paperless restarted five times between 4:31 and 4:52 and has been <span class="rd">stopped since</span>. Postgres and redis were recreated by 4:05; jellyfin restarted once and runs continuously.</p></div>
+      <div class="silence">
+        <p class="t">Not heard from</p>
+        <p>The UPS plugin <span class="rd">has not reported</span> since Monday 20 July — six days.</p>
+      </div>
+      <div class="endmark"><span class="e1">End of the brief</span><span class="e2">47 observations from 15 of 17 plugins</span></div>
+    </div></div>
+    <p class="plate-caption">Heresy 3 — one red, mechanical rule, completion-state phrases only. It looks reasonable. That is what makes it dangerous.</p>
+    <div class="verdict v-fail">
+      <span class="vtag">Verdict — the attack fails, instructively</span>
+      <p>The mechanical rule is a mirage. Choosing <i>which categories of fact</i> deserve the red channel — “did not complete” but not “75.2 percent full”? “stopped” but not “no reboot since the kernel update”? — is exactly the needs-attention classification Orven's constitution forbids, performed once at design time instead of nightly at runtime. And the reader's behavior seals the case: within a week, anyone who owns this page scans for red before reading — then <i>instead of</i> reading. The brief degrades into signal-plus-noise, which is a dashboard's soul in a newspaper's body. The ledger comparison also fails on inspection: red in bookkeeping marks a <i>sign</i> (debit/credit), a closed algebraic category — “facts I would regret missing” is not a closed category, it is a judgment. Law III holds, and this heresy is why it must: the moment there is a third voice, it becomes the only voice anyone hears.</p>
+    </div>
+  </section>
+
+  <!-- ============ H4 ============ -->
+  <section>
+    <p class="kicker">Heresy four</p>
+    <h2>The Honest Fraction</h2>
+    <p class="target">Against Law VII — counts, never grades</p>
+    <p class="steelman"><b>The argument, made in earnest:</b> division is arithmetic, not judgment. “Filed in 213 of 217 editions” <i>is</i> 98.2 percent — refusing to compute it is false modesty that shifts work onto the reader. Law VII cannot even survive contact with our own mockups: the DNS beat has said “13 percent blocked” since Sprint 02, and nobody flinched. If percentages are grades, Orven has been grading all along; if they are facts, the law is wrong.</p>
+    <div class="plate"><div class="m brief frac">
+      <div class="bound"></div>
+      <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">The Beats · Backups</span></div>
+      <p class="bname">Backups</p>
+      <div class="grades">
+        <div class="g"><span class="big">98.2%</span><small>Coverage</small></div>
+        <div class="g"><span class="big">99.1%</span><small>Completion</small></div>
+        <div class="g"><span class="big">A−</span><small>Reliability</small></div>
+      </div>
+      <div class="btext"><p>Reporting since 14 March 2026. Observes restic via tank/backups and rsync.net.</p></div>
+      <div class="endmark"><span class="e1">The record</span><span class="e2">213 filings · four gaps</span></div>
+    </div></div>
+    <p class="plate-caption">Heresy 4 — the beat page graded. The slide from 98.2% to “A−” took one design meeting.</p>
+    <div class="verdict v-succeed">
+      <span class="vtag">Verdict — the attack succeeds; Law VII must be rewritten</span>
+      <p>The heresy found a real crack. “13 percent blocked” and “98.2 percent coverage” are not the same kind of number, and the law as written cannot tell them apart. The difference is <b>who is being measured</b>: the first is a fact a source reported about the world it observes — Orven passes it through like any other fact. The second is <b>Orven evaluating one of its own sources</b>, compressing a record into a figure whose only purpose is to invite the question “is that good?” — and the mockup shows where that road ends: the A− is three pixels from a Nagios dashboard. The law survives in spirit but must be redrawn on that line:</p>
+      <p><b>Law VII, amended — “Facts pass through; the record stays long.”</b> Orven reports what sources say in whatever form they say it, ratios included. But about its own operation — coverage, filings, gaps — Orven speaks only in counts and dates, never in ratios, scores, streaks, or grades. Orven does not rate its witnesses.</p>
+    </div>
+  </section>
+
+  <!-- ============ SUMMARY ============ -->
+  <section>
+    <p class="kicker">The tally</p>
+    <h2>What ratification should now include</h2>
+    <div class="amend">
+      <div class="a"><b>Law I — holds.</b><p>Strengthened by its strongest rival: the edition is the license to not look. Add the coverage-window clause to Law V's accounting ("observations through 6:45").</p></div>
+      <div class="a"><b>Law II — holds, with a decision owed.</b><p>The count printed beside every claim is promoted from habit to load-bearing defense. The Even Page must be explicitly subordinated or offered as a reader's mode — your call at ratification.</p></div>
+      <div class="a"><b>Law III — holds, proven.</b><p>The red-ink heresy is the law's best justification and should be preserved in the charter as commentary: any third voice becomes the only voice.</p></div>
+      <div class="a"><b>Law VII — falls as written; rewritten.</b><p>“Facts pass through; the record stays long. Orven does not rate its witnesses.” The old wording could not distinguish a reported ratio from a self-grade.</p></div>
+      <div class="a"><b>Laws IV, V, VI, VIII — unchallenged here.</b><p>IV and V were attacked implicitly by Heresy 1 and survived with it; VI and VIII drew no compelling heresy — the strongest attacks I could construct against them collapsed into restatements of heresies above.</p></div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <p class="kicker">For your review</p>
+    <h2>Before the freeze</h2>
+    <ol>
+      <li>Do you accept the two verdict-driven changes — the coverage-window clause in Law V, and Law VII rewritten as “facts pass through; the record stays long”?</li>
+      <li>The Even Page decision: subordinate flatness (tiers are the language) or offer it as a reader's setting? I'd argue subordinate — a language with two grammars is two languages — but it survived on merit, so it's your ruling.</li>
+      <li>Is there a heresy I didn't have the nerve to build — an attack you suspect would land harder than these four?</li>
+      <li>If not: shall I consolidate charter, grammar, verdicts, and amendments into the final ratified document?</li>
+    </ol>
+  </section>
+</div>

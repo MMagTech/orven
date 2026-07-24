@@ -132,6 +132,7 @@ rather than papered over.
 |---|---|
 | [docs/DEPLOY.md](docs/DEPLOY.md) | Docker, compose, Unraid, persistent storage |
 | [docs/CONSTRAINTS.md](docs/CONSTRAINTS.md) | The product constitution: architecture boundaries, language rules, security model, plugin identity |
+| [docs/DESIGN_CHARTER.md](docs/DESIGN_CHARTER.md) | The design charter: the laws, grammar, and rooms of Orven's design language (ratified; discovery record in [docs/design-studio/](docs/design-studio/NOTES.md)) |
 | [docs/PLUGIN_SDK.md](docs/PLUGIN_SDK.md) | Writing plugins: the contract, scopes, HTTP pattern, house style |
 | [docs/VALIDATOR.md](docs/VALIDATOR.md) | Every check `orven validate` performs, and its hard boundaries |
 | [CLAUDE.md](CLAUDE.md) | Entry point for AI coding assistants working in this repo |

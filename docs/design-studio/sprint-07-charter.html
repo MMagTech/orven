@@ -1,0 +1,178 @@
+<title>Orven — Sprint 07: The Charter, Draft 1</title>
+<style>
+  :root {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-edge: #cfcabf; --accent: #3d5a4e; --law: #3d5a4e; --gram: #7a5a2a; --furn: #8a8478;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; --law: #8fb3a3; --gram: #c9a86a; --furn: #8f897d; }
+  }
+  :root[data-theme="dark"] { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; --law: #8fb3a3; --gram: #c9a86a; --furn: #8f897d; }
+  :root[data-theme="light"] { --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2; --plate-edge: #cfcabf; --accent: #3d5a4e; --law: #3d5a4e; --gram: #7a5a2a; --furn: #8a8478; }
+
+  body { background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.55; margin: 0; padding: 0 20px; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 56px 0 96px; }
+  .studio-head { border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 8px; }
+  .eyebrow { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h1 { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 42px); font-weight: 400; margin: 0 0 14px; line-height: 1.12; text-wrap: balance; }
+  .standfirst { max-width: 62ch; color: var(--muted); margin: 0; font-size: 16px; }
+  section { border-bottom: 1px solid var(--hairline); padding: 46px 0 50px; }
+  h2 { font-family: Georgia, serif; font-size: 25px; font-weight: 400; margin: 0 0 14px; }
+  h3 { font-family: Georgia, serif; font-size: 18px; font-weight: 400; font-style: italic; margin: 26px 0 8px; }
+  .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  .note { max-width: 64ch; }
+  .closing { padding-top: 46px; border-bottom: 0; }
+  .closing ol { max-width: 60ch; padding-left: 22px; }
+  .closing li { margin-bottom: 10px; }
+
+  /* layer diagram */
+  .layers { max-width: 620px; margin: 26px 0 10px; }
+  .layer { border: 1px solid var(--plate-edge); padding: 14px 18px; margin: 0 auto; background: color-mix(in srgb, var(--bg) 92%, var(--ink) 8%); }
+  .layer + .layer { border-top: 0; }
+  .layer .lt { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .layer .ln { font-family: Georgia, serif; font-size: 17px; }
+  .layer .lc { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; white-space: nowrap; }
+  .layer p { margin: 5px 0 0; font-size: 13px; color: var(--muted); max-width: 58ch; }
+  .l1 { width: 62%; min-width: 300px; } .l1 .lc { color: var(--law); }
+  .l2 { width: 80%; min-width: 320px; } .l2 .lc { color: var(--gram); }
+  .l3 { width: 100%; } .l3 .lc { color: var(--furn); }
+  .ldg { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+
+  /* laws */
+  .lawlist { max-width: 68ch; }
+  .law { display: grid; grid-template-columns: 44px 1fr; gap: 14px; padding: 13px 0; border-top: 1px solid var(--hairline); }
+  .law .n { font-family: Georgia, serif; font-size: 17px; color: var(--accent); }
+  .law b { display: block; font-family: Georgia, serif; font-size: 16px; font-weight: 400; font-style: italic; margin-bottom: 3px; }
+  .law p { margin: 0; font-size: 13.5px; color: var(--muted); }
+  .law .new { font-size: 9.5px; font-weight: 700; letter-spacing: .14em; color: var(--gram); text-transform: uppercase; margin-left: 8px; }
+
+  /* grammar table */
+  .gram { border-top: 1px solid var(--hairline); }
+  .grow { display: grid; grid-template-columns: 170px 1fr 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--hairline); font-size: 13px; }
+  @media (max-width: 640px) { .grow { grid-template-columns: 1fr; gap: 4px; } }
+  .grow .g1 { font-family: Georgia, serif; font-size: 15px; }
+  .grow .g2 b, .grow .g3 b { display: block; font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin-bottom: 2px; }
+  .grow .g2 b { color: var(--law); } .grow .g3 b { color: var(--furn); }
+  .grow p { margin: 0; color: var(--muted); }
+  .ghead { display: grid; grid-template-columns: 170px 1fr 1fr; gap: 16px; padding: 0 0 6px; font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  @media (max-width: 640px) { .ghead { display: none; } }
+
+  /* room cards */
+  .room { border: 1px solid var(--plate-edge); border-radius: 4px; padding: 20px 24px; margin: 0 0 18px; }
+  .room h3 { margin: 0 0 10px; font-style: normal; font-size: 19px; }
+  .room .band { display: grid; grid-template-columns: 108px 1fr; gap: 12px; padding: 8px 0; border-top: 1px solid var(--hairline); font-size: 13.5px; align-items: start; }
+  .room .band .tag { font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; padding-top: 3px; }
+  .room .band.law .tag { color: var(--law); }
+  .room .band.free .tag { color: var(--furn); }
+  .room .band.chose .tag { color: var(--gram); }
+  .room .band p { margin: 0; }
+  .room .band.chose p { color: var(--muted); }
+  .verdictline { font-family: Georgia, serif; font-style: italic; font-size: 15px; margin: 0 0 12px; }
+</style>
+
+<div class="wrap">
+  <header class="studio-head">
+    <p class="eyebrow">Orven Product Design Studio · Sprint 07</p>
+    <h1>The charter, draft 1</h1>
+    <p class="standfirst">A deliberate pause. Sprint 06 proved the language reaches every room — and quietly began confusing one implementation with the language itself. This document separates the two: what is law, what is Orven's chosen grammar, and what was merely furniture we happened to build on a Tuesday.</p>
+  </header>
+
+  <!-- ============ LAYER MODEL ============ -->
+  <section>
+    <p class="kicker">Part one</p>
+    <h2>Three layers, three speeds of change</h2>
+    <p class="note">Everything we have designed sits at one of three altitudes, and the drift you caught was work sliding down the stack without anyone saying so.</p>
+    <div class="layers">
+      <div class="layer l1">
+        <div class="lt"><span class="ln">Laws</span><span class="lc">Never change</span></div>
+        <p>What makes something Orven at all. Violating one produces a different product. Written in words, not pixels.</p>
+      </div>
+      <div class="layer l2">
+        <div class="lt"><span class="ln">Grammar</span><span class="lc">Change rarely, deliberately</span></div>
+        <p>Orven's chosen way of expressing the laws — the recognizable devices. Another product could obey the same laws with different grammar; this grammar is what makes Orven look like Orven.</p>
+      </div>
+      <div class="layer l3">
+        <div class="lt"><span class="ln">Furniture</span><span class="lc">Free to vary</span></div>
+        <p>Per-room, per-medium arrangement: row layouts, groupings, control styles, column counts. Sprint 06's mockups live almost entirely here.</p>
+      </div>
+    </div>
+    <p class="ldg">The test for placing anything: <b>could a different designer, given only the layers above it, produce a different version that is still unmistakably Orven?</b> If yes, it belongs below the line they worked from. If the room must look exactly like our mockup to feel right, we have mistaken furniture for law.</p>
+  </section>
+
+  <!-- ============ THE LAWS ============ -->
+  <section>
+    <p class="kicker">Part two</p>
+    <h2>The laws</h2>
+    <p class="note">The six from Sprint 04, plus two that Sprint 06's rooms forced into the open. Laws are stated without reference to any visual device — that is what makes them laws.</p>
+    <div class="lawlist">
+      <div class="law"><span class="n">I</span><div><b>The edition, not the feed</b><p>Every Orven document is finite, dated, and numbered, with a beginning and a declared end. Nothing is infinite, live, or asking you back early.</p></div></div>
+      <div class="law"><span class="n">II</span><div><b>Prominence is arithmetic</b><p>Whatever form prominence takes — size, order within a tier, space — it derives from countable fact, and the count is shown. Never from judged importance.</p></div></div>
+      <div class="law"><span class="n">III</span><div><b>Two voices, one of them quiet</b><p>The report speaks in full declarative sentences; the apparatus labels in a smaller, plainer voice. No third voice — no icons, badges, or alarm color — ever speaks.</p></div></div>
+      <div class="law"><span class="n">IV</span><div><b>Silence has a reserved seat</b><p>Absence of data is stated, structurally, wherever it occurs — in the brief, in history, in a source's record. It is never a footnote and never an implied all-clear.</p></div></div>
+      <div class="law"><span class="n">V</span><div><b>The frame certifies</b><p>A fixed apparatus — identity, date, number, accounting — appears identically on the heaviest and emptiest days. Ritual and reassurance live in the frame so the content never performs either.</p></div></div>
+      <div class="law"><span class="n">VI</span><div><b>Content breathes; structure doesn't</b><p>Density expands and contracts with the day; order and apparatus never do. Position carries no verdict.</p></div></div>
+      <div class="law"><span class="n">VII</span><div><b>Counts, never grades<span class="new">New — from the beat page</span></b><p>Orven may total what the reader can verify ("filed in 213 of 217 editions"). It may never compress a record into a score, percentage grade, streak, or rating — a grade is a judgment wearing a number's clothes.</p></div></div>
+      <div class="law"><span class="n">VIII</span><div><b>The reader's actions are facts too<span class="new">New — from settings</span></b><p>When the reader changes something, Orven records it as it records everything: attributed, dated, stated plainly ("Paused by you, 12 July"), taking effect at the next edition. Even the instrument's room is written, and nothing in it advises.</p></div></div>
+    </div>
+  </section>
+
+  <!-- ============ THE GRAMMAR ============ -->
+  <section>
+    <p class="kicker">Part three</p>
+    <h2>The grammar — chosen, not eternal</h2>
+    <p class="note">Sprint 05's six devices are Orven's signature expressions of the laws. They are identity, so they change only deliberately — but each has a revisable part, and naming it keeps us honest.</p>
+    <div class="ghead"><span>Device</span><span>The law it expresses</span><span>What remains revisable</span></div>
+    <div class="gram">
+      <div class="grow"><span class="g1">The bounds</span><div class="g2"><b>Law I, V</b><p>The edition lives between an opening and closing mark; the document declares its own extent.</p></div><div class="g3"><b>Revisable</b><p>That the mark is a double rule. The boundary is law; the rule style is signature.</p></div></div>
+      <div class="grow"><span class="g1">The certification line</span><div class="g2"><b>Law V</b><p>Identity · date · number · accounting, one quiet line, every document.</p></div><div class="g3"><b>Revisable</b><p>Its exact composition and position — not its presence or its constancy.</p></div></div>
+      <div class="grow"><span class="g1">The manifest</span><div class="g2"><b>Law II, V</b><p>The whole before the parts: every source and its count, up front, as public arithmetic.</p></div><div class="g3"><b>Revisable</b><p>Its form (line, block, list) and its mobile truncation rules.</p></div></div>
+      <div class="grow"><span class="g1">Two inks</span><div class="g2"><b>Law III</b><p>Reading serif for the report, quiet sans for the apparatus; the inversion in rooms where the reader acts.</p></div><div class="g3"><b>Revisable</b><p>The specific faces. Georgia-class and Segoe-class are today's choices, not the identity.</p></div></div>
+      <div class="grow"><span class="g1">Size as measurement</span><div class="g2"><b>Law II</b><p>A small fixed scale of prominence steps, assigned by count alone.</p></div><div class="g3"><b>Revisable</b><p>The number of steps (three) and the tier thresholds.</p></div></div>
+      <div class="grow"><span class="g1">The reserved seat &amp; the end</span><div class="g2"><b>Law I, IV</b><p>Silence in the design's only enclosure; an explicit end with self-accounting.</p></div><div class="g3"><b>Revisable</b><p>The box's placement per room; the end mark's wording.</p></div></div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM EXTRACTIONS ============ -->
+  <section>
+    <p class="kicker">Part four</p>
+    <h2>Your three questions, answered honestly</h2>
+
+    <div class="room">
+      <h3>The Archive</h3>
+      <p class="verdictline">Fundamentally: the unbroken chronological record of editions — emphatically not "one row per edition."</p>
+      <div class="band law"><span class="tag">Law</span><p>Chronological and complete; every edition present with equal standing — a quiet day is a full citizen of the record, never elided or collapsed. The archive states its own extent ("217 editions since 14 March"). No aggregation that ranks: a "busiest days" view would break Law II; a completion-streak would break Law VII.</p></div>
+      <div class="band free"><span class="tag">Free</span><p>Rows, a calendar, a bound monthly volume, a spine of dates — any chronological form. How much of each morning shows per entry (headline, counts, manifest) is furniture, tunable per medium.</p></div>
+      <div class="band chose"><span class="tag">Sprint 06 chose</span><p>One row per edition, month labels, lead headline as caption. A good instance; only an instance.</p></div>
+    </div>
+
+    <div class="room">
+      <h3>The Beat page</h3>
+      <p class="verdictline">Fundamentally: the public record of a reporting source — not a newspaper section.</p>
+      <div class="band law"><span class="tag">Law</span><p>Three things, always: the source's credentials (what it observes, since when, how faithfully — as counts, per Law VII); its record as dated sentences; and its silences seated chronologically within that record (Law IV). Never a reliability grade, never a health status.</p></div>
+      <div class="band free"><span class="tag">Free</span><p>Grouping (by edition, by week), depth shown before the archive takes over, whether credentials read as a passport block or a single line. Nothing requires it to resemble the Brief's own page.</p></div>
+      <div class="band chose"><span class="tag">Sprint 06 chose</span><p>Edition-by-edition rows, a "coverage" box confessing all four gaps ever. The full-confession box is furniture — the law only requires gaps to be visible in place.</p></div>
+    </div>
+
+    <div class="room">
+      <h3>Settings</h3>
+      <p class="verdictline">Fundamentally: the room where the reader acts — and the identity there is the writing, not the widgetry.</p>
+      <div class="band law"><span class="tag">Law</span><p>Every choice explained in a plain sentence of consequence; every change recorded as an attributed, dated fact; changes take effect at the next edition, and the page says so (Law VIII). The two-voice rule holds with the sans leading, because this is the instrument's room.</p></div>
+      <div class="band free"><span class="tag">Free</span><p>The controls themselves. Conventional, immediately operable controls are not a betrayal — friction is a cost paid by a person, and the laws say nothing about underlines. If a standard select reduces friction, use it; the sentences around it carry the identity.</p></div>
+      <div class="band chose"><span class="tag">Sprint 06 chose</span><p>Underlined values, no visible controls at rest. Elegant, possibly too precious — this is the mockup most likely to have mistaken furniture for language, and your instinct to flag it was right.</p></div>
+    </div>
+
+    <p class="note" style="margin-top:26px;">The quiet edition and the night ink extract cleanly: the quiet day's law is Law V (the frame certifies, presence stated); "the manifest names beats on quiet days" is grammar-adjacent but honestly furniture. The night's law is constitutional — colors only; the blue-black palette itself is a choice, revisable.</p>
+  </section>
+
+  <section class="closing">
+    <p class="kicker">For your review</p>
+    <h2>Ratification</h2>
+    <ol>
+      <li>Laws I–VIII: would you strike, amend, or add any? These are the sentences the implementation conversation will be governed by, so they deserve your red pen.</li>
+      <li>Laws VII and VIII are new — inferred from your rooms rather than chosen by you. Do they read as discoveries or as my inventions?</li>
+      <li>The grammar table's "revisable" column: is there a device whose revisable part you'd rather freeze (the double rule as permanent signature, say)?</li>
+      <li>On settings: the charter says conventional controls are permitted and the sentences carry the identity. Does that match your instinct?</li>
+      <li>Going forward, mockups will be labeled by layer — law, grammar, or furniture. Shall we resume the rooms on those terms, or is there another part of the language you want interrogated first?</li>
+    </ol>
+  </section>
+</div>

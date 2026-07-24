@@ -8,8 +8,12 @@ It never changes anything, and it never tells the reader what to do.
 ## Before any change
 
 Read **`docs/CONSTRAINTS.md`**. It is the product's constitution: if a
-change conflicts with it, the change is wrong, not the file. The
-rules most often at stake:
+change conflicts with it, the change is wrong, not the file. For any
+change to something a reader sees, **`docs/DESIGN_CHARTER.md`** governs
+the design language the same way: label every design decision law /
+grammar / furniture, and surface ambiguities for owner review instead
+of resolving them with new design decisions. The rules most often at
+stake:
 
 1. **Facts only, everywhere.** No recommendations, remediation steps,
    or advice in any briefing, observation, or summary — "The backup

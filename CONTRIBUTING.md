@@ -1,8 +1,8 @@
 # Contributing to Orven
 
 Thanks for wanting to help. Orven is small on purpose, and its rules
-are written down — most review friction disappears if you read two
-documents first:
+are written down — most review friction disappears if you read the
+right documents first:
 
 1. **[docs/CONSTRAINTS.md](docs/CONSTRAINTS.md)** — the product
    constitution. If a change conflicts with it, the change is wrong,
@@ -11,6 +11,8 @@ documents first:
    calm — never a dashboard.
 2. **[docs/PLUGIN_SDK.md](docs/PLUGIN_SDK.md)** — if you're writing a
    plugin.
+3. **[docs/DESIGN_CHARTER.md](docs/DESIGN_CHARTER.md)** — if you're
+   changing anything a reader sees.
 
 ## Where contributions go
 

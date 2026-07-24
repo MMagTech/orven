@@ -1,0 +1,266 @@
+<title>Orven — Sprint 04: The Principles, Proven</title>
+<style>
+  :root {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-edge: #cfcabf; --accent: #3d5a4e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; }
+  }
+  :root[data-theme="dark"] { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; }
+  :root[data-theme="light"] { --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2; --plate-edge: #cfcabf; --accent: #3d5a4e; }
+
+  body { background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.55; margin: 0; padding: 0 20px; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 56px 0 96px; }
+  .studio-head { border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 8px; }
+  .eyebrow { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h1 { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 42px); font-weight: 400; margin: 0 0 14px; line-height: 1.12; text-wrap: balance; }
+  .standfirst { max-width: 62ch; color: var(--muted); margin: 0; font-size: 16px; }
+
+  .principles { border-bottom: 1px solid var(--hairline); padding: 44px 0 40px; }
+  .principles h2, .concept h2, .closing h2 { font-family: Georgia, serif; font-size: 26px; font-weight: 400; margin: 0 0 20px; }
+  .pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 34px; }
+  @media (max-width: 640px) { .pgrid { grid-template-columns: 1fr; } }
+  .pgrid .p b { display: block; font-family: Georgia, serif; font-size: 16.5px; font-weight: 400; font-style: italic; margin-bottom: 4px; }
+  .pgrid .p p { margin: 0; font-size: 13.5px; color: var(--muted); }
+  .pgrid .p .num { color: var(--accent); font-style: normal; margin-right: 6px; }
+
+  .concept { border-bottom: 1px solid var(--hairline); padding: 48px 0 52px; }
+  .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  .register { color: var(--muted); font-style: italic; font-family: Georgia, serif; margin: 0 0 16px; font-size: 15px; }
+  .philosophy { max-width: 63ch; margin: 0 0 24px; }
+  .plate { border: 1px solid var(--plate-edge); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,.08); margin: 0 0 10px; }
+  .plate-caption { font-size: 12px; color: var(--muted); margin: 0 0 22px; }
+  .obeys { font-size: 13.5px; max-width: 64ch; margin: 0; }
+  .obeys b { font-weight: 600; }
+  .m * { box-sizing: border-box; }
+
+  .closing { padding-top: 48px; }
+  .closing ol { max-width: 60ch; padding-left: 22px; }
+  .closing li { margin-bottom: 10px; }
+
+  /* ============ A · THE DRAWING ============ */
+  .dw { background: #1d3a5f; color: #d8e6f3; font-family: Consolas, monospace; padding: 26px; }
+  .dw .sheet { border: 2px solid #d8e6f3; padding: 4px; }
+  .dw .inner { border: 1px solid #7d9cbc; padding: 14px; }
+  .dw .zones { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px; }
+  .dw .zone { border: 1px solid #7d9cbc; padding: 9px 11px; min-height: 72px; }
+  .dw .zone .zl { font-family: Bahnschrift, "Segoe UI", sans-serif; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: #a9c4de; margin: 0 0 5px; }
+  .dw .zone .zl b { color: #f0f6fb; font-weight: 400; }
+  .dw .zone p { margin: 0 0 4px; font-size: 11px; line-height: 1.5; color: #d8e6f3; }
+  .dw .z-lead { grid-column: span 7; min-height: 128px; }
+  .dw .z-lead p { font-size: 11.5px; }
+  .dw .z-2 { grid-column: span 5; min-height: 128px; }
+  .dw .z-s5 { grid-column: span 5; }
+  .dw .z-s4 { grid-column: span 4; }
+  .dw .z-s3 { grid-column: span 3; }
+  .dw .z-briefs { grid-column: span 9; }
+  .dw .z-briefs p { columns: 2; column-gap: 18px; font-size: 10.5px; color: #b9cfe4; }
+  .dw .z-silent { grid-column: span 3; background: repeating-linear-gradient(45deg, transparent 0 5px, rgba(169,196,222,.16) 5px 6px); }
+  .dw .titleblock { display: grid; grid-template-columns: 2fr 1.2fr 1.2fr 1.6fr; border: 1px solid #7d9cbc; border-top: 2px solid #d8e6f3; margin-top: 8px; }
+  .dw .tb { border-right: 1px solid #7d9cbc; padding: 7px 10px; }
+  .dw .tb:last-child { border-right: 0; }
+  .dw .tb small { display: block; font-size: 8.5px; letter-spacing: .16em; text-transform: uppercase; color: #a9c4de; font-family: Bahnschrift, "Segoe UI", sans-serif; margin-bottom: 3px; }
+  .dw .tb span { font-size: 12px; color: #f0f6fb; }
+
+  /* ============ B · THE PROGRAMME ============ */
+  .pg { background: #f9f4ea; color: #2b2620; font-family: "Bodoni MT", Didot, Georgia, serif; padding: 46px 64px 40px; text-align: center; }
+  .pg .house { font-size: 13px; letter-spacing: .5em; text-indent: .5em; margin: 0 0 6px; }
+  .pg .rule { border: 0; border-top: 1px solid #2b2620; width: 64px; margin: 14px auto; }
+  .pg .occasion { font-style: italic; font-size: 15px; margin: 0 0 2px; }
+  .pg .date { font-size: 12px; letter-spacing: .12em; margin: 0 0 30px; color: #6b6152; }
+  .pg .work { margin: 0 0 24px; }
+  .pg .work-title { font-size: 16px; margin: 0 0 3px; }
+  .pg .work-title i { font-size: 12.5px; color: #6b6152; }
+  .pg .mv { font-size: 12.5px; line-height: 1.7; margin: 0; color: #443d33; }
+  .pg .tacet { font-style: italic; color: #6b6152; }
+  .pg .fine { font-size: 13px; letter-spacing: .3em; text-indent: .3em; margin: 30px 0 8px; }
+  .pg .colophon { font-size: 10.5px; letter-spacing: .1em; color: #6b6152; }
+
+  /* ============ C · THE TIMETABLE ============ */
+  .tt { background: #fbfaf6; color: #17150f; font-family: "Gill Sans MT", "Gill Sans", Calibri, "Segoe UI", sans-serif; padding: 30px 38px 30px; }
+  .tt .tthead { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 4px solid #17150f; padding-bottom: 8px; }
+  .tt .tthead b { font-size: 21px; letter-spacing: .22em; font-weight: 600; }
+  .tt .tthead span { font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: #55503f; }
+  .tt .notice { font-size: 11px; letter-spacing: .06em; color: #55503f; padding: 6px 0 14px; border-bottom: 1px solid #cdc8b8; margin-bottom: 4px; text-transform: uppercase; }
+  .tt table { width: 100%; border-collapse: collapse; }
+  .tt .line-row td { padding: 10px 8px 3px 0; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #1c4a38; border-bottom: 1px solid #17150f; }
+  .tt .line-row .cnt { text-align: right; color: #55503f; font-weight: 400; letter-spacing: .04em; text-transform: none; }
+  .tt .call td { padding: 5px 8px 5px 0; font-size: 12.5px; border-bottom: 1px dotted #cdc8b8; vertical-align: baseline; }
+  .tt .call .t { width: 74px; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+  .tt .silent-block { border: 1.5px solid #17150f; margin-top: 18px; padding: 9px 13px; }
+  .tt .silent-block .sl { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 4px; }
+  .tt .silent-block p { margin: 0 0 3px; font-size: 12.5px; }
+  .tt .ttfoot { display: flex; justify-content: space-between; border-top: 4px solid #17150f; margin-top: 16px; padding-top: 8px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #55503f; }
+</style>
+
+<div class="wrap">
+  <header class="studio-head">
+    <p class="eyebrow">Orven Product Design Studio · Sprint 04</p>
+    <h1>The principles, proven</h1>
+    <p class="standfirst">If the Broadsheet only works because it looks like a newspaper, we found a costume, not an identity. Below: the six principles extracted from Sprints 01–03, then the same frantic night — edition No. 217, 47 observations — rendered three ways that share nothing with a newspaper. If all three still feel like Orven, the principles are the identity, and the newspaper is just one garment it can wear.</p>
+  </header>
+
+  <section class="principles">
+    <h2>Six principles, no layout attached</h2>
+    <div class="pgrid">
+      <div class="p"><b><span class="num">I.</span>The edition, not the feed</b><p>A finite, numbered, dated artifact with a beginning and an explicit end. Never infinite, never live, never asking you back before tomorrow.</p></div>
+      <div class="p"><b><span class="num">II.</span>Prominence is arithmetic</b><p>Space follows the count of observations, never judgment. The count is printed beside the claim so the reader can audit the layout every morning.</p></div>
+      <div class="p"><b><span class="num">III.</span>Type is the only voice</b><p>No icons, badges, or alarm color. Hierarchy is carried by scale, weight, and rules; every fact is a declarative sentence with a time.</p></div>
+      <div class="p"><b><span class="num">IV.</span>Silence has a reserved seat</b><p>Missing coverage is a fixed structural element with its own enclosure — stated, never implied as all-clear, never a footnote.</p></div>
+      <div class="p"><b><span class="num">V.</span>The frame certifies</b><p>A fixed ceremonial apparatus — title, date, edition number, and a colophon that states the edition's own accounting — identical on heavy and quiet days.</p></div>
+      <div class="p"><b><span class="num">VI.</span>The page breathes; the order doesn't</b><p>Density expands and contracts with the day. Section order never changes, so position carries no verdict.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ A ============ -->
+  <section class="concept">
+    <p class="kicker">Proof A</p>
+    <h2>The Drawing</h2>
+    <p class="register">An engineering sheet: the night surveyed to scale.</p>
+    <p class="philosophy">An engineer's drawing of the night. Each beat is a zone whose <b>area is drawn to the scale of its count</b> — prominence-as-arithmetic made literal, measurable with a ruler. Silence is a hatched zone, the draftsman's mark for "not surveyed." The title block — unchanged on every sheet — carries the certification: edition, date, totals, next issue.</p>
+    <div class="plate"><div class="m dw">
+      <div class="sheet"><div class="inner">
+        <div class="zones">
+          <div class="zone z-lead">
+            <p class="zl"><b>CONTAINERS</b> · 9 OBS</p>
+            <p>Paperless restarted 04:31, 04:36, 04:40, 04:47, 04:52; stopped since the fifth restart. Image updated 04:06.</p>
+            <p>Postgres and redis images pulled 04:02; both recreated by 04:05. Jellyfin restarted once, 02:10.</p>
+          </div>
+          <div class="zone z-2">
+            <p class="zl"><b>UPDATES</b> · 7 OBS</p>
+            <p>Seven packages applied 05:00, kernel 6.9.4 among them. Running kernel remains 6.9.2 — no reboot since.</p>
+          </div>
+          <div class="zone z-s5">
+            <p class="zl"><b>STORAGE</b> · 5 OBS</p>
+            <p>Sdb above 50&deg;C for four hours, peak 57&deg;C. Pool at 75.2%. Scrub 41% at press time.</p>
+          </div>
+          <div class="zone z-s4">
+            <p class="zl"><b>BACKUPS</b> · 4 OBS</p>
+            <p>Offsite run ended 02:47, exit status 1. Local run completed 03:09, 19.4 GB.</p>
+          </div>
+          <div class="zone z-s3">
+            <p class="zl"><b>NETWORK</b> · 4 OBS</p>
+            <p>WAN IP changed 01:44 and 03:58.</p>
+          </div>
+          <div class="zone z-s3">
+            <p class="zl"><b>UPTIME</b> · 3 OBS</p>
+            <p>Three checks unanswered 04:47–04:52; paperless silent since.</p>
+          </div>
+          <div class="zone z-briefs">
+            <p class="zl">MINOR ZONES · 10 BEATS · 17 OBS</p>
+            <p>Media: three items added &nbsp;— Git: two pushes, last 22:41 &nbsp;— VMs: win11 up 21:12–23:03 &nbsp;— Certificates: vault renewed, all nine beyond 30 days &nbsp;— DNS: 44,807 queries, 13% blocked &nbsp;— Photos: 214 imported &nbsp;— Mail: 61 retrieved &nbsp;— Nextcloud: 2.1 GB synced &nbsp;— Syncthing: four folders in sync &nbsp;— Home Assistant: one automation edited.</p>
+          </div>
+          <div class="zone z-silent">
+            <p class="zl">NOT SURVEYED</p>
+            <p>UPS — silent six days.</p>
+            <p>Zigbee — missed 06:00 collection.</p>
+          </div>
+        </div>
+        <div class="titleblock">
+          <div class="tb"><small>Subject</small><span>maple.lan — overnight survey</span></div>
+          <div class="tb"><small>Edition</small><span>No. 217</span></div>
+          <div class="tb"><small>Date</small><span>26 Jul 2026</span></div>
+          <div class="tb"><small>Accounting</small><span>47 obs · 15/17 reporting</span></div>
+        </div>
+      </div></div>
+    </div></div>
+    <p class="plate-caption">Plate A — zones drawn to the scale of their counts; hatching for the unsurveyed; title block as the fixed certifying frame.</p>
+    <p class="obeys"><b>Obeys:</b> I (one sheet, one issue), II (area = count, literally), III (line and type only — the failed backup gets no color), IV (hatched zone), V (title block), VI (zone order fixed by charter, only sizes change).</p>
+  </section>
+
+  <!-- ============ B ============ -->
+  <section class="concept">
+    <p class="kicker">Proof B</p>
+    <h2>The Programme</h2>
+    <p class="register">An order of service: the night performed, movement by movement.</p>
+    <p class="philosophy">A concert programme for the night just performed. Each beat is a work; its observations are movements. Busy works list many movements; quiet works list one. A plugin that did not report is marked <i>tacet</i> — the musician's term for "silent this performance," which states absence without a whisper of alarm. The programme ends the way programmes always have: <i>fine</i>.</p>
+    <div class="plate"><div class="m pg">
+      <p class="house">ORVEN</p>
+      <hr class="rule">
+      <p class="occasion">Morning Programme — the two hundred seventeenth edition</p>
+      <p class="date">SATURDAY THE 26TH OF JULY, 2026 · ISSUED AT 7:00</p>
+
+      <div class="work">
+        <p class="work-title">Containers &nbsp;<i>in nine observations</i></p>
+        <p class="mv">i. Paperless restarts five times, 4:31–4:52, and rests stopped &nbsp;·&nbsp; ii. Postgres and redis renewed at 4:02 &nbsp;·&nbsp; iii. Jellyfin restarts once at 2:10</p>
+      </div>
+      <div class="work">
+        <p class="work-title">Updates &nbsp;<i>in seven observations</i></p>
+        <p class="mv">Seven packages at 5:00, kernel 6.9.4 among them; the machine has not rebooted since</p>
+      </div>
+      <div class="work">
+        <p class="work-title">Storage &nbsp;<i>in five observations</i></p>
+        <p class="mv">Sdb four hours above 50&deg;, peak 57&deg; &nbsp;·&nbsp; the pool at 75.2 percent &nbsp;·&nbsp; a scrub underway, 41 percent</p>
+      </div>
+      <div class="work">
+        <p class="work-title">Backups &nbsp;<i>in four observations</i></p>
+        <p class="mv">The offsite run ends at 2:47 with exit status 1 &nbsp;·&nbsp; the local run completes, 19.4 GB</p>
+      </div>
+      <div class="work">
+        <p class="work-title">Network · Uptime &nbsp;<i>in seven observations</i></p>
+        <p class="mv">The WAN address changes at 1:44 and 3:58 &nbsp;·&nbsp; three checks unanswered five minutes; paperless silent since</p>
+      </div>
+      <div class="work">
+        <p class="work-title">The quiet works &nbsp;<i>ten beats in seventeen observations</i></p>
+        <p class="mv">Media, three items &nbsp;·&nbsp; Git, two pushes &nbsp;·&nbsp; VMs, one evening session &nbsp;·&nbsp; Certificates, one renewal &nbsp;·&nbsp; DNS, Photos, Mail, Nextcloud, Syncthing, Home Assistant — each a single line</p>
+      </div>
+      <div class="work">
+        <p class="work-title tacet">Tacet</p>
+        <p class="mv tacet">The UPS, silent since Monday the 20th &nbsp;·&nbsp; The Zigbee, absent from the 6:00 collection</p>
+      </div>
+
+      <p class="fine">FINE</p>
+      <p class="colophon">47 observations · 15 of 17 plugins performing · the next programme follows at 7:00 tomorrow</p>
+    </div></div>
+    <p class="plate-caption">Plate B — beats as works, observations as movements, silence as <i>tacet</i>, and <i>fine</i> where a feed would ask you to keep scrolling.</p>
+    <p class="obeys"><b>Obeys:</b> I (<i>fine</i>), II (movement count printed in the work's title), III (Didone type, not one ornament of alarm), IV (<i>tacet</i> — silence with a dignified name), V (house name, occasion, colophon), VI (works in fixed order, only their length changes).</p>
+  </section>
+
+  <!-- ============ C ============ -->
+  <section class="concept">
+    <p class="kicker">Proof C</p>
+    <h2>The Timetable</h2>
+    <p class="register">A railway board: the night as a printed service.</p>
+    <p class="philosophy">A printed railway timetable. Each beat is a line; each observation a scheduled call with its time in the left column. A heavy night is simply a line with many calls — the block grows taller and the eye measures it instantly. A line not running is posted in the notice box, the way stations have always announced it: plainly, in the same ink as everything else.</p>
+    <div class="plate"><div class="m tt">
+      <div class="tthead"><b>ORVEN</b><span>Daily service · No. 217 · Sat 26 July 2026</span></div>
+      <p class="notice">Issued 07:00 · 47 calls on 15 of 17 lines · two lines not reporting — see notice below</p>
+      <table>
+        <tr class="line-row"><td>Containers</td><td class="cnt">9 calls</td></tr>
+        <tr class="call"><td class="t">02:10</td><td>Jellyfin restarts once; runs continuously since</td></tr>
+        <tr class="call"><td class="t">04:02</td><td>Postgres and redis images pulled; both recreated by 04:05</td></tr>
+        <tr class="call"><td class="t">04:31–04:52</td><td>Paperless restarts five times; stopped since the fifth</td></tr>
+        <tr class="line-row"><td>Updates</td><td class="cnt">7 calls</td></tr>
+        <tr class="call"><td class="t">05:00</td><td>Seven packages applied, kernel 6.9.4 among them; no reboot since</td></tr>
+        <tr class="line-row"><td>Storage</td><td class="cnt">5 calls</td></tr>
+        <tr class="call"><td class="t">15:14 (yest.)</td><td>Sdb above 50&deg;C four hours, peak 57&deg;C</td></tr>
+        <tr class="call"><td class="t">01:00</td><td>Scrub begins; 41 percent complete at press time. Pool at 75.2 percent</td></tr>
+        <tr class="line-row"><td>Backups</td><td class="cnt">4 calls</td></tr>
+        <tr class="call"><td class="t">02:47</td><td>Offsite run ends after 12 minutes, exit status 1 — first incomplete run since 30 May</td></tr>
+        <tr class="call"><td class="t">03:09</td><td>Local run completes; 38 minutes, 19.4 GB; two snapshots pruned</td></tr>
+        <tr class="line-row"><td>All other lines</td><td class="cnt">22 calls on 12 lines</td></tr>
+        <tr class="call"><td class="t">—</td><td>Network 4 · Uptime 3 · Media 3 · VMs 2 · Git 2 · Certificates 2 · DNS 2 · Photos, Mail, Nextcloud, Syncthing, Home Assistant 1 each</td></tr>
+      </table>
+      <div class="silent-block">
+        <p class="sl">Lines not reporting</p>
+        <p>UPS — no service reported since Monday 20 July.</p>
+        <p>Zigbee — last call 02:31; absent from the 06:00 collection.</p>
+      </div>
+      <div class="ttfoot"><span>End of service No. 217</span><span>Next issue 07:00 tomorrow</span></div>
+    </div></div>
+    <p class="plate-caption">Plate C — beats as lines, observations as timed calls, block height as the visible measure of the night.</p>
+    <p class="obeys"><b>Obeys:</b> I (End of service), II (call counts beside every line name; block height is the count), III (one green for line names — a labeling color, never a judging one), IV (the notice box), V (board head and foot), VI (lines in fixed order regardless of traffic).</p>
+  </section>
+
+  <section class="closing">
+    <p class="kicker">For your review</p>
+    <h2>The question this sprint answers</h2>
+    <ol>
+      <li>Do all three still feel like Orven to you? If yes, the six principles are the identity — and the choice of garment (newspaper, drawing, programme, timetable) becomes a separate, smaller decision.</li>
+      <li>Does any of these three make you hesitate on the Broadsheet — or do they confirm it?</li>
+      <li>The Timetable's time-first left column is the one structural idea here the Broadsheet lacks. Worth stealing into the Broadsheet's grammar, or leave it?</li>
+      <li>Which single principle of the six feels most essential — the one you would defend if you could only keep one?</li>
+    </ol>
+  </section>
+</div>

@@ -1,0 +1,188 @@
+<title>The Orven Design Charter</title>
+<style>
+  :root {
+    --paper: #faf9f6; --report: #211f1b; --apparatus: #57534a;
+    --rule: #211f1b; --hairline: #d8d4ca; --dotted: #c9c4b8;
+    --stage: #f0eeea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --paper: #14181f; --report: #cdd5de; --apparatus: #8d99a8;
+      --rule: #cdd5de; --hairline: #2c3542; --dotted: #2c3542; --stage: #0e1218; }
+  }
+  :root[data-theme="dark"] { --paper: #14181f; --report: #cdd5de; --apparatus: #8d99a8; --rule: #cdd5de; --hairline: #2c3542; --dotted: #2c3542; --stage: #0e1218; }
+  :root[data-theme="light"] { --paper: #faf9f6; --report: #211f1b; --apparatus: #57534a; --rule: #211f1b; --hairline: #d8d4ca; --dotted: #c9c4b8; --stage: #f0eeea; }
+
+  * { box-sizing: border-box; }
+  body { background: var(--stage); color: var(--report); font-family: Georgia, "Iowan Old Style", serif; line-height: 1.6; margin: 0; padding: 40px 20px 72px; }
+  .sheet { max-width: 780px; margin: 0 auto; background: var(--paper); padding: 40px 56px 36px; }
+  @media (max-width: 640px) { .sheet { padding: 26px 22px 26px; } body { padding: 16px 8px 40px; } }
+
+  .bound { border-top: 3px double var(--rule); }
+  .wordline { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 2px 16px; padding: 12px 0 10px; }
+  .wordmark { font-size: 17px; letter-spacing: .3em; font-weight: 700; }
+  .cert { font-family: "Segoe UI", system-ui, sans-serif; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--apparatus); }
+  .hairline { border-top: 1px solid var(--hairline); }
+
+  h1 { font-size: 30px; font-weight: 700; line-height: 1.15; margin: 34px 0 6px; text-wrap: balance; }
+  .subtitle { font-size: 15px; font-style: italic; color: var(--apparatus); margin: 0 0 8px; }
+
+  .skick { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--apparatus); margin: 40px 0 10px; }
+  p { font-size: 15px; margin: 0 0 13px; max-width: 62ch; }
+  .preamble p { font-size: 16px; line-height: 1.7; }
+
+  .law { display: grid; grid-template-columns: 46px 1fr; gap: 16px; padding: 16px 0 14px; border-top: 1px solid var(--hairline); }
+  .law .n { font-size: 18px; padding-top: 1px; }
+  .law h3 { font-size: 16.5px; font-weight: 700; margin: 0 0 5px; }
+  .law p { font-size: 14px; margin: 0 0 8px; }
+  .law .comm { border-left: 2px solid var(--hairline); padding: 2px 0 2px 14px; }
+  .law .comm p { font-size: 13px; color: var(--apparatus); font-style: italic; margin: 0; }
+  .law .comm .cl { font-family: "Segoe UI", sans-serif; font-size: 9px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--apparatus); font-style: normal; display: block; margin-bottom: 3px; }
+
+  .layers p { font-size: 14px; }
+  .layerline { display: grid; grid-template-columns: 104px 1fr; gap: 14px; padding: 9px 0; border-top: 1px solid var(--hairline); font-size: 14px; align-items: baseline; }
+  .layerline b { font-family: "Segoe UI", sans-serif; font-size: 10.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+  .layerline p { margin: 0; font-size: 13.5px; }
+
+  .device { display: grid; grid-template-columns: 168px 1fr; gap: 16px; padding: 12px 0; border-top: 1px solid var(--hairline); }
+  @media (max-width: 560px) { .device, .law, .layerline, .roomline { grid-template-columns: 1fr; gap: 4px; } }
+  .device .dn { font-size: 15px; font-weight: 700; padding-top: 1px; }
+  .device p { font-size: 13.5px; margin: 0 0 5px; }
+  .device .rev { font-size: 12.5px; color: var(--apparatus); font-style: italic; }
+  .device .rev b { font-style: normal; font-family: "Segoe UI", sans-serif; font-size: 9px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+
+  .roomline { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 12px 0; border-top: 1px solid var(--hairline); }
+  .roomline .rn { font-size: 15px; font-weight: 700; }
+  .roomline p { font-size: 13.5px; margin: 0; }
+
+  .process p { font-size: 13.5px; color: var(--apparatus); }
+
+  .endmark { margin-top: 44px; border-top: 3px double var(--rule); padding-top: 10px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2px 16px; }
+  .endmark .e1 { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+  .endmark .e2 { font-family: "Segoe UI", sans-serif; font-size: 11px; color: var(--apparatus); }
+</style>
+
+<div class="sheet">
+  <div class="bound"></div>
+  <div class="wordline"><span class="wordmark">ORVEN</span><span class="cert">The Design Charter · Ratified 23 July 2026</span></div>
+  <div class="hairline"></div>
+
+  <h1>The Orven Design Charter</h1>
+  <p class="subtitle">The laws, grammar, and commentary of Orven's design language — set in that language, in its day ink or its night ink, as your system prefers.</p>
+
+  <!-- ============ PREAMBLE ============ -->
+  <div class="preamble">
+    <p class="skick">Preamble — why Orven exists</p>
+    <p>A self-hosted machine is a quiet responsibility. It works through the night — backing up, serving, renewing, recording — and the person responsible for it carries a low, constant question: <i>is everything all right?</i></p>
+    <p>Nearly every tool built to answer that question does so by asking for vigilance. Dashboards want watching. Alerts want reacting. Graphs want interpreting. Each of them, however well made, converts a quiet responsibility into a standing anxiety — and none of them will ever tell you that you may stop looking.</p>
+    <p>Orven is built on the opposite promise. Once a day it compiles what its plugins observed into a single finite brief: what happened, what changed, and what it could not see. It reports in plain sentences, ranks nothing, recommends nothing, and ends. The reader — the operator, the only person with the judgment to decide what matters on their own machine — reads it in minutes and puts it down.</p>
+    <p>The promise, in one sentence: <b>Orven observes so that you may stop watching — and earns that trust by never once telling you what to think.</b></p>
+    <p>Everything below exists to protect that promise. The laws are not aesthetic preferences; each one guards a place where the promise could quietly break.</p>
+  </div>
+
+  <!-- ============ LAYERS ============ -->
+  <div class="layers">
+    <p class="skick">The three layers</p>
+    <p>Every design decision in Orven sits at one of three altitudes. Confusing them is how design languages rot.</p>
+    <div class="layerline"><b>Laws</b><p>What makes something Orven at all. Violating one produces a different product. Never change.</p></div>
+    <div class="layerline"><b>Grammar</b><p>Orven's chosen expressions of the laws — the recognizable devices. Change rarely and deliberately.</p></div>
+    <div class="layerline"><b>Furniture</b><p>Per-room, per-medium arrangement. Free to vary whenever a better arrangement is found.</p></div>
+    <p style="margin-top:12px; font-size:13.5px; color: var(--apparatus); font-style: italic;">The placement test: could a different designer, given only the layers above, produce a different-looking version that is still unmistakably Orven? If yes, it belongs below the line they worked from. If a page must look exactly one way to feel right, furniture has been mistaken for law.</p>
+  </div>
+
+  <!-- ============ LAWS ============ -->
+  <p class="skick">The laws — as amended after adversarial review</p>
+
+  <div class="law"><span class="n">I</span><div>
+    <h3>The edition, not the feed</h3>
+    <p>Every Orven document is finite, dated, and numbered, with a beginning and a declared end. Nothing is infinite, live, or asking the reader back early.</p>
+    <div class="comm"><span class="cl">Commentary — from the heresy of the Current Page</span><p>A page that can be stale makes the reader responsible for refreshing it; a page you must keep checking is an alert stream with good typography. The edition is the license to not look. That license is the product.</p></div>
+  </div></div>
+
+  <div class="law"><span class="n">II</span><div>
+    <h3>Prominence is arithmetic</h3>
+    <p>Whatever form prominence takes, it derives from countable fact — never from judged importance — and the count is printed beside the claim, so the reader can audit the layout every morning.</p>
+    <div class="comm"><span class="cl">Commentary — from the heresy of the Even Page</span><p>The printed count is not decoration; it is the defense. Verbosity becomes visible as verbosity ("Containers · 9 observations" names who is talking a lot). A perfectly flat page is what the tiers become when counts are equal — it is the language's floor, not a second grammar, and it is not offered as a mode. Orven has one visual language.</p></div>
+  </div></div>
+
+  <div class="law"><span class="n">III</span><div>
+    <h3>Two voices, one of them quiet</h3>
+    <p>The report speaks in full declarative sentences; the apparatus labels in a smaller, plainer voice. No third voice — no icons, badges, or alarm color — ever speaks.</p>
+    <div class="comm"><span class="cl">Commentary — from the heresy of the Red Ink</span><p>Even one restrained accent, assigned by the fairest mechanical rule, is a needs-attention classification performed at design time — and within a week the reader scans for it instead of reading. The moment there is a third voice, it becomes the only voice anyone hears.</p></div>
+  </div></div>
+
+  <div class="law"><span class="n">IV</span><div>
+    <h3>Silence has a reserved seat</h3>
+    <p>Absence of data is stated, structurally, wherever it occurs — in the brief, in history, in a source's record. It is never a footnote and never an implied all-clear.</p>
+  </div></div>
+
+  <div class="law"><span class="n">V</span><div>
+    <h3>The frame certifies</h3>
+    <p>A fixed apparatus — identity, date, number, and accounting — appears identically on the heaviest and emptiest days. The accounting states the edition's own arithmetic and its coverage window ("47 observations from 15 of 17 plugins · observations through 6:45"), so the document's completeness and its staleness are both declared, never discovered.</p>
+    <div class="comm"><span class="cl">Amended at ratification</span><p>The coverage-window clause is the scar left by the Current Page heresy: the edition answers its strongest rival by being honest about what it does not yet know.</p></div>
+  </div></div>
+
+  <div class="law"><span class="n">VI</span><div>
+    <h3>Content breathes; structure doesn't</h3>
+    <p>Density expands and contracts with the day; order and apparatus never do. Position carries no verdict. The same grammar holds on a desktop, a phone, and a printed page — geometry flexes, grammar does not.</p>
+  </div></div>
+
+  <div class="law"><span class="n">VII</span><div>
+    <h3>Facts pass through; the record stays long</h3>
+    <p>Orven reports what sources say in whatever form they say it, ratios and percentages included. But about its own operation — coverage, filings, gaps — Orven speaks only in counts and dates: "filed in 213 of 217 editions," never "98.2 percent," never a score, streak, or grade. <b>Orven does not rate its witnesses.</b></p>
+    <div class="comm"><span class="cl">Rewritten at ratification — the successful heresy</span><p>The original law ("counts, never grades") could not distinguish a fact a source reported about the world from Orven evaluating its own sources. The line is who is being measured. A self-grade's only purpose is to invite "is that good?" — and the road from 98.2 percent to a letter grade took one design meeting.</p></div>
+  </div></div>
+
+  <div class="law"><span class="n">VIII</span><div>
+    <h3>The reader's actions are facts too</h3>
+    <p>When the reader changes something, Orven records it as it records everything: attributed, dated, stated plainly — "Paused by you, 12 July" — taking effect at the next edition, with the page saying so. Even the instrument's room is written, and nothing in it advises.</p>
+  </div></div>
+
+  <!-- ============ GRAMMAR ============ -->
+  <p class="skick">The grammar — Orven's chosen devices</p>
+  <p style="font-size:14px;">Six devices express the laws. They are the identity — another product could obey the same laws with different grammar; this grammar is what makes Orven look like Orven. Each names its revisable part, so future change is deliberate rather than drift.</p>
+
+  <div class="device"><span class="dn">The bounds</span><div>
+    <p>A double rule opens every document and a double rule closes it. The edition lives between them; nothing outside them exists. (Laws I, V.)</p>
+    <p class="rev"><b>Revisable</b> — that the mark is a double rule. The boundary is law; the rule style is signature.</p>
+  </div></div>
+  <div class="device"><span class="dn">The certification line</span><div>
+    <p>Identity · date · edition number · accounting, one quiet line at the head of every document, identical every day. (Law V.)</p>
+    <p class="rev"><b>Revisable</b> — composition and position; never presence or constancy.</p>
+  </div></div>
+  <div class="device"><span class="dn">The manifest</span><div>
+    <p>The whole before the parts: every source and its count, up front. On quiet days it may name the sources instead, because presence is the day's only news. (Laws II, V.)</p>
+    <p class="rev"><b>Revisable</b> — its form, and its truncation rules on small media.</p>
+  </div></div>
+  <div class="device"><span class="dn">Two inks</span><div>
+    <p>A reading serif for the report; a quiet sans for the apparatus. In rooms where the reader acts, the voices invert — the sans leads, the serif explains. Day and night are the same page in different colors, and colors only. (Law III.)</p>
+    <p class="rev"><b>Revisable</b> — the specific faces and palettes. Georgia-class, Segoe-class, the warm day paper, and the blue-black night are today's choices, not the identity.</p>
+  </div></div>
+  <div class="device"><span class="dn">Size as measurement</span><div>
+    <p>A small fixed scale of prominence steps assigned by count alone — bigger type means more happened, never that it matters more. Body text is one readable column, ragged right; parallel stories sit side by side only where the medium is wide. (Laws II, VI.)</p>
+    <p class="rev"><b>Revisable</b> — the number of steps and the tier thresholds.</p>
+  </div></div>
+  <div class="device"><span class="dn">The reserved seat &amp; the end</span><div>
+    <p>Silence sits in the design's only enclosure. The document closes with an explicit end mark and its own accounting. (Laws I, IV, V.)</p>
+    <p class="rev"><b>Revisable</b> — the box's placement per room; the end mark's wording.</p>
+  </div></div>
+
+  <!-- ============ ROOMS ============ -->
+  <p class="skick">The rooms — law extracted from furniture</p>
+  <p style="font-size:14px;">What each room fundamentally is. Everything else about a room — layouts, groupings, controls — is furniture, free to vary within the laws.</p>
+
+  <div class="roomline"><span class="rn">The Brief</span><p>The product itself: one finite edition of what happened, what changed, and what could not be seen, composed by the six devices, readable in minutes.</p></div>
+  <div class="roomline"><span class="rn">The Archive</span><p>The unbroken chronological record of editions, every one present with equal standing — a quiet day is a full citizen. The archive states its own extent. No aggregation that ranks days; no streaks.</p></div>
+  <div class="roomline"><span class="rn">A beat's record</span><p>The public record of a reporting source: its credentials as counts and dates, its record as dated sentences, and its silences seated chronologically within that record.</p></div>
+  <div class="roomline"><span class="rn">Settings</span><p>The room where the reader acts. The identity is the writing, not the widgetry: every choice explained in a sentence of consequence, every change an attributed dated fact, effective at the next edition. Conventional controls are permitted — friction is a cost paid by a person.</p></div>
+  <div class="roomline"><span class="rn">The quiet edition</span><p>The full frame around a stated nothing. The apparatus certifies the quiet; the whitespace is the news.</p></div>
+
+  <!-- ============ PROCESS ============ -->
+  <div class="process">
+    <p class="skick">Process record</p>
+    <p>This charter was discovered, not decreed, across eight design sprints: eight divergent concepts (01); load tests at 21 and 47 observations (02, 03); portability proofs in three non-newspaper languages (04); an element-by-element distillation against three equal mediums — desktop, mobile, print (05); extension to the secondary rooms (06); the separation of law, grammar, and furniture (07); and an adversarial review in which four steelman heresies were built against the laws (08). Two heresies failed and strengthened the laws they attacked; one was subordinated by ruling; one succeeded and forced Law VII's rewriting. A charter that has corrected itself under attack can be trusted further than one that has only been admired.</p>
+    <p class="skick">Ratification record</p>
+    <p>Ratified by the product owner on 23 July 2026, with two observations entered into the record. First, an editorial change accepted at ratification: the preamble's promise now reads "Orven <i>observes</i>" rather than "Orven watches" — the platform's own verb, and the sharper one, since observing without watching is precisely the distinction Orven exists to make. Second, the owner's recorded expectation: Law II, prominence by arithmetic, is the law most likely to be revisited once the product has lived with real data. That uncertainty was judged no reason to delay — constitutions are amended through experience, not speculation.</p>
+  </div>
+
+  <div class="endmark"><span class="e1">End of the charter</span><span class="e2">8 laws · 6 devices · 5 rooms · discovered over 8 sprints · ratified by the product owner, 23 July 2026</span></div>
+</div>

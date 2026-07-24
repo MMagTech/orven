@@ -1,0 +1,194 @@
+<title>Orven — Sprint 03: The Frantic Edition</title>
+<style>
+  :root {
+    --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2;
+    --plate-edge: #cfcabf; --accent: #3d5a4e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; }
+  }
+  :root[data-theme="dark"] { --bg: #1b1a18; --ink: #e6e2da; --muted: #9a948a; --hairline: #35322d; --plate-edge: #454038; --accent: #8fb3a3; }
+  :root[data-theme="light"] { --bg: #f4f3f0; --ink: #26241f; --muted: #716c62; --hairline: #dedad2; --plate-edge: #cfcabf; --accent: #3d5a4e; }
+
+  body { background: var(--bg); color: var(--ink); font-family: "Segoe UI", system-ui, sans-serif; line-height: 1.55; margin: 0; padding: 0 20px; }
+  .wrap { max-width: 940px; margin: 0 auto; padding: 56px 0 96px; }
+  .studio-head { border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 40px; }
+  .eyebrow { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  h1 { font-family: Georgia, serif; font-size: clamp(30px, 5vw, 42px); font-weight: 400; margin: 0 0 14px; line-height: 1.12; text-wrap: balance; }
+  .standfirst { max-width: 62ch; color: var(--muted); margin: 0; font-size: 16px; }
+  .note { max-width: 64ch; }
+  .kicker { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin: 34px 0 8px; }
+  h2 { font-family: Georgia, serif; font-size: 25px; font-weight: 400; margin: 0 0 12px; }
+  .plate { border: 1px solid var(--plate-edge); border-radius: 4px; overflow: hidden; box-shadow: 0 2px 14px rgba(0,0,0,.08); margin: 26px 0 10px; }
+  .plate-caption { font-size: 12px; color: var(--muted); margin: 0 0 8px; }
+  .closing { border-top: 1px solid var(--hairline); margin-top: 48px; padding-top: 40px; }
+  .closing ol { max-width: 60ch; padding-left: 22px; }
+  .closing li { margin-bottom: 10px; }
+
+  /* ================= THE FRANTIC BROADSHEET ================= */
+  .bs { background: #f8f6f1; color: #191817; font-family: Cambria, Georgia, "Times New Roman", serif; padding: 32px 40px 36px; }
+  .bs * { box-sizing: border-box; }
+  .bs .masthead { text-align: center; border-bottom: 3.5px double #191817; padding-bottom: 11px; }
+  .bs .paper-name { display: block; font-size: 40px; letter-spacing: .3em; text-indent: .3em; font-weight: 700; font-family: "Times New Roman", serif; }
+  .bs .dateline { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; border-bottom: 1px solid #191817; padding: 5px 2px; font-family: "Segoe UI", sans-serif; }
+
+  .bs .contents { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px; font-family: "Segoe UI", sans-serif; font-size: 10.5px; color: #4a463f; padding: 8px 2px 9px; border-bottom: 1px solid #d9d4c8; margin-bottom: 22px; }
+  .bs .contents b { color: #191817; font-weight: 600; }
+  .bs .contents .lbl { letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #191817; }
+
+  .bs .kick { font-family: "Segoe UI", sans-serif; font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; margin: 0 0 5px; border-top: 1px solid #191817; padding-top: 6px; }
+  .bs .body { font-size: 13px; line-height: 1.5; text-align: justify; hyphens: auto; }
+  .bs .body p { margin: 0 0 8px; }
+
+  /* band 1 — lead */
+  .bs .lead-band { margin-bottom: 20px; }
+  .bs .lead-hed { font-size: 27px; line-height: 1.12; font-weight: 700; margin: 0 0 6px; text-wrap: balance; }
+  .bs .deck { font-style: italic; font-size: 14.5px; color: #3c3a35; margin: 0 0 11px; }
+  .bs .lead-band .body { column-count: 2; column-gap: 24px; column-rule: 1px solid #d9d4c8; }
+
+  /* band 2 — two secondaries */
+  .bs .band2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; margin-bottom: 20px; }
+  .bs .band2 .hed2 { font-size: 18.5px; font-weight: 700; line-height: 1.18; margin: 0 0 6px; text-wrap: balance; }
+
+  /* band 3 — three tertiaries */
+  .bs .band3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 22px; margin-bottom: 22px; }
+  .bs .band3 .hed3 { font-size: 15px; font-weight: 700; line-height: 1.22; margin: 0 0 5px; }
+  .bs .band3 .body { font-size: 12.5px; text-align: left; }
+
+  /* band 4 — the record in brief */
+  .bs .briefs-band { border-top: 2px solid #191817; padding-top: 8px; margin-bottom: 20px; }
+  .bs .briefs-title { font-family: "Segoe UI", sans-serif; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; text-align: center; margin: 0 0 10px; }
+  .bs .briefs { column-count: 3; column-gap: 22px; column-rule: 1px solid #d9d4c8; }
+  .bs .brief-item { font-size: 12px; line-height: 1.45; padding: 5px 0; border-bottom: 1px dotted #c4beb0; break-inside: avoid; }
+  .bs .brief-item b { font-family: "Segoe UI", sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-right: 5px; }
+
+  /* band 5 — silence + colophon */
+  .bs .foot-band { display: grid; grid-template-columns: 1.2fr 1fr; gap: 0 24px; align-items: start; }
+  .bs .silent { border: 1px solid #191817; padding: 10px 13px; }
+  .bs .silent .kick { border-top: 0; padding-top: 0; }
+  .bs .silent p { margin: 0 0 4px; font-size: 12.5px; }
+  .bs .colophon { text-align: center; font-size: 11.5px; color: #4a463f; padding-top: 14px; }
+  .bs .colophon .fleuron { font-size: 15px; display: block; margin-bottom: 4px; }
+  .bs .colophon .end { font-family: "Segoe UI", sans-serif; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
+</style>
+
+<div class="wrap">
+  <header class="studio-head">
+    <p class="eyebrow">Orven Product Design Studio · Sprint 03</p>
+    <h1>The frantic edition</h1>
+    <p class="standfirst">You asked for double. Here it is: seventeen plugins, 47 observations, one genuinely bad night — a failed offsite backup, a container that won't hold, a disk running hot, two plugins silent. If the Broadsheet can make <i>this</i> readable in minutes without ranking a single thing, the identity is proven.</p>
+  </header>
+
+  <p class="kicker">The mechanism</p>
+  <h2>Headline size is a unit of measurement</h2>
+  <p class="note">Same rule as Sprint 02, now with three tiers instead of one. Volume assigns the tier mechanically: the busiest beat leads the page in two columns; five-to-seven-observation beats get band two; three-to-four get band three; everything smaller is one dotted line in “The record in brief.” The reader learns to read headline size the way they read a thermometer — <i>bigger type means more happened</i>, and never anything else. Note what stays constant under load: one page, fixed section order within each band, silence boxed at the bottom, and an explicit end.</p>
+
+  <div class="plate"><div class="bs">
+    <div class="masthead"><span class="paper-name">ORVEN</span></div>
+    <div class="dateline"><span>Saturday, July 26, 2026</span><span>Edition No. 217</span><span>47 observations</span></div>
+    <div class="contents">
+      <span class="lbl">Inside</span>
+      <span><b>Containers</b> 9</span><span><b>Updates</b> 7</span><span><b>Storage</b> 5</span>
+      <span><b>Backups</b> 4</span><span><b>Network</b> 4</span><span><b>Uptime</b> 3</span>
+      <span><b>Media</b> 3</span><span><b>VMs</b> 2</span><span><b>Git</b> 2</span>
+      <span><b>Certificates</b> 2</span><span><b>DNS</b> 2</span><span><b>+4 more</b></span>
+      <span><b>2 silent</b></span>
+    </div>
+
+    <!-- band 1 -->
+    <div class="lead-band">
+      <p class="kick">Containers · 9 observations</p>
+      <div class="lead-hed">Nine container events overnight; paperless restarts five times and is stopped since 4:52</div>
+      <p class="deck">The heaviest beat of the night by a wide margin — a restart loop, three image updates, and one container left down.</p>
+      <div class="body">
+        <p>Paperless restarted at 4:31, 4:36, 4:40, 4:47, and 4:52 AM, and has been in a stopped state since the fifth restart. Its image had been updated at 4:06.</p>
+        <p>Watchtower pulled new images for postgres and redis at 4:02; both containers were recreated and running by 4:05. Jellyfin restarted once at 2:10 and has run continuously since. All other containers ran without event.</p>
+      </div>
+    </div>
+
+    <!-- band 2 -->
+    <div class="band2">
+      <div>
+        <p class="kick">Updates · 7 observations</p>
+        <p class="hed2">Seven packages applied at 5:00, kernel 6.9.4 among them; no reboot since</p>
+        <div class="body">
+          <p>The unattended run applied kernel 6.9.4, openssl 3.3.2, curl, and four library packages. The running kernel remains 6.9.2 — the machine has not rebooted since the update. The previous kernel update, in June, was followed by a reboot the same morning.</p>
+        </div>
+      </div>
+      <div>
+        <p class="kick">Storage · 5 observations</p>
+        <p class="hed2">Disk sdb spent four hours above 50°C; pool crosses 75 percent</p>
+        <div class="body">
+          <p>Sdb reached 57&deg;C at 3:14 PM yesterday and stayed above 50&deg;C until 7:22 PM. The pool stands at 75.2 percent, up three points this week. A scrub began at 1:00 AM and was 41 percent complete at press time. SMART reports no reallocated sectors on any disk.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- band 3 -->
+    <div class="band3">
+      <div>
+        <p class="kick">Backups · 4</p>
+        <p class="hed3">Offsite backup did not complete; nightly local run finished</p>
+        <div class="body"><p>The offsite run to rsync.net ended at 2:47 AM after 12 minutes with exit status 1 — its first incomplete run since May 30. The local run to tank/backups completed at 3:09: 38 minutes, 19.4 GB. Two snapshots were pruned.</p></div>
+      </div>
+      <div>
+        <p class="kick">Network · 4</p>
+        <p class="hed3">WAN address changed twice in one night</p>
+        <div class="body"><p>The WAN IP changed at 1:44 and again at 3:58 AM. Tailscale peer laptop reconnected at 6:40 after four days away. LAN throughput was otherwise ordinary.</p></div>
+      </div>
+      <div>
+        <p class="kick">Uptime · 3</p>
+        <p class="hed3">Three HTTP checks went unanswered for five minutes</p>
+        <div class="body"><p>Checks for jellyfin, paperless, and nextcloud did not respond between 4:47 and 4:52 AM. All three answered again by 4:53 except paperless, which has not responded since.</p></div>
+      </div>
+    </div>
+
+    <!-- band 4 -->
+    <div class="briefs-band">
+      <p class="briefs-title">The record in brief</p>
+      <div class="briefs">
+        <div class="brief-item"><b>Media</b> Three items added to the library overnight; weekly total stands at eleven.</div>
+        <div class="brief-item"><b>VMs</b> The win11 VM was started at 9:12 PM and shut down at 11:03 PM. All others unchanged.</div>
+        <div class="brief-item"><b>Git</b> Two pushes to infra-config yesterday evening; last commit 10:41 PM.</div>
+        <div class="brief-item"><b>Certificates</b> vault.home.arpa renewed, expiry 21 Oct. All nine certificates beyond 30 days.</div>
+        <div class="brief-item"><b>DNS</b> 44,807 queries answered yesterday, 13 percent blocked; upstream latency ordinary.</div>
+        <div class="brief-item"><b>Photos</b> Sunday's import job processed 214 new photos.</div>
+        <div class="brief-item"><b>Mail</b> Fetchmail retrieved 61 messages; no delivery deferrals recorded.</div>
+        <div class="brief-item"><b>Nextcloud</b> 2.1 GB synced across three clients since yesterday.</div>
+        <div class="brief-item"><b>Syncthing</b> All four folders in sync as of 6:58 AM.</div>
+        <div class="brief-item"><b>Home Assistant</b> One automation edited yesterday at 8:22 PM.</div>
+      </div>
+    </div>
+
+    <!-- band 5 -->
+    <div class="foot-band">
+      <div class="silent">
+        <p class="kick">Not heard from</p>
+        <p>The UPS plugin has not reported since Monday, July 20 — six days.</p>
+        <p>The Zigbee plugin last reported at 2:31 this morning; it missed the 6:00 AM collection.</p>
+      </div>
+      <div class="colophon">
+        <span class="fleuron">&#10086;</span>
+        <span class="end">End of the brief</span><br>
+        Edition No. 217 &nbsp;·&nbsp; 47 observations from 15 of 17 plugins &nbsp;·&nbsp; next edition tomorrow, 7:00 AM
+      </div>
+    </div>
+  </div></div>
+  <p class="plate-caption">Plate 1 — the frantic edition: 47 observations, five bands, still one page. Headline tiers assigned by count alone: 9 leads, 5–7 get band two, 3–4 band three, the rest one dotted line each.</p>
+
+  <p class="kicker">Where it finally breaks</p>
+  <h2>An honest note on the ceiling</h2>
+  <p class="note">This composition holds to roughly 60–70 observations. Past that, nothing collapses — the bands simply repeat and the page grows taller, which is exactly how a newspaper has always handled a big news day: more pages, same grammar. The failure mode to guard against isn't length; it's a morning where <i>every</i> beat is busy and the tier system flattens (six beats all with 7+ observations). Even then the rule stays honest — several equal headlines side by side is a truthful picture of a night when everything happened at once.</p>
+
+  <section class="closing">
+    <p class="kicker">For your review</p>
+    <h2>Signals wanted</h2>
+    <ol>
+      <li>At 47 observations, does this still read <i>calm</i> to you — or has it crossed into busy?</li>
+      <li>The three headline tiers: can you feel the "bigger type = more happened" rule working as you scan, without being told?</li>
+      <li>The bad news (failed offsite backup, stopped container) sits wherever its volume puts it — no red, no badges, no promotion. Are you comfortable with that, or does your eye want the page to help more?</li>
+      <li>"The record in brief" holds ten beats in three dotted columns. Right density, or should quiet beats be even smaller?</li>
+      <li>If this page is the identity, are you ready to call the Broadsheet the direction and move to its other rooms — history, a single plugin's page, settings — in this same language?</li>
+    </ol>
+  </section>
+</div>
