@@ -119,7 +119,12 @@ automatically.
   independent-plugin exercise showed editorial review catches what
   structural validation intentionally cannot (domain logic, honesty
   of claims, environment assumptions); write the checklist down so
-  the review is repeatable.
+  the review is repeatable. Standard language (decided 2026-07-23):
+  every finding is classified as a plugin defect, a validator gap,
+  an SDK usability gap, a documentation gap, or a possible contract
+  issue — the same taxonomy the future SDK Plugin Doctor (Ideas)
+  would automate, so the manual process and the tool speak one
+  language.
 - **Validator success wording** — "0 errors, 0 warnings — OK" could
   read "contract checks passed," keeping the valid-is-never-trusted
   distinction visible at the moment of success.
@@ -153,6 +158,27 @@ Captured, not commitments.
   visual hierarchy reinforce the editorial experience; where does
   restraint read as generic or unfinished rather than intentional?
   A product review of its own, never part of another milestone.
+- **SDK Plugin Doctor** — a future capability of the SDK toolchain
+  and strictly a developer tool: never part of the runtime, the
+  application, or any production system. Invoked after `orven
+  validate` fails — the validator remains the sole pass/fail
+  authority — it diagnoses the failure, explains the root cause,
+  recommends corrections to the plugin, and classifies what the
+  failure is evidence of: a plugin defect, a validator gap, an SDK
+  usability gap, a documentation gap, or a possible contract issue —
+  so the SDK evolves from recurring evidence rather than assumption.
+  Strictly local and never communicates over the network on its own;
+  it may draft a sanitized SDK Improvement Report that the developer
+  explicitly and optionally submits (for example as a prefilled
+  GitHub issue). It never self-heals production plugins and never
+  rewrites the SDK — evidence and recommendations flow through
+  normal review and governance. Settled (2026-07-23): the Doctor is
+  invocable against failing and passing plugins alike — validation
+  failure is the most common entry point, not a gate. Validation
+  proves contract compliance; the Doctor's remit is broader (plugin
+  quality, SDK evidence), and the 2026-07 independent-plugin
+  exercise showed the most damaging plugin bugs pass validation
+  cleanly.
 
 ## Done
 
